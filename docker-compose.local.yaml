@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  mysql:
+    container_name: insert.local.db
+    image: mysql:8.4.0
+    environment:
+      MYSQL_ROOT_PASSWORD: insert1234
+      MYSQL_DATABASE: ioj
+      MYSQL_USER: insert
+      MYSQL_PASSWORD: insert1234
+    restart: always
+    ports:
+      - "3306:3306"
+
+  redis:
+    container_name: insert.local.redis
+    image: redis:7.2-alpine
+    command: redis-server --requirepass root --port 6379
+    restart: always
+    ports:
+      - "6379:6379"
