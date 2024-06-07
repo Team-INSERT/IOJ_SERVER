@@ -1,0 +1,8 @@
+${AnsiColor.BLUE}  ___ _   _ ____  _____ ____ _____  ${AnsiStyle.NORMAL}  ___  _   _ _     ___ _   _ _____       _ _   _ ____   ____ _____
+${AnsiColor.BLUE} |_ _| \ | / ___|| ____|  _ \_   _| ${AnsiStyle.NORMAL} / _ \| \ | | |   |_ _| \ | | ____|     | | | | |  _ \ / ___| ____|
+${AnsiColor.BLUE}  | ||  \| \___ \|  _| | |_) || |   ${AnsiStyle.NORMAL}| | | |  \| | |    | ||  \| |  _|    _  | | | | | | | | |  _|  _|
+${AnsiColor.BLUE}  | || |\  |___) | |___|  _ < | |   ${AnsiStyle.NORMAL}| |_| | |\  | |___ | || |\  | |___  | |_| | |_| | |_| | |_| | |___
+${AnsiColor.BLUE} |___|_| \_|____/|_____|_| \_\|_|   ${AnsiStyle.NORMAL} \___/|_| \_|_____|___|_| \_|_____|  \___/ \___/|____/ \____|_____|
+
+Contributors - @anys34 @j1w0n-1209
+Powered by Spring Boot ${spring-boot.version}
