@@ -20,4 +20,12 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Color color;
+
+    public User(
+        String email, String nickname, Color color
+    ) {
+        this.email = email;
+        this.nickname = nickname;
+        this.color = color;
+    }
 }

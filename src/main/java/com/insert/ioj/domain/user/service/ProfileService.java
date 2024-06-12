@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.user.service;
 
+import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.domain.user.presentation.dto.res.InfoUserResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ public class ProfileService {
 
     @Transactional(readOnly = true)
     public InfoUserResponse execute(String email) {
-        return new InfoUserResponse(userFacade.getUserByEmail(email));
+        User user = userFacade.getCurrentUser();
+        return new InfoUserResponse(user);
     }
 }
