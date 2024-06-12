@@ -18,6 +18,6 @@ public class UserFacade {
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-            .orElseThrow();
+            .orElseThrow(IllegalArgumentException::new);
     }
 }

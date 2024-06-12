@@ -23,6 +23,6 @@ public class CreateAccessTokenService {
 
     private RefreshToken getRefreshToken(String token) {
         return refreshTokenRepository.findById(token)
-                .orElseThrow();
+                .orElseThrow(IllegalArgumentException::new);
     }
 }
