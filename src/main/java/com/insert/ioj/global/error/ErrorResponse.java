@@ -15,7 +15,7 @@ public class ErrorResponse {
         """;
 
     private int status;
-    private int code;
+    private String code;
     private String message;
 
     public String toString() {
