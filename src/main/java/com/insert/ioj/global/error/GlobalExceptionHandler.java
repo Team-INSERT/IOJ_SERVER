@@ -14,13 +14,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IojException.class)
     public ResponseEntity<ErrorResponse> handleIojException(IojException e) {
         final ErrorCode errorCode = e.getErrorCode();
-        log.error(errorCode.toString());
+        ErrorResponse response = new ErrorResponse(
+            errorCode.getStatus(),
+            errorCode.getCode(),
+            errorCode.getMessage()
+        );
+        log.error(response.toString());
         return new ResponseEntity<>(
-            new ErrorResponse(
-                errorCode.getStatus(),
-                errorCode.getCode(),
-                errorCode.getMessage()
-            ),
+            response,
             HttpStatus.valueOf(errorCode.getStatus())
         );
     }

@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ErrorResponse {
     private static final String errorLogsFormat = """
-        {
+        \n{
             "status": "%s",
             "code": "%s",
             "message": "%s"
