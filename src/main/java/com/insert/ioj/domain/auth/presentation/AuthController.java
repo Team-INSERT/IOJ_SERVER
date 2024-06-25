@@ -9,6 +9,7 @@ import com.insert.ioj.domain.auth.service.GoogleAuthLinkService;
 import com.insert.ioj.domain.auth.service.GoogleAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +31,14 @@ public class AuthController {
 
     @Operation(summary = "유저 인증을 위한 토큰 발급")
     @PostMapping
-    public TokenResponse login(@RequestBody AccessTokenRequest accessTokenRequest) {
+    public TokenResponse login(@RequestBody @Valid AccessTokenRequest accessTokenRequest) {
         return googleAuthService.execute(accessTokenRequest.getAccessToken());
     }
 
     @Operation(summary = "accessToken 재발급")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/token")
-    public AccessTokenResponse createNewAccessToken(@RequestBody CreateAccessTokenRequest request) {
+    public AccessTokenResponse createNewAccessToken(@RequestBody @Valid CreateAccessTokenRequest request) {
         return createNewAccessToken.execute(request.getRefreshToken());
     }
 }

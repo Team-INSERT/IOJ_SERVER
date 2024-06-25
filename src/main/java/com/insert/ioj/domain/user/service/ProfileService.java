@@ -13,7 +13,7 @@ public class ProfileService {
     private final UserFacade userFacade;
 
     @Transactional(readOnly = true)
-    public InfoUserResponse execute(String email) {
+    public InfoUserResponse execute() {
         User user = userFacade.getCurrentUser();
         return new InfoUserResponse(user);
     }

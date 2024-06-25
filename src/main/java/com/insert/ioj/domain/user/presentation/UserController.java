@@ -18,7 +18,7 @@ public class UserController {
 
     @Operation(summary = "유저 상세 정보 조회")
     @GetMapping
-    public InfoUserResponse findMyInfo(String email) {
-        return profileService.execute(email);
+    public InfoUserResponse findMyInfo() {
+        return profileService.execute();
     }
 }

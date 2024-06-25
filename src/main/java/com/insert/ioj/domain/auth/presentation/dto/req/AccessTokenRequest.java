@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AccessTokenRequest {
-    @NotNull(message = "accessToken은 null일 수 없습니다.")
+    @NotNull(message = "accessToken이 비어있습니다.")
     private String accessToken;
 }
