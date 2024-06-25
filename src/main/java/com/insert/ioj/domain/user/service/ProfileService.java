@@ -17,4 +17,6 @@ public class ProfileService {
         User user = userFacade.getCurrentUser();
         return new InfoUserResponse(user);
     }
+
+
 }
