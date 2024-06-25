@@ -3,8 +3,11 @@ package com.insert.ioj.global.security.jwt;
 import com.insert.ioj.domain.auth.domain.RefreshToken;
 import com.insert.ioj.domain.auth.domain.repository.RefreshTokenRepository;
 import com.insert.ioj.global.config.properties.JwtProperties;
+import com.insert.ioj.global.error.exception.ErrorCode;
+import com.insert.ioj.global.error.exception.IojException;
 import com.insert.ioj.global.security.principle.AuthDetailsService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -75,8 +78,10 @@ public class JwtTokenProvider {
         try {
             return Jwts.parser().setSigningKey(jwtProperties.getSecretKey())
                     .parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            throw new IojException(ErrorCode.EXPIRED_PERIOD_TOKEN);
         } catch (Exception e) {
-            throw new IllegalArgumentException();
+            throw new IojException(ErrorCode.INVALID_TOKEN);
         }
     }
 }
