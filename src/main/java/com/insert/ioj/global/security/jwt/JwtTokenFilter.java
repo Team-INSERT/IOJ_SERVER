@@ -39,11 +39,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private void handleException(HttpServletResponse response, IojException e) throws IOException {
         ErrorCode errorCode = e.getErrorCode();
-        ErrorResponse res = new ErrorResponse(
-            errorCode.getStatus(),
-            errorCode.getCode(),
-            errorCode.getMessage()
-        );
+        ErrorResponse res = ErrorResponse.builder()
+            .status(errorCode.getStatus())
+            .code(errorCode.getCode())
+            .message(errorCode.getMessage())
+            .build();
 
         log.error(res.toString());
         response.setCharacterEncoding("UTF-8");

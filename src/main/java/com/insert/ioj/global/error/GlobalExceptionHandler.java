@@ -20,11 +20,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IojException.class)
     public ResponseEntity<ErrorResponse> handleIojException(IojException e) {
         final ErrorCode errorCode = e.getErrorCode();
-        ErrorResponse response = new ErrorResponse(
-            errorCode.getStatus(),
-            errorCode.getCode(),
-            errorCode.getMessage()
-        );
+        ErrorResponse response = ErrorResponse.builder()
+            .status(errorCode.getStatus())
+            .code(errorCode.getCode())
+            .message(errorCode.getMessage())
+            .build();
         log.error(response.toString());
         return new ResponseEntity<>(
             response,
