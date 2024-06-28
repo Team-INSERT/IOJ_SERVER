@@ -8,7 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,7 +15,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-@Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtProvider;
@@ -39,13 +37,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private void handleException(HttpServletResponse response, IojException e) throws IOException {
         ErrorCode errorCode = e.getErrorCode();
-        ErrorResponse res = new ErrorResponse(
-            errorCode.getStatus(),
-            errorCode.getCode(),
-            errorCode.getMessage()
-        );
+        ErrorResponse res = ErrorResponse.builder()
+            .status(errorCode.getStatus())
+            .code(errorCode.getCode())
+            .message(errorCode.getMessage())
+            .build();
 
-        log.error(res.toString());
         response.setCharacterEncoding("UTF-8");
         response.setStatus(errorCode.getStatus());
         response.getWriter().write(res.toString());

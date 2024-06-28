@@ -1,13 +1,15 @@
 package com.insert.ioj.global.error;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class ErrorResponse {
     private static final String errorLogsFormat = """
-        \n{
+        {
             "status": "%s",
             "code": "%s",
             "message": "%s"
