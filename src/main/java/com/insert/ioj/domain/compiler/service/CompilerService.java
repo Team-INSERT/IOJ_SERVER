@@ -5,16 +5,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
 public class CompilerService {
-    public void execute(CompileCodeRequest request) {
+    public void execute(CompileCodeRequest request) throws IOException {
         createStartFile(
             request.getInput(),
             request.getTimeLimit(),
             request.getMemoryLimit()
         );
+
+        saveUploadFile(request.getInput());
     }
 
     private void createStartFile(String input, int timeLimit, int memoryLimit) {
@@ -37,5 +42,11 @@ public class CompilerService {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void saveUploadFile(String content) throws IOException {
+        byte[] bytes = content.getBytes();
+        Path path = Paths.get("util/main.py");
+        Files.write(path, bytes);
     }
 }
