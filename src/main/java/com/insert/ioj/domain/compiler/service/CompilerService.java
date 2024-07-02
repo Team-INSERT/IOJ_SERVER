@@ -8,11 +8,12 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class CompilerService {
-    public void execute(CompileCodeRequest request) throws IOException {
+    public void execute(CompileCodeRequest request) throws Exception {
         createStartFile(
             request.getInput(),
             request.getTimeLimit(),
@@ -20,6 +21,9 @@ public class CompilerService {
         );
 
         saveUploadFile(request.getInput());
+
+        String imageName = UUID.randomUUID() + "-python";
+        buildImage(imageName);
     }
 
     private void createStartFile(String input, int timeLimit, int memoryLimit) {
@@ -48,5 +52,12 @@ public class CompilerService {
         byte[] bytes = content.getBytes();
         Path path = Paths.get("util/main.py");
         Files.write(path, bytes);
+    }
+
+    private int buildImage(String name) throws IOException, InterruptedException {
+        String[] dockerCommand = new String[] {"docker", "image", "build", "util", "-t", name};
+        ProcessBuilder processBuilder = new ProcessBuilder(dockerCommand);
+        Process process = processBuilder.start();
+        return process.waitFor();
     }
 }

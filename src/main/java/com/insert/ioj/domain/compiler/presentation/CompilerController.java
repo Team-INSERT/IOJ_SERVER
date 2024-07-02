@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @Tag(name = "Compiler API")
 @RequiredArgsConstructor
 @RequestMapping("/compiler")
@@ -19,7 +17,7 @@ public class CompilerController {
     private final CompilerService compilerService;
 
     @PostMapping("/python")
-    public void pythonCompiler(@RequestBody CompileCodeRequest request) throws IOException {
+    public void pythonCompiler(@RequestBody CompileCodeRequest request) throws Exception {
         compilerService.execute(request);
     }
 }
