@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.compiler.service;
 
 import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
+import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class CompilerService {
-    public void execute(CompileCodeRequest request) throws Exception {
+    public CompileResponse execute(CompileCodeRequest request) throws Exception {
         String id = UUID.randomUUID().toString();
         String inputFileName = id + "_input";
 
@@ -27,7 +28,7 @@ public class CompilerService {
         saveUploadFile(request.getSourcecode());
 
         buildImage(id);
-        buildImage(imageName);
+        return new CompileResponse(id, runCode(id));
     }
 
     private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {
@@ -69,5 +70,15 @@ public class CompilerService {
         ProcessBuilder processBuilder = new ProcessBuilder(dockerCommand);
         Process process = processBuilder.start();
         return process.waitFor();
+    }
+
+    private String runCode(String imageName) throws InterruptedException, IOException {
+        String[] dockerCommand = new String[] {"docker", "run", "--rm", imageName};
+        ProcessBuilder processbuilder = new ProcessBuilder(dockerCommand);
+        Process process = processbuilder.start();
+        process.waitFor();
+
+        BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        return outputReader.readLine();
     }
 }

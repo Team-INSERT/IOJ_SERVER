@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.compiler.presentation;
 
 import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
+import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import com.insert.ioj.domain.compiler.service.CompilerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class CompilerController {
     private final CompilerService compilerService;
 
     @PostMapping("/python")
-    public void pythonCompiler(@RequestBody CompileCodeRequest request) throws Exception {
-        compilerService.execute(request);
+    public CompileResponse pythonCompiler(@RequestBody CompileCodeRequest request) throws Exception {
+        return compilerService.execute(request);
     }
 }
