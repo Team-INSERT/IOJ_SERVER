@@ -79,6 +79,16 @@ public class CompilerService {
         process.waitFor();
 
         BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        return outputReader.readLine();
+        return readOutput(outputReader);
+    }
+
+    private String readOutput(BufferedReader outputReader) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while((line = outputReader.readLine()) != null) {
+            builder.append(line);
+            builder.append(System.lineSeparator());
+        }
+        return builder.toString();
     }
 }
