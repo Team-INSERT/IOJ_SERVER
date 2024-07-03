@@ -14,25 +14,29 @@ import java.util.UUID;
 @Service
 public class CompilerService {
     public void execute(CompileCodeRequest request) throws Exception {
+        String id = UUID.randomUUID().toString();
+        String inputFileName = id + "_input";
+
         createStartFile(
-            request.getInput(),
+            inputFileName,
             request.getTimeLimit(),
             request.getMemoryLimit()
         );
 
-        saveUploadFile(request.getInput());
+        saveUploadFile(request.getInput(), inputFileName);
+        saveUploadFile(request.getSourcecode());
 
-        String imageName = UUID.randomUUID() + "-python";
+        buildImage(id);
         buildImage(imageName);
     }
 
-    private void createStartFile(String input, int timeLimit, int memoryLimit) {
+    private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {
         String executionCommand = """
             #!/usr/bin/env bash
             ulimit -s %d
             timeout --signal=SIGTERM %d python3 main.py < %s
             exit $?
-            """.formatted(memoryLimit, timeLimit, input);
+            """.formatted(memoryLimit, timeLimit, inputFileName);
         OutputStream os = null;
         try {
             os = new FileOutputStream("util/start.sh");
@@ -54,8 +58,14 @@ public class CompilerService {
         Files.write(path, bytes);
     }
 
-    private int buildImage(String name) throws IOException, InterruptedException {
-        String[] dockerCommand = new String[] {"docker", "image", "build", "util", "-t", name};
+    private void saveUploadFile(String content, String fileName) throws IOException {
+        byte[] bytes = content.getBytes();
+        Path path = Paths.get("util/" + fileName);
+        Files.write(path, bytes);
+    }
+
+    private int buildImage(String imageName) throws IOException, InterruptedException {
+        String[] dockerCommand = new String[] {"docker", "image", "build", "util", "-t", imageName};
         ProcessBuilder processBuilder = new ProcessBuilder(dockerCommand);
         Process process = processBuilder.start();
         return process.waitFor();
