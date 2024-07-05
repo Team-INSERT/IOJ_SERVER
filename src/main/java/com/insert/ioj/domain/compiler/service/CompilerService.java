@@ -28,7 +28,7 @@ public class CompilerService {
         saveUploadFile(request.getSourcecode());
 
         buildImage(id);
-        return new CompileResponse(id, runCode(id));
+        return runCode(id);
     }
 
     private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {
@@ -65,21 +65,27 @@ public class CompilerService {
         Files.write(path, bytes);
     }
 
-    private int buildImage(String imageName) throws IOException, InterruptedException {
-        String[] dockerCommand = new String[] {"docker", "image", "build", "util", "-t", imageName};
+    private int buildImage(String id) throws IOException, InterruptedException {
+        String[] dockerCommand = new String[] {"docker", "image", "build", "util", "-t", id};
         ProcessBuilder processBuilder = new ProcessBuilder(dockerCommand);
         Process process = processBuilder.start();
         return process.waitFor();
     }
 
-    private String runCode(String imageName) throws InterruptedException, IOException {
-        String[] dockerCommand = new String[] {"docker", "run", "--rm", imageName};
+    private CompileResponse runCode(String id) throws InterruptedException, IOException {
+        String[] dockerCommand = new String[] {"docker", "run", "--rm", id};
         ProcessBuilder processbuilder = new ProcessBuilder(dockerCommand);
         Process process = processbuilder.start();
-        process.waitFor();
+        int status = process.waitFor();
+        String statusResponse = checkStatus(status);
 
         BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        return readOutput(outputReader);
+        String output = readOutput(outputReader);
+        return CompileResponse.builder()
+            .id(id)
+            .status(statusResponse)
+            .result(output)
+            .build();
     }
 
     private String readOutput(BufferedReader outputReader) throws IOException {
@@ -90,5 +96,20 @@ public class CompilerService {
             builder.append(System.lineSeparator());
         }
         return builder.toString();
+    }
+
+    private String checkStatus(int status) {
+        String response;
+        if (status == 0)
+            response = "Success";
+        else if (status == 1)
+            response = "Runtime Error";
+        else if (status == 2)
+            response = "Compilation Error";
+        else if (status == 139)
+            response = "Out Of Memory";
+        else
+            response = "Time Limit Exceeded";
+        return response;
     }
 }
