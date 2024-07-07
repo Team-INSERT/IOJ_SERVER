@@ -21,4 +21,9 @@ public class ProblemTestcase {
     @ManyToOne
     @JoinColumn(name = "testcase_id")
     private Testcase testcase;
+
+    public ProblemTestcase(Problem problem, Testcase testcase) {
+        this.problem = problem;
+        this.testcase = testcase;
+    }
 }

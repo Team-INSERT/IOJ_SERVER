@@ -15,11 +15,21 @@ public class Problem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int level;
-
     private String title;
 
     private String content;
 
-    private String input;
+    private int level;
+
+    private int memoryLimit;
+
+    private int timeLimit;
+
+    public Problem(String title, String content, int level, int memoryLimit, int timeLimit) {
+        this.title = title;
+        this.content = content;
+        this.level = level;
+        this.memoryLimit = memoryLimit;
+        this.timeLimit = timeLimit;
+    }
 }

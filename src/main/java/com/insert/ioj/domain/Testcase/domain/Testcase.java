@@ -17,4 +17,9 @@ public class Testcase {
     private String input;
 
     private String output;
+
+    public Testcase(String input, String output) {
+        this.input = input;
+        this.output = output;
+    }
 }
