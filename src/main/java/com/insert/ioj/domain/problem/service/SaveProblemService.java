@@ -9,6 +9,7 @@ import com.insert.ioj.domain.problemTestcase.domain.ProblemTestcase;
 import com.insert.ioj.domain.problemTestcase.domain.repository.ProblemTestcaseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class SaveProblemService {
     private final TestcaseRepository testcaseRepository;
     private final ProblemTestcaseRepository problemTestcaseRepository;
 
+    @Transactional
     public Long execute(SaveProblemRequest request) {
         Problem problem = problemRepository.save(request.toProblem());
         List<Testcase> testcases = testcaseRepository.saveAll(request.toTestcaseList());
