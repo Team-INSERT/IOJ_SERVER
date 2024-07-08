@@ -9,6 +9,7 @@ import com.insert.ioj.domain.problem.service.SaveProblemService;
 import com.insert.ioj.domain.problem.service.SubmitProblemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,13 @@ public class ProblemController {
 
     @Operation(summary = "문제 실행")
     @PostMapping
-    public SubmitProblemResponse submitProblem(@RequestBody SubmitProblemRequest request) throws Exception {
+    public SubmitProblemResponse submitProblem(@RequestBody @Valid SubmitProblemRequest request) throws Exception {
         return submitProblemService.execute(request);
     }
 
     @Operation(summary = "문제 저장")
     @PostMapping("/save")
-    public Long saveProblem(@RequestBody SaveProblemRequest request) {
+    public Long saveProblem(@RequestBody @Valid SaveProblemRequest request) {
         return saveProblemService.execute(request);
     }
 }
