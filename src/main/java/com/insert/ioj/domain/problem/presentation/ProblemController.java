@@ -38,7 +38,7 @@ public class ProblemController {
     }
 
     @Operation(summary = "문제 저장")
-    @PostMapping("/save")
+    @PutMapping
     public Long saveProblem(@RequestBody @Valid SaveProblemRequest request) {
         return saveProblemService.execute(request);
     }
