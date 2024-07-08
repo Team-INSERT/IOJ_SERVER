@@ -52,6 +52,8 @@ public class CompilerService {
 
             buildImage(id);
             CompileResponse compile = runCode(id);
+            deleteFile(inputFileName);
+
             if (!testcase.getOutput().equals(compile.getResult())) {
                 return new SubmitProblemResponse(problem.getId(), compile.getStatus(), false);
             }
@@ -140,5 +142,10 @@ public class CompilerService {
         else
             response = "Time Limit Exceeded";
         return response;
+    }
+
+    private void deleteFile(String filename) {
+        File file = new File("util/"+filename);
+        file.delete();
     }
 }
