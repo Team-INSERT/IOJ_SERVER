@@ -37,7 +37,7 @@ public class AuthController {
 
     @Operation(summary = "accessToken 재발급")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/token")
+    @PostMapping("/refresh")
     public AccessTokenResponse createNewAccessToken(@RequestBody @Valid CreateAccessTokenRequest request) {
         return createNewAccessToken.execute(request.getRefreshToken());
     }
