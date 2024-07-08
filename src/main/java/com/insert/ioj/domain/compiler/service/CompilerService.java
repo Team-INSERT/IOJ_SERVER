@@ -37,8 +37,6 @@ public class CompilerService {
     }
 
     public SubmitProblemResponse execute(Problem problem, List<Testcase> testcases, SubmitProblemRequest request) throws Exception {
-        boolean isPass = true;
-
         for(Testcase testcase: testcases) {
             String id = testcase.getId().toString();
             String inputFileName = id + "_input";
@@ -53,13 +51,13 @@ public class CompilerService {
             saveUploadFile(request.getSourcecode());
 
             buildImage(id);
-            runCode(id);
-            if (!testcase.getOutput().equals(runCode(id).getResult())) {
-                isPass = false;
+            CompileResponse compile = runCode(id);
+            if (!testcase.getOutput().equals(compile.getResult())) {
+                return new SubmitProblemResponse(problem.getId(), compile.getStatus(), false);
             }
         }
 
-        return new SubmitProblemResponse(problem.getId(), isPass);
+        return new SubmitProblemResponse(problem.getId(), "Success", true);
     }
 
     private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {
