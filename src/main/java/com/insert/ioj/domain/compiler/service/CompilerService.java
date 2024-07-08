@@ -1,7 +1,11 @@
 package com.insert.ioj.domain.compiler.service;
 
+import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
+import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.presentation.dto.req.SubmitProblemRequest;
+import com.insert.ioj.domain.problem.presentation.dto.res.SubmitProblemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -29,6 +34,32 @@ public class CompilerService {
 
         buildImage(id);
         return runCode(id);
+    }
+
+    public SubmitProblemResponse execute(Problem problem, List<Testcase> testcases, SubmitProblemRequest request) throws Exception {
+        boolean isPass = true;
+
+        for(Testcase testcase: testcases) {
+            String id = testcase.getId().toString();
+            String inputFileName = id + "_input";
+
+            createStartFile(
+                inputFileName,
+                problem.getTimeLimit(),
+                problem.getMemoryLimit()
+            );
+
+            saveUploadFile(testcase.getInput(), inputFileName);
+            saveUploadFile(request.getSourcecode());
+
+            buildImage(id);
+            runCode(id);
+            if (!testcase.getOutput().equals(runCode(id).getResult())) {
+                isPass = false;
+            }
+        }
+
+        return new SubmitProblemResponse(problem.getId(), isPass);
     }
 
     private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {

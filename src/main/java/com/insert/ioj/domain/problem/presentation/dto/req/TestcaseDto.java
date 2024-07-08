@@ -11,6 +11,6 @@ public class TestcaseDto {
     private String output;
 
     public Testcase toEntity() {
-        return new Testcase(input, output);
+        return new Testcase(input, output+"\n");
     }
 }
