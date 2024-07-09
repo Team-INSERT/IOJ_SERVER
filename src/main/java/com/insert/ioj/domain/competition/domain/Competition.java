@@ -8,18 +8,24 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class  Competition {
+public class Competition {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
 
-    private LocalDate startTime;
+    private LocalDateTime startTime;
 
-    private LocalDate endTime;
+    private LocalDateTime endTime;
+
+    public Competition(String title, LocalDateTime startTime, LocalDateTime endTime) {
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }
