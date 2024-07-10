@@ -26,11 +26,7 @@ public class SaveCompetitionService {
     @Transactional
     public Long execute(SaveCompetitionRequest request) {
         Competition competition = competitionRepository.save(request.toEntity());
-        List<Problem> problems = new ArrayList<>();
-        for(Long problemId: request.getProblems()) {
-            problems.add(problemRepository.findById(problemId)
-                .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM)));
-        }
+        List<Problem> problems = problemRepository.findAllById(request.getProblems());
         for(Problem problem: problems) {
             problemCompetitionRepository.save(
                 new ProblemCompetition(problem, competition)
