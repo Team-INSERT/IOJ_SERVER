@@ -25,8 +25,17 @@ public class SolveCompetition {
     @JoinColumn(name = "problem_competition_id")
     private ProblemCompetition problemCompetition;
 
-    public SolveCompetition(User user, ProblemCompetition problemCompetition) {
+    private String sourcecode;
+
+    private String compileStatus;
+
+    private boolean isPass;
+
+    public SolveCompetition(User user, ProblemCompetition problemCompetition, String sourcecode, String compileStatus, boolean isPass) {
         this.user = user;
         this.problemCompetition = problemCompetition;
+        this.sourcecode = sourcecode;
+        this.compileStatus = compileStatus;
+        this.isPass = isPass;
     }
 }

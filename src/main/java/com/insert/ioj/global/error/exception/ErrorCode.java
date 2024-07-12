@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
     NOT_FOUND_USER(404, "USER-404-1", "요청한 사용자가 존재하지 않습니다."),
     NOT_FOUND_PROBLEM(404, "PROBLEM-404-1", "요청한 문제가 존재하지 않습니다."),
+    NOT_FOUND_COMPETITION(404, "COMPETITION-404-1", "요청한 대회가 존재하지 않습니다."),
 
     INVALID_TOKEN(401, "TOKEN-401-1", "올바르지 않은 형식의 Token입니다."),
     EXPIRED_PERIOD_TOKEN(401, "TOKEN-401-2", "기한이 만료된 Token입니다."),

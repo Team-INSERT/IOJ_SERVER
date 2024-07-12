@@ -1,11 +1,11 @@
 package com.insert.ioj.domain.problem.service;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
+import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.compiler.service.CompilerService;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.problem.presentation.dto.req.SubmitProblemRequest;
-import com.insert.ioj.domain.problem.presentation.dto.res.SubmitProblemResponse;
 import com.insert.ioj.domain.problemTestcase.domain.ProblemTestcase;
 import com.insert.ioj.domain.problemTestcase.domain.repository.ProblemTestcaseRepository;
 import com.insert.ioj.domain.solve.domain.repository.SolveRepository;
@@ -29,7 +29,7 @@ public class SubmitProblemService {
     private final UserFacade userFacade;
 
     @Transactional
-    public SubmitProblemResponse execute(SubmitProblemRequest request) throws Exception {
+    public ProblemCompileResponse execute(SubmitProblemRequest request) throws Exception {
         User user = userFacade.getCurrentUser();
 
         Problem problem = problemRepository.findById(request.getId())
@@ -40,8 +40,8 @@ public class SubmitProblemService {
                 .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM))
                 .stream().map(ProblemTestcase::getTestcase).toList();
 
-        SubmitProblemResponse response = compilerService.execute(problem, testcases, request);
-        solveRepository.save(response.toEntity(user, problem, request.getSourcecode()));
+        ProblemCompileResponse response = compilerService.execute(problem, testcases, request.getSourcecode());
+        solveRepository.save(response.toSolve(user, problem, request.getSourcecode()));
 
         return response;
     }
