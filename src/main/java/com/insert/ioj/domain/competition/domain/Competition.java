@@ -1,9 +1,9 @@
 package com.insert.ioj.domain.competition.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.insert.ioj.domain.user.domain.type.Authority;
+import com.insert.ioj.global.error.exception.ErrorCode;
+import com.insert.ioj.global.error.exception.IojException;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +23,25 @@ public class Competition {
 
     private LocalDateTime endTime;
 
-    public Competition(String title, LocalDateTime startTime, LocalDateTime endTime) {
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
+    public Competition(String title, LocalDateTime startTime, LocalDateTime endTime, Authority authority) {
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.authority = authority;
+    }
+
+    public void checkRole(Authority authority) {
+        if (this.authority == null) return;
+        if (this.authority == authority) return;
+
+        switch (authority) {
+            case USER -> throw new IojException(ErrorCode.FORBIDDEN_USER);
+            case THIRD_YEAR -> throw new IojException(ErrorCode.FORBIDDEN_THIRD_YEAR);
+            case SECOND_YEAR -> throw new IojException(ErrorCode.FORBIDDEN_SECOND_YEAR);
+            case FIRST_YEAR -> throw new IojException(ErrorCode.FORBIDDEN_FIRST_YEAR);
+        }
     }
 }

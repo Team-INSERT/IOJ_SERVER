@@ -3,6 +3,7 @@ package com.insert.ioj.domain.auth.service;
 import com.insert.ioj.domain.auth.presentation.dto.res.TokenResponse;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.domain.repository.UserRepository;
+import com.insert.ioj.domain.user.domain.type.Authority;
 import com.insert.ioj.domain.user.domain.type.Color;
 import com.insert.ioj.global.feign.auth.GoogleInformationClient;
 import com.insert.ioj.global.feign.auth.res.GoogleInformationResponse;
@@ -30,7 +31,7 @@ public class GoogleAuthService {
 
         if (user.isEmpty()) {
             userRepository.save(
-                new User(response.getEmail(), response.getName(), ramdomColor()));
+                new User(email, response.getName(), ramdomColor(), getAuthority(email)));
         }
 
         return new TokenResponse(
@@ -43,5 +44,21 @@ public class GoogleAuthService {
         Random random = new Random();
         Color[] colors = Color.values();
         return colors[random.nextInt(colors.length)];
+    }
+
+    private Authority getAuthority(String email) {
+        if (email.endsWith("@bssm.hs.kr")) {
+            if (email.startsWith("2022")) {
+                return Authority.FIRST_YEAR;
+            } else if (email.startsWith("2023")) {
+                return Authority.SECOND_YEAR;
+            } else if (email.startsWith("24.")) {
+                return Authority.THIRD_YEAR;
+            } else {
+                return Authority.USER;
+            }
+        } else {
+            return Authority.USER;
+        }
     }
 }

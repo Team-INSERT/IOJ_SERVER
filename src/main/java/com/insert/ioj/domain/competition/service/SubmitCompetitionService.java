@@ -41,6 +41,8 @@ public class SubmitCompetitionService {
         Competition competition = competitionRepository.findById(request.getCompetitionId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_COMPETITION));
 
+        competition.checkRole(user.getAuthority());
+
         Problem problem = problemRepository.findById(request.getProblemId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
 

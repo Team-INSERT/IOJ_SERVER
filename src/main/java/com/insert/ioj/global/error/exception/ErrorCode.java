@@ -6,6 +6,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    FORBIDDEN_USER(403, "USER-403-1", "요청한 사용자의 권한이 존재하지 않습니다."),
+    FORBIDDEN_THIRD_YEAR(403, "USER-403-2", "요청한 사용자의 3학년 권한이 존재하지 않습니다."),
+    FORBIDDEN_SECOND_YEAR(403, "USER-403-3", "요청한 사용자의 2학년 권한이 존재하지 않습니다."),
+    FORBIDDEN_FIRST_YEAR(403, "USER-403-4", "요청한 사용자의 1학년 권한이 존재하지 않습니다."),
+
     NOT_FOUND_USER(404, "USER-404-1", "요청한 사용자가 존재하지 않습니다."),
     NOT_FOUND_PROBLEM(404, "PROBLEM-404-1", "요청한 문제가 존재하지 않습니다."),
     NOT_FOUND_COMPETITION(404, "COMPETITION-404-1", "요청한 대회가 존재하지 않습니다."),
