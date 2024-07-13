@@ -2,8 +2,10 @@ package com.insert.ioj.domain.competition.presentation;
 
 import com.insert.ioj.domain.competition.presentation.dto.req.SaveCompetitionRequest;
 import com.insert.ioj.domain.competition.presentation.dto.req.SubmitCompetitionRequest;
+import com.insert.ioj.domain.competition.presentation.dto.res.ListCompetitionProblemResponse;
 import com.insert.ioj.domain.competition.presentation.dto.res.ListCompetitionResponse;
 import com.insert.ioj.domain.competition.service.ListCompetitionService;
+import com.insert.ioj.domain.competition.service.ProblemCompetitionService;
 import com.insert.ioj.domain.competition.service.SaveCompetitionService;
 import com.insert.ioj.domain.competition.service.SubmitCompetitionService;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 public class CompetitionController {
     private final ListCompetitionService listCompetitionService;
+    private final ProblemCompetitionService problemCompetitionService;
     private final SaveCompetitionService saveCompetitionService;
     private final SubmitCompetitionService submitCompetitionService;
 
@@ -29,6 +32,13 @@ public class CompetitionController {
     @GetMapping
     public List<ListCompetitionResponse> listCompetition(Pageable pageable) {
         return listCompetitionService.execute(pageable);
+    }
+
+    @Operation(summary = "대회 문제 리스트")
+    @GetMapping("/{competitionId}")
+    public List<ListCompetitionProblemResponse> listCompetitionProblem(
+                @PathVariable(name = "competitionId") Long id) {
+        return problemCompetitionService.execute(id);
     }
 
     @Operation(summary = "대회 생성")
