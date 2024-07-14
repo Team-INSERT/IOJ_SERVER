@@ -2,7 +2,7 @@ package com.insert.ioj.domain.competition.service;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.competition.domain.Competition;
-import com.insert.ioj.domain.competition.domain.repository.CompetitionRepository;
+import com.insert.ioj.domain.competition.facade.CompetitionFacade;
 import com.insert.ioj.domain.competition.presentation.dto.req.SubmitCompetitionRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.compiler.service.CompilerService;
@@ -29,7 +29,7 @@ public class SubmitCompetitionService {
     private final CompilerService compilerService;
     private final ProblemTestcaseRepository problemTestcaseRepository;
     private final SolveCompetitionRepository solveCompetitionRepository;
-    private final CompetitionRepository competitionRepository;
+    private final CompetitionFacade competitionFacade;
     private final ProblemCompetitionRepository problemCompetitionRepository;
     private final ProblemRepository problemRepository;
     private final UserFacade userFacade;
@@ -37,9 +37,7 @@ public class SubmitCompetitionService {
     @Transactional
     public ProblemCompileResponse execute(SubmitCompetitionRequest request) throws Exception {
         User user = userFacade.getCurrentUser();
-
-        Competition competition = competitionRepository.findById(request.getCompetitionId())
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_COMPETITION));
+        Competition competition = competitionFacade.getCompetition(request.getCompetitionId());
 
         competition.checkRole(user.getAuthority());
 
