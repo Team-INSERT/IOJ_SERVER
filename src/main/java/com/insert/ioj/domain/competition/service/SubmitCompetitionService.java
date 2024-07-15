@@ -35,26 +35,32 @@ public class SubmitCompetitionService {
     private final UserFacade userFacade;
 
     @Transactional
-    public ProblemCompileResponse execute(SubmitCompetitionRequest request) throws Exception {
+    public ProblemCompileResponse execute(SubmitCompetitionRequest req) throws Exception {
         User user = userFacade.getCurrentUser();
-        Competition competition = competitionFacade.getCompetition(request.getCompetitionId());
+        Competition competition = competitionFacade.getCompetition(req.getCompetitionId());
 
         competition.checkRole(user.getAuthority());
 
-        Problem problem = problemRepository.findById(request.getProblemId())
+        Problem problem = problemRepository.findById(req.getProblemId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
 
-        ProblemCompetition problemCompetition = problemCompetitionRepository.findByCompetitionAndProblem(competition, problem);
+        ProblemCompetition problemCompetition =
+            problemCompetitionRepository.findByCompetitionAndProblem(competition, problem);
 
-        List<Testcase> testcases =
+        List<Testcase> testcases = saveTestcases(problem);
+
+        ProblemCompileResponse res =
+            compilerService.execute(problem, testcases, req.getSourcecode());
+
+        solveCompetitionRepository.save(res.toSolveCompetition(user, problemCompetition, req.getSourcecode()));
+
+        return res;
+    }
+
+    private List<Testcase> saveTestcases(Problem problem) {
+        return
             problemTestcaseRepository.findAllByProblem(problem)
                 .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM))
                 .stream().map(ProblemTestcase::getTestcase).toList();
-
-        ProblemCompileResponse response =
-            compilerService.execute(problem, testcases, request.getSourcecode());
-        solveCompetitionRepository.save(response.toSolveCompetition(user, problemCompetition, request.getSourcecode()));
-
-        return response;
     }
 }
