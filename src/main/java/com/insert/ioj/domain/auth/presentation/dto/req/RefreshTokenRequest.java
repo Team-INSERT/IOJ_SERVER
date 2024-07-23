@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CreateAccessTokenRequest {
+public class RefreshTokenRequest {
     @NotNull(message = "refreshToken이 비어있습니다.")
     private String refreshToken;
 }
