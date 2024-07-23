@@ -36,6 +36,7 @@ public class Competition {
     public void checkRole(Authority authority) {
         if (this.authority == null) return;
         if (this.authority == authority) return;
+        if (this.authority == Authority.ADMIN) return;
 
         switch (authority) {
             case USER -> throw new IojException(ErrorCode.FORBIDDEN_USER);
