@@ -1,9 +1,9 @@
 package com.insert.ioj.domain.compiler.presentation.dto.res;
 
 import com.insert.ioj.domain.problem.domain.Problem;
-import com.insert.ioj.domain.problemCompetition.domain.ProblemCompetition;
+import com.insert.ioj.domain.problemContest.domain.ProblemContest;
 import com.insert.ioj.domain.solve.domain.Solve;
-import com.insert.ioj.domain.solveCompetition.domain.SolveCompetition;
+import com.insert.ioj.domain.solveContest.domain.SolveContest;
 import com.insert.ioj.domain.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +27,9 @@ public class ProblemCompileResponse {
         );
     }
 
-    public SolveCompetition toSolveCompetition(User user, ProblemCompetition problemCompetition, String sourcecode) {
-        return new SolveCompetition(
-            user, problemCompetition, sourcecode, compileStatus, isPass
+    public SolveContest toSolveContest(User user, ProblemContest problemContest, String sourcecode) {
+        return new SolveContest(
+            user, problemContest, sourcecode, compileStatus, isPass
         );
     }
 }

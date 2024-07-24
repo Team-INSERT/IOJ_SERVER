@@ -3,9 +3,12 @@ package com.insert.ioj.domain.problem.presentation.dto.req;
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.problem.domain.Problem;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +23,7 @@ public class SaveProblemRequest {
     @NotNull(message = "content가 비어있습니다.")
     private String content;
 
-    @Min(value = 1, message = "level은 1보다 커야 합니다.")
-    @Max(value = 5, message = "level은 5보다 작아야 합니다.")
+    @Range(min = 1, max = 5, message = "level은 1혹은 5사이어야 합니다.")
     @NotNull(message = "level이 비어있습니다.")
     private Integer level;
 

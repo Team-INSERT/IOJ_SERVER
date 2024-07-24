@@ -1,6 +1,6 @@
-package com.insert.ioj.domain.competition.presentation.dto.req;
+package com.insert.ioj.domain.contest.presentation.dto.req;
 
-import com.insert.ioj.domain.competition.domain.Competition;
+import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.user.domain.type.Authority;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class SaveCompetitionRequest {
+public class SaveContestRequest {
     @Size(max = 22, message = "title은 공백 포함 22자까지만 가능합니다.")
     @NotNull(message = "title이 비어있습니다.")
     private String title;
@@ -32,8 +32,8 @@ public class SaveCompetitionRequest {
     @NotNull(message = "problems가 비어있습니다.")
     private List<Long> problems;
 
-    public Competition toEntity() {
-        return new Competition(
+    public Contest toEntity() {
+        return new Contest(
             title, startTime, endTime, authority
         );
     }
