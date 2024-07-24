@@ -3,9 +3,8 @@ package com.insert.ioj.domain.compiler.service;
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
+import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.problem.domain.Problem;
-import com.insert.ioj.domain.problem.presentation.dto.req.SubmitProblemRequest;
-import com.insert.ioj.domain.problem.presentation.dto.res.SubmitProblemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +35,7 @@ public class CompilerService {
         return runCode(id);
     }
 
-    public SubmitProblemResponse execute(Problem problem, List<Testcase> testcases, SubmitProblemRequest request) throws Exception {
+    public ProblemCompileResponse execute(Problem problem, List<Testcase> testcases, String sourcecode) throws Exception {
         for(Testcase testcase: testcases) {
             String id = testcase.getId().toString();
             String inputFileName = id + "_input";
@@ -48,18 +47,18 @@ public class CompilerService {
             );
 
             saveUploadFile(testcase.getInput(), inputFileName);
-            saveUploadFile(request.getSourcecode());
+            saveUploadFile(sourcecode);
 
             buildImage(id);
             CompileResponse compile = runCode(id);
             deleteFile(inputFileName);
 
             if (!testcase.getOutput().equals(compile.getResult())) {
-                return new SubmitProblemResponse(problem.getId(), compile.getStatus(), false);
+                return new ProblemCompileResponse(problem.getId(), compile.getStatus(), false);
             }
         }
 
-        return new SubmitProblemResponse(problem.getId(), "Success", true);
+        return new ProblemCompileResponse(problem.getId(), "Success", true);
     }
 
     private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {
