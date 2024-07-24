@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.contest.presentation;
 
+import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.contest.presentation.dto.req.SaveContestRequest;
 import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse;
@@ -8,7 +9,6 @@ import com.insert.ioj.domain.contest.service.ListContestService;
 import com.insert.ioj.domain.contest.service.ProblemContestService;
 import com.insert.ioj.domain.contest.service.SaveContestService;
 import com.insert.ioj.domain.contest.service.SubmitContestService;
-import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -42,13 +42,13 @@ public class ContestController {
     }
 
     @Operation(summary = "대회 생성")
-    @PutMapping
+    @PostMapping
     public Long saveContest(@RequestBody @Valid SaveContestRequest request) {
         return saveContestService.execute(request);
     }
 
     @Operation(summary = "대회 문제 제출")
-    @PostMapping
+    @PostMapping("/execution")
     public ProblemCompileResponse submitContest(@RequestBody SubmitContestRequest request) throws Exception {
         return submitContestService.execute(request);
     }

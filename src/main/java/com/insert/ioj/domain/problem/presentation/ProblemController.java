@@ -32,13 +32,13 @@ public class ProblemController {
     }
 
     @Operation(summary = "문제 실행")
-    @PostMapping
+    @PostMapping("/execution")
     public ProblemCompileResponse submitProblem(@RequestBody @Valid SubmitProblemRequest request) throws Exception {
         return submitProblemService.execute(request);
     }
 
     @Operation(summary = "문제 저장")
-    @PutMapping
+    @PostMapping
     public Long saveProblem(@RequestBody @Valid SaveProblemRequest request) {
         return saveProblemService.execute(request);
     }
