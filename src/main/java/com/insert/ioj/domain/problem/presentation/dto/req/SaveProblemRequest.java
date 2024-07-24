@@ -45,10 +45,10 @@ public class SaveProblemRequest {
         );
     }
 
-    public List<Testcase> toTestcaseList() {
+    public List<Testcase> toTestcaseList(Problem problem) {
         List<Testcase> testcaseList = new ArrayList<>();
         for(TestcaseDto testcase: testcases) {
-            testcaseList.add(testcase.toEntity());
+            testcaseList.add(testcase.toEntity(problem));
         }
         return testcaseList;
     }
