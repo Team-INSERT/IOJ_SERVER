@@ -1,4 +1,4 @@
-package com.insert.ioj.domain.competition.presentation.dto.req;
+package com.insert.ioj.domain.contest.presentation.dto.req;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SubmitCompetitionRequest {
-    @NotNull(message = "competitionId가 비어있습니다.")
-    private Long competitionId;
+public class SubmitContestRequest {
+    @NotNull(message = "contestId가 비어있습니다.")
+    private Long contestId;
 
     @NotNull(message = "problemId가 비어있습니다.")
     private Long problemId;

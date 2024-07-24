@@ -1,18 +1,18 @@
-package com.insert.ioj.domain.competition.service;
+package com.insert.ioj.domain.contest.service;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
-import com.insert.ioj.domain.competition.domain.Competition;
-import com.insert.ioj.domain.competition.facade.CompetitionFacade;
-import com.insert.ioj.domain.competition.presentation.dto.req.SubmitCompetitionRequest;
+import com.insert.ioj.domain.contest.domain.Contest;
+import com.insert.ioj.domain.contest.facade.ContestFacade;
+import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.compiler.service.CompilerService;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
-import com.insert.ioj.domain.problemCompetition.domain.ProblemCompetition;
-import com.insert.ioj.domain.problemCompetition.domain.repository.ProblemCompetitionRepository;
+import com.insert.ioj.domain.problemContest.domain.ProblemContest;
+import com.insert.ioj.domain.problemContest.domain.repository.ProblemContestRepository;
 import com.insert.ioj.domain.problemTestcase.domain.ProblemTestcase;
 import com.insert.ioj.domain.problemTestcase.domain.repository.ProblemTestcaseRepository;
-import com.insert.ioj.domain.solveCompetition.domain.repository.SolveCompetitionRepository;
+import com.insert.ioj.domain.solveContest.domain.repository.SolveContestRepository;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.error.exception.ErrorCode;
@@ -25,34 +25,34 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class SubmitCompetitionService {
+public class SubmitContestService {
     private final CompilerService compilerService;
     private final ProblemTestcaseRepository problemTestcaseRepository;
-    private final SolveCompetitionRepository solveCompetitionRepository;
-    private final CompetitionFacade competitionFacade;
-    private final ProblemCompetitionRepository problemCompetitionRepository;
+    private final SolveContestRepository solveContestRepository;
+    private final ContestFacade contestFacade;
+    private final ProblemContestRepository problemContestRepository;
     private final ProblemRepository problemRepository;
     private final UserFacade userFacade;
 
     @Transactional
-    public ProblemCompileResponse execute(SubmitCompetitionRequest req) throws Exception {
+    public ProblemCompileResponse execute(SubmitContestRequest req) throws Exception {
         User user = userFacade.getCurrentUser();
-        Competition competition = competitionFacade.getCompetition(req.getCompetitionId());
+        Contest contest = contestFacade.getContest(req.getContestId());
 
-        competition.checkRole(user.getAuthority());
+        contest.checkRole(user.getAuthority());
 
         Problem problem = problemRepository.findById(req.getProblemId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
 
-        ProblemCompetition problemCompetition =
-            problemCompetitionRepository.findByCompetitionAndProblem(competition, problem);
+        ProblemContest problemContest =
+            problemContestRepository.findByContestAndProblem(contest, problem);
 
         List<Testcase> testcases = saveTestcases(problem);
 
         ProblemCompileResponse res =
             compilerService.execute(problem, testcases, req.getSourcecode());
 
-        solveCompetitionRepository.save(res.toSolveCompetition(user, problemCompetition, req.getSourcecode()));
+        solveContestRepository.save(res.toSolveContest(user, problemContest, req.getSourcecode()));
 
         return res;
     }

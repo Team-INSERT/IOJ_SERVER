@@ -1,4 +1,4 @@
-package com.insert.ioj.domain.competition.domain;
+package com.insert.ioj.domain.contest.domain;
 
 import com.insert.ioj.domain.user.domain.type.Authority;
 import com.insert.ioj.global.error.exception.ErrorCode;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Competition {
+public class Contest {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,7 +26,7 @@ public class Competition {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    public Competition(String title, LocalDateTime startTime, LocalDateTime endTime, Authority authority) {
+    public Contest(String title, LocalDateTime startTime, LocalDateTime endTime, Authority authority) {
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
