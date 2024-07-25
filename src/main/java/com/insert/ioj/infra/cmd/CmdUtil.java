@@ -29,7 +29,7 @@ public class CmdUtil {
             Process process = processBuilder.start();
             long executionStartTime = System.currentTimeMillis();
 
-            process.waitFor(timeout, TimeUnit.MILLISECONDS);
+            process.waitFor(timeout, TimeUnit.SECONDS);
             long executionEndTime = System.currentTimeMillis();
 
             int status = process.exitValue();
