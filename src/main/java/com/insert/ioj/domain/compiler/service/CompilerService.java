@@ -6,6 +6,7 @@ import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.infra.cmd.CmdUtil;
+import com.insert.ioj.infra.docker.DockerUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class CompilerService {
         saveUploadFile(request.getInput(), inputFileName);
         saveUploadFile(request.getSourcecode());
 
-        buildImage(id);
+        DockerUtil.buildImage(id);
         return runCode(id);
     }
 
@@ -50,7 +51,7 @@ public class CompilerService {
             saveUploadFile(testcase.getInput(), inputFileName);
             saveUploadFile(sourcecode);
 
-            buildImage(id);
+            DockerUtil.buildImage(id);
             CompileResponse compile = runCode(id);
             deleteFile(inputFileName);
 
@@ -94,13 +95,6 @@ public class CompilerService {
         byte[] bytes = content.getBytes();
         Path path = Paths.get("util/" + fileName);
         Files.write(path, bytes);
-    }
-
-    private int buildImage(String id) throws IOException, InterruptedException {
-        String[] dockerCommand = new String[] {"docker", "image", "build", "util", "-t", id};
-        ProcessBuilder processBuilder = new ProcessBuilder(dockerCommand);
-        Process process = processBuilder.start();
-        return process.waitFor();
     }
 
     private CompileResponse runCode(String id) throws InterruptedException, IOException {
