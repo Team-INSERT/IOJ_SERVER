@@ -5,6 +5,7 @@ import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.infra.cmd.CmdUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -110,22 +111,12 @@ public class CompilerService {
         String statusResponse = checkStatus(status);
 
         BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String output = readOutput(outputReader);
+        String output = CmdUtil.readOutput(outputReader);
         return CompileResponse.builder()
             .id(id)
             .status(statusResponse)
             .result(output)
             .build();
-    }
-
-    private String readOutput(BufferedReader outputReader) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while((line = outputReader.readLine()) != null) {
-            builder.append(line);
-            builder.append(System.lineSeparator());
-        }
-        return builder.toString();
     }
 
     private String checkStatus(int status) {

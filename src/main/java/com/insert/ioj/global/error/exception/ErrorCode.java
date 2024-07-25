@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    PROCESS_EXECUTION(500, "EXECUTION-1", "명령어를 실행하는 도중 에러가 발생하였습니다."),
+
     FORBIDDEN_USER(403, "USER-403-1", "요청한 사용자의 권한이 존재하지 않습니다."),
     FORBIDDEN_THIRD_YEAR(403, "USER-403-2", "요청한 사용자의 3학년 권한이 존재하지 않습니다."),
     FORBIDDEN_SECOND_YEAR(403, "USER-403-3", "요청한 사용자의 2학년 권한이 존재하지 않습니다."),
