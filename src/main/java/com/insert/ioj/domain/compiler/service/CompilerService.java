@@ -6,6 +6,7 @@ import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.infra.cmd.CmdUtil;
+import com.insert.ioj.infra.cmd.dto.res.ProcessOutput;
 import com.insert.ioj.infra.docker.DockerUtil;
 import com.insert.ioj.infra.file.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -74,19 +75,14 @@ public class CompilerService {
         FileUtil.saveUploadedFiles(executionCommand, "util/start.sh");
     }
 
-    private CompileResponse runCode(String id) throws InterruptedException, IOException {
-        String[] dockerCommand = new String[] {"docker", "run", "--rm", id};
-        ProcessBuilder processbuilder = new ProcessBuilder(dockerCommand);
-        Process process = processbuilder.start();
-        int status = process.waitFor();
-        String statusResponse = checkStatus(status);
+    private CompileResponse runCode(String id) {
+        ProcessOutput processOutput = DockerUtil.runContainer(id);
+        String statusResponse = checkStatus(processOutput.getStatus());
 
-        BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String output = CmdUtil.readOutput(outputReader);
         return CompileResponse.builder()
             .id(id)
             .status(statusResponse)
-            .result(output)
+            .result(processOutput.getStdOut())
             .build();
     }
 
