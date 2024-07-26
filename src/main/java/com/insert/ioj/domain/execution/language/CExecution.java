@@ -4,6 +4,7 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.Execution;
 import lombok.Getter;
 
+import java.io.IOException;
 import java.util.List;
 
 @Getter
@@ -13,6 +14,11 @@ public class CExecution extends Execution {
                       int timeLimit,
                       int memoryLimit) {
         super(sourcecode, testcases, timeLimit, memoryLimit);
+    }
+
+    @Override
+    protected void copySpecialFile() throws IOException {
+        // null
     }
 
     @Override

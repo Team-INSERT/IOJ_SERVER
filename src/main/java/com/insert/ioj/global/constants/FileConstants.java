@@ -8,5 +8,6 @@ public class FileConstants {
     public static final String CPP_FILE_NAME = "main.cpp";
     public static final String JAVA_FILE_NAME = "main.java";
     public static final String PYTHON_FILE_NAME = "main.py";
+    public static final String JAVA_SECURITY_POLICY_FILE_NAME = "security.policy";
     public static final String DOCKER_FILE_NAME = "Dockerfile.execution";
 }

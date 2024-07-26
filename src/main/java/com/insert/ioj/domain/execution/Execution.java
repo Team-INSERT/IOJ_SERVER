@@ -2,8 +2,11 @@ package com.insert.ioj.domain.execution;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.language.Language;
+import com.insert.ioj.global.constants.FileConstants;
+import com.insert.ioj.infra.file.FileUtil;
 import lombok.Getter;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +32,33 @@ public abstract class Execution {
         this.memoryLimit = memoryLimit;
         this.path = getLanguage().getFolderName() + "/" + getExecutionFolderName();
     }
+
+    public void createExecutionDirectory() throws IOException {
+        FileUtil.createDirectory(path);
+        saveUploadedFiles();
+        copyDockerFile();
+        copySpecialFile();
+    }
+
+    private void saveUploadedFiles() throws IOException {
+        String sourceCodeFileName = getLanguage().getSourcecodeFileName();
+        FileUtil.saveUploadedFiles(sourcecode, path + "/" + sourceCodeFileName);
+
+        for (Testcase testcase : testcases) {
+            FileUtil.saveUploadedFiles(
+                testcase.getInput(),
+                path + "/" + testcase.getId());
+        }
+    }
+
+    private void copyDockerFile() throws IOException {
+        FileUtil.copyFile(getLanguage()
+                .getFolderName()
+                .concat("/" + FileConstants.DOCKER_FILE_NAME),
+            path.concat("/" + FileConstants.DOCKER_FILE_NAME));
+    }
+
+    protected abstract void copySpecialFile() throws IOException;
 
     public String getExecutionFolderName() {
         return EXECUTION_FOLDER_PREFIX_NAME + id;

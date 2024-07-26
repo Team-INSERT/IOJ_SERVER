@@ -16,6 +16,11 @@ public class PythonExecution extends Execution {
     }
 
     @Override
+    protected void copySpecialFile() {
+        // null
+    }
+
+    @Override
     public Language getLanguage() {
         return Language.PYTHON;
     }
