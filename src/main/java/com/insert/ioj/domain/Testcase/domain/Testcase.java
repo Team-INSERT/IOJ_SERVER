@@ -1,9 +1,7 @@
 package com.insert.ioj.domain.Testcase.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.insert.ioj.domain.problem.domain.Problem;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +19,13 @@ public class Testcase {
 
     private String output;
 
-    public Testcase(String input, String output) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "problem_id")
+    private Problem problem;
+
+    public Testcase(String input, String output, Problem problem) {
         this.input = input;
         this.output = output;
+        this.problem = problem;
     }
 }

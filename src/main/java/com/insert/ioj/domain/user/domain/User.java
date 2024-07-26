@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.user.domain;
 
+import com.insert.ioj.domain.user.domain.type.Authority;
 import com.insert.ioj.domain.user.domain.type.Color;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -27,11 +28,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Color color;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     public User(
-        String email, String nickname, Color color
+        String email, String nickname, Color color, Authority authority
     ) {
         this.email = email;
         this.nickname = nickname;
         this.color = color;
+        this.authority = authority;
     }
 }

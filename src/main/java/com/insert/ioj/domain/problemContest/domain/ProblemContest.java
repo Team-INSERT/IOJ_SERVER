@@ -1,6 +1,6 @@
-package com.insert.ioj.domain.problemTestcase.domain;
+package com.insert.ioj.domain.problemContest.domain;
 
-import com.insert.ioj.domain.Testcase.domain.Testcase;
+import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.problem.domain.Problem;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ProblemTestcase {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProblemContest {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -19,11 +20,11 @@ public class ProblemTestcase {
     private Problem problem;
 
     @ManyToOne
-    @JoinColumn(name = "testcase_id")
-    private Testcase testcase;
+    @JoinColumn(name = "contest_id")
+    private Contest contest;
 
-    public ProblemTestcase(Problem problem, Testcase testcase) {
+    public ProblemContest(Problem problem, Contest contest) {
         this.problem = problem;
-        this.testcase = testcase;
+        this.contest = contest;
     }
 }

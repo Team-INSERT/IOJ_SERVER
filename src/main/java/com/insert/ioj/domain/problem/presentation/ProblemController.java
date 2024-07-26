@@ -1,9 +1,9 @@
 package com.insert.ioj.domain.problem.presentation;
 
+import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.problem.presentation.dto.req.SaveProblemRequest;
 import com.insert.ioj.domain.problem.presentation.dto.req.SubmitProblemRequest;
 import com.insert.ioj.domain.problem.presentation.dto.res.ListProblemResponse;
-import com.insert.ioj.domain.problem.presentation.dto.res.SubmitProblemResponse;
 import com.insert.ioj.domain.problem.service.ListProblemService;
 import com.insert.ioj.domain.problem.service.SaveProblemService;
 import com.insert.ioj.domain.problem.service.SubmitProblemService;
@@ -32,13 +32,13 @@ public class ProblemController {
     }
 
     @Operation(summary = "문제 실행")
-    @PostMapping
-    public SubmitProblemResponse submitProblem(@RequestBody @Valid SubmitProblemRequest request) throws Exception {
+    @PostMapping("/execution")
+    public ProblemCompileResponse submitProblem(@RequestBody @Valid SubmitProblemRequest request) throws Exception {
         return submitProblemService.execute(request);
     }
 
     @Operation(summary = "문제 저장")
-    @PutMapping
+    @PostMapping
     public Long saveProblem(@RequestBody @Valid SaveProblemRequest request) {
         return saveProblemService.execute(request);
     }

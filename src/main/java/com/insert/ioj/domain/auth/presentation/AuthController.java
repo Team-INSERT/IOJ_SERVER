@@ -25,7 +25,7 @@ public class AuthController {
     private final CreateAccessTokenService createNewAccessToken;
     private final LogoutService logoutService;
 
-    @Operation(summary = "구글 로그인 링크 조히")
+    @Operation(summary = "구글 로그인 링크 조회")
     @GetMapping
     public String getGoogleAuthLink() {
         return googleAuthLinkService.execute();
