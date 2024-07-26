@@ -7,6 +7,7 @@ import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileRespons
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.infra.cmd.CmdUtil;
 import com.insert.ioj.infra.docker.DockerUtil;
+import com.insert.ioj.infra.file.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,8 @@ public class CompilerService {
             request.getMemoryLimit()
         );
 
-        saveUploadFile(request.getInput(), inputFileName);
-        saveUploadFile(request.getSourcecode());
+        FileUtil.saveUploadedFiles(request.getInput(), "util/"+inputFileName);
+        FileUtil.saveUploadedFiles(request.getSourcecode(), "util/main.py");
 
         DockerUtil.buildImage(id);
         return runCode(id);
@@ -48,12 +49,12 @@ public class CompilerService {
                 problem.getMemoryLimit()
             );
 
-            saveUploadFile(testcase.getInput(), inputFileName);
-            saveUploadFile(sourcecode);
+            FileUtil.saveUploadedFiles(testcase.getInput(), inputFileName);
+            FileUtil.saveUploadedFiles(sourcecode, "util/main.py");
 
             DockerUtil.buildImage(id);
             CompileResponse compile = runCode(id);
-            deleteFile(inputFileName);
+            FileUtil.deleteFile("util/"+inputFileName);
 
             if (!testcase.getOutput().equals(compile.getResult())) {
                 return new ProblemCompileResponse(problem.getId(), compile.getStatus(), false);
@@ -63,38 +64,14 @@ public class CompilerService {
         return new ProblemCompileResponse(problem.getId(), "Success", true);
     }
 
-    private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {
+    private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) throws IOException {
         String executionCommand = """
             #!/usr/bin/env bash
             ulimit -s %d
             timeout --signal=SIGTERM %d python3 main.py < %s
             exit $?
             """.formatted(memoryLimit, timeLimit, inputFileName);
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream("util/start.sh");
-            os.write(executionCommand.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                os.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private void saveUploadFile(String content) throws IOException {
-        byte[] bytes = content.getBytes();
-        Path path = Paths.get("util/main.py");
-        Files.write(path, bytes);
-    }
-
-    private void saveUploadFile(String content, String fileName) throws IOException {
-        byte[] bytes = content.getBytes();
-        Path path = Paths.get("util/" + fileName);
-        Files.write(path, bytes);
+        FileUtil.saveUploadedFiles(executionCommand, "util/start.sh");
     }
 
     private CompileResponse runCode(String id) throws InterruptedException, IOException {
@@ -126,10 +103,5 @@ public class CompilerService {
         else
             response = "Time Limit Exceeded";
         return response;
-    }
-
-    private void deleteFile(String filename) {
-        File file = new File("util/"+filename);
-        file.delete();
     }
 }
