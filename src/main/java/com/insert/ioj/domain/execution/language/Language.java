@@ -1,4 +1,4 @@
-package com.insert.ioj.domain.execution;
+package com.insert.ioj.domain.execution.language;
 
 import com.insert.ioj.global.constants.CommandConstants;
 import com.insert.ioj.global.constants.ExtensionConstants;
