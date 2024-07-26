@@ -11,19 +11,13 @@ public class FileUtil {
         Files.createDirectory(Path.of(path));
     }
 
-    public static void saveUploadedFiles(String content, String path) {
+    public static void saveUploadedFiles(String content, String path) throws IOException {
         try(OutputStream os = new FileOutputStream(path)) {
             os.write(content.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    public static void deleteFile(String path) {
-        try {
-            Files.deleteIfExists(Path.of(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static void deleteFile(String path) throws IOException {
+        Files.deleteIfExists(Path.of(path));
     }
 }
