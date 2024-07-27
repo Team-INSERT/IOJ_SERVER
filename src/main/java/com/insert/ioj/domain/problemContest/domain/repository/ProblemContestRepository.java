@@ -14,7 +14,7 @@ import java.util.List;
 public interface ProblemContestRepository extends JpaRepository<ProblemContest, Long> {
     ProblemContest findByContestAndProblem(Contest contest, Problem problem);
 
-    @Query("SELECT new com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse(p.level, p.title, " +
+    @Query("SELECT new com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse(p.id, p.level, p.title, " +
         "CASE " +
         "WHEN sc.isPass = true THEN 'solved' " +
         "WHEN sc.isPass = false THEN 'failed' " +
