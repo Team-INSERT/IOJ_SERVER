@@ -1,5 +1,6 @@
 package com.insert.ioj.global.config;
 
+import com.insert.ioj.domain.user.domain.type.Authority;
 import com.insert.ioj.global.security.jwt.JwtTokenFilter;
 import com.insert.ioj.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+    private final String ADMIN = "ADMIN";
     private final JwtTokenProvider jwtProvider;
 
     @Bean
@@ -47,6 +49,7 @@ public class SecurityConfig {
                 .requestMatchers("/user").authenticated()
                 .requestMatchers(HttpMethod.POST, "/problem").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/problem").authenticated()
+                .requestMatchers("/contest/admin").hasRole(ADMIN)
                 .anyRequest().permitAll()
             );
 
