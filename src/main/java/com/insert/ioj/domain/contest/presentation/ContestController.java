@@ -3,12 +3,10 @@ package com.insert.ioj.domain.contest.presentation;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.contest.presentation.dto.req.SaveContestRequest;
 import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
+import com.insert.ioj.domain.contest.presentation.dto.res.ListContestAdminResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestResponse;
-import com.insert.ioj.domain.contest.service.ListContestService;
-import com.insert.ioj.domain.contest.service.ProblemContestService;
-import com.insert.ioj.domain.contest.service.SaveContestService;
-import com.insert.ioj.domain.contest.service.SubmitContestService;
+import com.insert.ioj.domain.contest.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +22,7 @@ import java.util.List;
 @RestController
 public class ContestController {
     private final ListContestService listContestService;
+    private final ListContestAdminService listContestAdminService;
     private final ProblemContestService problemContestService;
     private final SaveContestService saveContestService;
     private final SubmitContestService submitContestService;
@@ -32,6 +31,12 @@ public class ContestController {
     @GetMapping
     public List<ListContestResponse> listContest(Pageable pageable) {
         return listContestService.execute(pageable);
+    }
+
+    @Operation(summary = "어드민 대회 리스트")
+    @GetMapping("/admin")
+    public List<ListContestAdminResponse> listContestAdmin() {
+        return listContestAdminService.execute();
     }
 
     @Operation(summary = "대회 문제 리스트")
