@@ -1,4 +1,4 @@
-package com.insert.ioj.domain.execution;
+package com.insert.ioj.domain.execution.domain;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.language.Language;
@@ -40,6 +40,14 @@ public abstract class Execution {
         copySpecialFile();
     }
 
+    public void createEntrypointFiles() {
+        testcases.forEach(testcase -> {
+            String testcaseId = testcase.getId().toString();
+            String inputFileName = testcaseId + "-" + FileConstants.INPUT_FILE_NAME;
+            createEntrypointFile(inputFileName, testcaseId);
+        });
+    }
+
     private void saveUploadedFiles() throws IOException {
         String sourceCodeFileName = getLanguage().getSourcecodeFileName();
         FileUtil.saveUploadedFiles(sourcecode, path + "/" + sourceCodeFileName);
@@ -47,7 +55,7 @@ public abstract class Execution {
         for (Testcase testcase : testcases) {
             FileUtil.saveUploadedFiles(
                 testcase.getInput(),
-                path + "/" + testcase.getId());
+                path + "/" + testcase.getId() + "-" + FileConstants.INPUT_FILE_NAME);
         }
     }
 
@@ -63,6 +71,8 @@ public abstract class Execution {
     public String getExecutionFolderName() {
         return EXECUTION_FOLDER_PREFIX_NAME + id;
     }
+
+    protected abstract void createEntrypointFile(String inputFileName, String testcaseId);
 
     public abstract Language getLanguage();
 }
