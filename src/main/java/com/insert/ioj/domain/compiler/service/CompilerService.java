@@ -35,7 +35,7 @@ public class CompilerService {
         FileUtil.saveUploadedFiles(request.getInput(), "util/"+inputFileName);
         FileUtil.saveUploadedFiles(request.getSourcecode(), "util/main.py");
 
-        DockerUtil.buildImage(id);
+        DockerUtil.buildImage("util", id);
         return runCode(id);
     }
 
@@ -53,7 +53,7 @@ public class CompilerService {
             FileUtil.saveUploadedFiles(testcase.getInput(), inputFileName);
             FileUtil.saveUploadedFiles(sourcecode, "util/main.py");
 
-            DockerUtil.buildImage(id);
+            DockerUtil.buildImage("util", id);
             CompileResponse compile = runCode(id);
             FileUtil.deleteFile("util/"+inputFileName);
 
@@ -76,7 +76,7 @@ public class CompilerService {
     }
 
     private CompileResponse runCode(String id) {
-        ProcessOutput processOutput = DockerUtil.runContainer(id);
+        ProcessOutput processOutput = DockerUtil.runContainer("util", id);
         String statusResponse = checkStatus(processOutput.getStatus());
 
         return CompileResponse.builder()
