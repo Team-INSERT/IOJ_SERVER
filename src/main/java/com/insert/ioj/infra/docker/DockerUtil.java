@@ -7,8 +7,15 @@ public class DockerUtil {
     public static final int BUILD_TIMEOUT = 60;
     public static final int RUN_TIMEOUT = 60;
 
-    public static void buildImage(String path, String id) {
-        String[] dockerCommand = new String[] {"docker", "image", "build", "-f", path, "-t", id};
+    public static void buildImage(String dockerfilePath, String id, String contextPath) {
+        String[] dockerCommand =
+            new String[] {
+                "docker",
+                "image",
+                "build",
+                "-f", dockerfilePath,
+                "-t", id,
+                contextPath};
         CmdUtil.executeProcess(dockerCommand, BUILD_TIMEOUT);
     }
 

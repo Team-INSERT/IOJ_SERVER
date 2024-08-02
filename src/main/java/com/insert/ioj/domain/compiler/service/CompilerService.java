@@ -35,7 +35,7 @@ public class CompilerService {
         FileUtil.saveUploadedFiles(request.getInput(), "util/"+inputFileName);
         FileUtil.saveUploadedFiles(request.getSourcecode(), "util/main.py");
 
-        DockerUtil.buildImage("util", id);
+        DockerUtil.buildImage("util/Dockerfile", id, "util");
         return runCode(id);
     }
 
@@ -53,7 +53,7 @@ public class CompilerService {
             FileUtil.saveUploadedFiles(testcase.getInput(), inputFileName);
             FileUtil.saveUploadedFiles(sourcecode, "util/main.py");
 
-            DockerUtil.buildImage("util", id);
+            DockerUtil.buildImage("util/Dockerfile", id, "util");
             CompileResponse compile = runCode(id);
             FileUtil.deleteFile("util/"+inputFileName);
 
