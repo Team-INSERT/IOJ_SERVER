@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Getter
 public abstract class Execution {
+    private static final String IMAGE_PREFIX_NAME = "image-";
     private static final String EXECUTION_FOLDER_PREFIX_NAME = "execution-";
 
     private String id;
@@ -67,6 +68,10 @@ public abstract class Execution {
     }
 
     protected abstract void copySpecialFile() throws IOException;
+
+    public String getImageName() {
+        return IMAGE_PREFIX_NAME + id;
+    }
 
     public String getExecutionFolderName() {
         return EXECUTION_FOLDER_PREFIX_NAME + id;
