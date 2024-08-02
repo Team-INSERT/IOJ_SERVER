@@ -76,7 +76,7 @@ public class CompilerService {
     }
 
     private CompileResponse runCode(String id) {
-        ProcessOutput processOutput = DockerUtil.runContainer("util", id);
+        ProcessOutput processOutput = DockerUtil.runContainer(id);
         String statusResponse = checkStatus(processOutput.getStatus());
 
         return CompileResponse.builder()

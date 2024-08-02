@@ -23,4 +23,9 @@ public class DockerUtil {
         String[] dockerCommand = new String[] {"docker", "run", "--rm", containerName};
         return CmdUtil.executeProcess(dockerCommand, RUN_TIMEOUT);
     }
+
+    public static ProcessOutput runContainer(String containerName, String env) {
+        String[] dockerCommand = new String[] {"docker", "run", "--rm", "-e", env, containerName};
+        return CmdUtil.executeProcess(dockerCommand, RUN_TIMEOUT);
+    }
 }
