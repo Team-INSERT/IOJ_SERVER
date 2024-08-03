@@ -1,5 +1,7 @@
 package com.insert.ioj.domain.solve.domain;
 
+import com.insert.ioj.domain.execution.domain.type.Verdict;
+import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.user.domain.User;
 import jakarta.persistence.*;
@@ -24,15 +26,15 @@ public class Solve {
 
     private String sourcecode;
 
-    private String compileStatus;
+    private Verdict verdict;
 
-    private boolean isPass;
+    private Language language;
 
-    public Solve(User user, Problem problem, String sourcecode, String compileStatus, boolean isPass) {
+    public Solve(User user, Problem problem, String sourcecode, Verdict verdict, Language language) {
         this.user = user;
         this.problem = problem;
         this.sourcecode = sourcecode;
-        this.compileStatus = compileStatus;
-        this.isPass = isPass;
+        this.verdict = verdict;
+        this.language = language;
     }
 }

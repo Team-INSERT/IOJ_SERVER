@@ -4,14 +4,16 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.infra.cmd.dto.res.ProcessOutput;
+import com.insert.ioj.infra.docker.DockerUtil;
+import com.insert.ioj.infra.file.FileUtil;
+import com.insert.ioj.infra.status.StatusUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,10 +30,10 @@ public class CompilerService {
             request.getMemoryLimit()
         );
 
-        saveUploadFile(request.getInput(), inputFileName);
-        saveUploadFile(request.getSourcecode());
+        FileUtil.saveUploadedFiles(request.getInput(), "util/"+inputFileName);
+        FileUtil.saveUploadedFiles(request.getSourcecode(), "util/main.py");
 
-        buildImage(id);
+        DockerUtil.buildImage("util/Dockerfile", id, "util");
         return runCode(id);
     }
 
@@ -46,86 +48,43 @@ public class CompilerService {
                 problem.getMemoryLimit()
             );
 
-            saveUploadFile(testcase.getInput(), inputFileName);
-            saveUploadFile(sourcecode);
+            FileUtil.saveUploadedFiles(testcase.getInput(), inputFileName);
+            FileUtil.saveUploadedFiles(sourcecode, "util/main.py");
 
-            buildImage(id);
+            DockerUtil.buildImage("util/Dockerfile", id, "util");
             CompileResponse compile = runCode(id);
-            deleteFile(inputFileName);
+            FileUtil.deleteFile("util/"+inputFileName);
 
             if (!testcase.getOutput().equals(compile.getResult())) {
-                return new ProblemCompileResponse(problem.getId(), compile.getStatus(), false);
+                Verdict verdict = StatusUtil.statusResponse(compile.getStatus(), false);
+                return new ProblemCompileResponse(problem.getId(), compile.getMessage(), false, verdict);
             }
         }
 
-        return new ProblemCompileResponse(problem.getId(), "Success", true);
+        Verdict verdict = StatusUtil.statusResponse(0, true);
+        return new ProblemCompileResponse(problem.getId(), "Success", true, verdict);
     }
 
-    private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) {
+    private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) throws IOException {
         String executionCommand = """
             #!/usr/bin/env bash
             ulimit -s %d
             timeout --signal=SIGTERM %d python3 main.py < %s
             exit $?
             """.formatted(memoryLimit, timeLimit, inputFileName);
-        OutputStream os = null;
-        try {
-            os = new FileOutputStream("util/start.sh");
-            os.write(executionCommand.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                os.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        FileUtil.saveUploadedFiles(executionCommand, "util/start.sh");
     }
 
-    private void saveUploadFile(String content) throws IOException {
-        byte[] bytes = content.getBytes();
-        Path path = Paths.get("util/main.py");
-        Files.write(path, bytes);
-    }
+    private CompileResponse runCode(String id) {
+        ProcessOutput processOutput = DockerUtil.runContainer(id);
+        String statusResponse = checkStatus(processOutput.getStatus());
 
-    private void saveUploadFile(String content, String fileName) throws IOException {
-        byte[] bytes = content.getBytes();
-        Path path = Paths.get("util/" + fileName);
-        Files.write(path, bytes);
-    }
-
-    private int buildImage(String id) throws IOException, InterruptedException {
-        String[] dockerCommand = new String[] {"docker", "image", "build", "util", "-t", id};
-        ProcessBuilder processBuilder = new ProcessBuilder(dockerCommand);
-        Process process = processBuilder.start();
-        return process.waitFor();
-    }
-
-    private CompileResponse runCode(String id) throws InterruptedException, IOException {
-        String[] dockerCommand = new String[] {"docker", "run", "--rm", id};
-        ProcessBuilder processbuilder = new ProcessBuilder(dockerCommand);
-        Process process = processbuilder.start();
-        int status = process.waitFor();
-        String statusResponse = checkStatus(status);
-
-        BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String output = readOutput(outputReader);
         return CompileResponse.builder()
             .id(id)
-            .status(statusResponse)
-            .result(output)
+            .status(processOutput.getStatus())
+            .message(statusResponse)
+            .result(processOutput.getStdOut())
             .build();
-    }
-
-    private String readOutput(BufferedReader outputReader) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while((line = outputReader.readLine()) != null) {
-            builder.append(line);
-            builder.append(System.lineSeparator());
-        }
-        return builder.toString();
     }
 
     private String checkStatus(int status) {
@@ -141,10 +100,5 @@ public class CompilerService {
         else
             response = "Time Limit Exceeded";
         return response;
-    }
-
-    private void deleteFile(String filename) {
-        File file = new File("util/"+filename);
-        file.delete();
     }
 }
