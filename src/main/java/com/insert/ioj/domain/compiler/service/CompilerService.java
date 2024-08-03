@@ -4,18 +4,16 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.domain.Problem;
-import com.insert.ioj.infra.cmd.CmdUtil;
 import com.insert.ioj.infra.cmd.dto.res.ProcessOutput;
 import com.insert.ioj.infra.docker.DockerUtil;
 import com.insert.ioj.infra.file.FileUtil;
+import com.insert.ioj.infra.status.StatusUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,11 +56,13 @@ public class CompilerService {
             FileUtil.deleteFile("util/"+inputFileName);
 
             if (!testcase.getOutput().equals(compile.getResult())) {
-                return new ProblemCompileResponse(problem.getId(), compile.getStatus(), false);
+                Verdict verdict = StatusUtil.statusResponse(compile.getStatus(), false);
+                return new ProblemCompileResponse(problem.getId(), compile.getMessage(), false, verdict);
             }
         }
 
-        return new ProblemCompileResponse(problem.getId(), "Success", true);
+        Verdict verdict = StatusUtil.statusResponse(0, true);
+        return new ProblemCompileResponse(problem.getId(), "Success", true, verdict);
     }
 
     private void createStartFile(String inputFileName, int timeLimit, int memoryLimit) throws IOException {
@@ -81,7 +81,8 @@ public class CompilerService {
 
         return CompileResponse.builder()
             .id(id)
-            .status(statusResponse)
+            .status(processOutput.getStatus())
+            .message(statusResponse)
             .result(processOutput.getStdOut())
             .build();
     }
