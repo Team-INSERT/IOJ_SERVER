@@ -6,10 +6,8 @@ import com.insert.ioj.domain.problem.presentation.dto.req.ExecutionProblemReques
 import com.insert.ioj.domain.problem.presentation.dto.req.SaveProblemRequest;
 import com.insert.ioj.domain.problem.presentation.dto.req.SubmitProblemRequest;
 import com.insert.ioj.domain.problem.presentation.dto.res.ListProblemResponse;
-import com.insert.ioj.domain.problem.service.ExecutionProblemService;
-import com.insert.ioj.domain.problem.service.ListProblemService;
-import com.insert.ioj.domain.problem.service.SaveProblemService;
-import com.insert.ioj.domain.problem.service.SubmitProblemService;
+import com.insert.ioj.domain.problem.presentation.dto.res.ProblemResponse;
+import com.insert.ioj.domain.problem.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,6 +23,7 @@ import java.util.List;
 @RestController
 public class ProblemController {
     private final ListProblemService listProblemService;
+    private final GetProblemService getProblemService;
     private final SubmitProblemService submitProblemService;
     private final SaveProblemService saveProblemService;
     private final ExecutionProblemService executionProblemService;
@@ -33,6 +32,12 @@ public class ProblemController {
     @GetMapping
     public List<ListProblemResponse> problemList(Pageable pageable) {
         return listProblemService.execute(pageable);
+    }
+
+    @Operation(summary = "문제 상세 조회")
+    @GetMapping("/{id}")
+    public ProblemResponse getProblem(@PathVariable Long id) {
+        return getProblemService.execute(id);
     }
 
     @Operation(summary = "다양한 언어 문제 제출")
