@@ -18,4 +18,9 @@ public class TestcaseDto {
     public Testcase toEntity(Problem problem) {
         return new Testcase(input, output+"\n", problem);
     }
+
+    public TestcaseDto(Testcase testcase) {
+        this.input = testcase.getInput();
+        this.output = testcase.getOutput();
+    }
 }
