@@ -3,6 +3,7 @@ package com.insert.ioj.domain.contest.presentation;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.contest.presentation.dto.req.SaveContestRequest;
 import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
+import com.insert.ioj.domain.contest.presentation.dto.res.ContestResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestAdminResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestResponse;
@@ -23,7 +24,7 @@ import java.util.List;
 public class ContestController {
     private final ListContestService listContestService;
     private final ListContestAdminService listContestAdminService;
-    private final ProblemContestService problemContestService;
+    private final GetContestService getContestService;
     private final SaveContestService saveContestService;
     private final SubmitContestService submitContestService;
 
@@ -39,11 +40,11 @@ public class ContestController {
         return listContestAdminService.execute();
     }
 
-    @Operation(summary = "대회 문제 리스트")
+    @Operation(summary = "대회 상세 조회")
     @GetMapping("/{contestId}")
-    public List<ListContestProblemResponse> listContestProblem(
+    public ContestResponse listContestProblem(
                 @PathVariable(name = "contestId") Long id) {
-        return problemContestService.execute(id);
+        return getContestService.execute(id);
     }
 
     @Operation(summary = "대회 생성")
