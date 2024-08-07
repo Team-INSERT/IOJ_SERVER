@@ -1,6 +1,5 @@
-package com.insert.ioj.domain.problemContest.infra;
+package com.insert.ioj.domain.problemContest.domain.repository;
 
-import com.insert.ioj.domain.problemContest.domain.repository.CustomProblemContestRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
