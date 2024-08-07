@@ -6,7 +6,6 @@ import com.insert.ioj.domain.contest.presentation.dto.res.ContestResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.CustomProblemRepository;
-import com.insert.ioj.domain.problemContest.domain.repository.CustomCompetitionContestRepository;
 import com.insert.ioj.domain.solveContest.domain.SolveContest;
 import com.insert.ioj.domain.solveContest.domain.repository.CustomSolveContestRepository;
 import com.insert.ioj.domain.user.domain.User;
