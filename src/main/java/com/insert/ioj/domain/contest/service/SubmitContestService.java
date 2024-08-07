@@ -9,8 +9,6 @@ import com.insert.ioj.domain.contest.facade.ContestFacade;
 import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
-import com.insert.ioj.domain.problemContest.domain.ProblemContest;
-import com.insert.ioj.domain.problemContest.domain.repository.ProblemContestRepository;
 import com.insert.ioj.domain.solveContest.domain.repository.SolveContestRepository;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
@@ -29,7 +27,6 @@ public class SubmitContestService {
     private final TestcaseRepository testcaseRepository;
     private final SolveContestRepository solveContestRepository;
     private final ContestFacade contestFacade;
-    private final ProblemContestRepository problemContestRepository;
     private final ProblemRepository problemRepository;
     private final UserFacade userFacade;
 
@@ -43,15 +40,12 @@ public class SubmitContestService {
         Problem problem = problemRepository.findById(req.getProblemId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
 
-        ProblemContest problemContest =
-            problemContestRepository.findByContestAndProblem(contest, problem);
-
         List<Testcase> testcases = saveTestcases(problem);
 
         ProblemCompileResponse res =
             compilerService.execute(problem, testcases, req.getSourcecode());
 
-        solveContestRepository.save(res.toSolveContest(user, problemContest, req.getSourcecode()));
+        solveContestRepository.save(res.toSolveContest(user, contest, problem, req.getSourcecode()));
 
         return res;
     }

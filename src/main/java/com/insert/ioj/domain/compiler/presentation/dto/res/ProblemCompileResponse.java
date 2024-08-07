@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.compiler.presentation.dto.res;
 
+import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.domain.problem.domain.Problem;
@@ -31,9 +32,9 @@ public class ProblemCompileResponse {
         );
     }
 
-    public SolveContest toSolveContest(User user, ProblemContest problemContest, String sourcecode) {
+    public SolveContest toSolveContest(User user, Contest contest, Problem problem, String sourcecode) {
         return new SolveContest(
-            user, problemContest, sourcecode, compileStatus, isPass
+            user, contest, problem, sourcecode, compileStatus, isPass
         );
     }
 }
