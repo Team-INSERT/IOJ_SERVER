@@ -10,6 +10,7 @@ import com.insert.ioj.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,8 @@ public class ProblemFacade {
                 status = "failed";
             }
 
-            problemStatuses.add(new ProblemStatusDto(problem, status));
+            LocalDateTime solveTime = solveContest != null ? solveContest.getCreateDate() : null;
+            problemStatuses.add(new ProblemStatusDto(problem, status, solveTime));
         }
         return problemStatuses;
     }
