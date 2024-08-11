@@ -3,10 +3,7 @@ package com.insert.ioj.domain.contest.presentation;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.contest.presentation.dto.req.SaveContestRequest;
 import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
-import com.insert.ioj.domain.contest.presentation.dto.res.ContestResponse;
-import com.insert.ioj.domain.contest.presentation.dto.res.ListContestAdminResponse;
-import com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse;
-import com.insert.ioj.domain.contest.presentation.dto.res.ListContestResponse;
+import com.insert.ioj.domain.contest.presentation.dto.res.*;
 import com.insert.ioj.domain.contest.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +22,7 @@ public class ContestController {
     private final ListContestService listContestService;
     private final ListContestAdminService listContestAdminService;
     private final GetContestService getContestService;
+    private final RankingService rankingService;
     private final SaveContestService saveContestService;
     private final SubmitContestService submitContestService;
 
@@ -45,6 +43,12 @@ public class ContestController {
     public ContestResponse listContestProblem(
                 @PathVariable(name = "contestId") Long id) {
         return getContestService.execute(id);
+    }
+
+    @Operation(summary = "대회 순위 조회")
+    @GetMapping("/ranking/{contestId}")
+    public List<RankingResponse> ranking(@PathVariable Long contestId) {
+        return rankingService.execute(contestId);
     }
 
     @Operation(summary = "대회 생성")

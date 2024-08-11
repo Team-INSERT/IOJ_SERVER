@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.contest.presentation.dto.res;
 
 import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.presentation.dto.res.ProblemStatusDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,10 +13,11 @@ public class ListContestProblemResponse {
     private String title;
     private String status;
 
-    public ListContestProblemResponse(Problem problem, String status) {
+    public ListContestProblemResponse(ProblemStatusDto problemStatus) {
+        Problem problem = problemStatus.getProblem();
         this.id = problem.getId();
         this.level = problem.getLevel();
         this.title = problem.getTitle();
-        this.status = status;
+        this.status = problemStatus.getStatus();
     }
 }
