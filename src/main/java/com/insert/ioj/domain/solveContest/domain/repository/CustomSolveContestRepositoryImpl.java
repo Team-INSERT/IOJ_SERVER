@@ -2,6 +2,7 @@ package com.insert.ioj.domain.solveContest.domain.repository;
 
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListRankResponse;
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.solveContest.domain.SolveContest;
 import com.insert.ioj.domain.user.domain.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,13 +34,13 @@ public class CustomSolveContestRepositoryImpl implements CustomSolveContestRepos
         return queryFactory
             .select(constructor(ListRankResponse.class,
                 solveContest.user,
-                solveContest.isPass.count(),
+                solveContest.verdict.count(),
                 solveContest.createDate.max()))
             .from(solveContest)
             .where(solveContest.contest.eq(contest)
-                .and(solveContest.isPass.isTrue()))
+                .and(solveContest.verdict.eq(Verdict.ACCEPTED)))
             .groupBy(solveContest.user)
-            .orderBy(solveContest.isPass.count().desc(),
+            .orderBy(solveContest.verdict.count().desc(),
                 solveContest.createDate.max().asc())
             .fetch();
     }
