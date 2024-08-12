@@ -1,13 +1,13 @@
 package com.insert.ioj.domain.contest.presentation;
 
-import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.contest.presentation.dto.req.SaveContestRequest;
 import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
 import com.insert.ioj.domain.contest.presentation.dto.res.ContestResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestAdminResponse;
-import com.insert.ioj.domain.contest.presentation.dto.res.ListContestProblemResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestResponse;
+import com.insert.ioj.domain.contest.presentation.dto.res.RankingResponse;
 import com.insert.ioj.domain.contest.service.*;
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,6 +25,7 @@ public class ContestController {
     private final ListContestService listContestService;
     private final ListContestAdminService listContestAdminService;
     private final GetContestService getContestService;
+    private final RankingService rankingService;
     private final SaveContestService saveContestService;
     private final SubmitContestService submitContestService;
 
@@ -47,6 +48,12 @@ public class ContestController {
         return getContestService.execute(id);
     }
 
+    @Operation(summary = "대회 순위 조회")
+    @GetMapping("/ranking/{contestId}")
+    public List<RankingResponse> ranking(@PathVariable Long contestId) {
+        return rankingService.execute(contestId);
+    }
+
     @Operation(summary = "대회 생성")
     @PostMapping
     public Long saveContest(@RequestBody @Valid SaveContestRequest request) {
@@ -55,7 +62,7 @@ public class ContestController {
 
     @Operation(summary = "대회 문제 제출")
     @PostMapping("/execution")
-    public ProblemCompileResponse submitContest(@RequestBody SubmitContestRequest request) throws Exception {
+    public Verdict submitContest(@RequestBody SubmitContestRequest request) {
         return submitContestService.execute(request);
     }
 }

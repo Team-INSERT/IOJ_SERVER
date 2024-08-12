@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.compiler.presentation.dto.res;
 
+import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.domain.problem.domain.Problem;
@@ -28,12 +29,6 @@ public class ProblemCompileResponse {
     public Solve toSolve(User user, Problem problem, String sourcecode) {
         return new Solve(
             user, problem, sourcecode, verdict, Language.PYTHON
-        );
-    }
-
-    public SolveContest toSolveContest(User user, ProblemContest problemContest, String sourcecode) {
-        return new SolveContest(
-            user, problemContest, sourcecode, compileStatus, isPass
         );
     }
 }
