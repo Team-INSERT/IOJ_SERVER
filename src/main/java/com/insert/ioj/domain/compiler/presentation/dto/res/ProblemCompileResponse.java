@@ -31,10 +31,4 @@ public class ProblemCompileResponse {
             user, problem, sourcecode, verdict, Language.PYTHON
         );
     }
-
-    public SolveContest toSolveContest(User user, Contest contest, Problem problem, String sourcecode) {
-        return new SolveContest(
-            user, contest, problem, sourcecode, compileStatus, isPass
-        );
-    }
 }

@@ -1,6 +1,8 @@
 package com.insert.ioj.domain.solveContest.domain;
 
 import com.insert.ioj.domain.contest.domain.Contest;
+import com.insert.ioj.domain.execution.domain.type.Verdict;
+import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.global.entity.BaseTimeEntity;
@@ -31,21 +33,21 @@ public class SolveContest extends BaseTimeEntity {
 
     private String sourcecode;
 
-    private String compileStatus;
+    private Verdict verdict;
 
-    private boolean isPass;
+    private Language language;
 
     public SolveContest(User user,
                         Contest contest,
                         Problem problem,
                         String sourcecode,
-                        String compileStatus,
-                        boolean isPass) {
+                        Verdict verdict,
+                        Language language) {
         this.user = user;
         this.contest = contest;
         this.problem = problem;
         this.sourcecode = sourcecode;
-        this.compileStatus = compileStatus;
-        this.isPass = isPass;
+        this.verdict = verdict;
+        this.language = language;
     }
 }

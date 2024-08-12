@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.problem.facade;
 
 import com.insert.ioj.domain.contest.domain.Contest;
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.CustomProblemRepository;
 import com.insert.ioj.domain.problem.presentation.dto.res.ProblemStatusDto;
@@ -42,7 +43,7 @@ public class ProblemFacade {
             String status = "solved";
             if (solveContest == null) {
                 status = "unsolved";
-            } else if (!solveContest.isPass()) {
+            } else if (solveContest.getVerdict() != Verdict.ACCEPTED) {
                 status = "failed";
             }
 
