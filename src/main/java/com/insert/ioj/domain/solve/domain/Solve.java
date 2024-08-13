@@ -26,8 +26,10 @@ public class Solve {
 
     private String sourcecode;
 
+    @Enumerated(EnumType.STRING)
     private Verdict verdict;
 
+    @Enumerated(EnumType.STRING)
     private Language language;
 
     public Solve(User user, Problem problem, String sourcecode, Verdict verdict, Language language) {
