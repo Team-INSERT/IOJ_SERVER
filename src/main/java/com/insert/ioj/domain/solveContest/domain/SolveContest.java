@@ -33,8 +33,10 @@ public class SolveContest extends BaseTimeEntity {
 
     private String sourcecode;
 
+    @Enumerated(EnumType.STRING)
     private Verdict verdict;
 
+    @Enumerated(EnumType.STRING)
     private Language language;
 
     public SolveContest(User user,
