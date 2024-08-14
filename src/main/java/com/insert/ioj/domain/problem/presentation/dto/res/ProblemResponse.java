@@ -16,9 +16,9 @@ public class ProblemResponse {
     private int level;
     private int memoryLimit;
     private int timeLimit;
-    private List<TestcaseDto> testcases;
+    private List<TestcaseResponse> testcases;
 
-    public ProblemResponse(Problem problem, List<TestcaseDto> testcases) {
+    public ProblemResponse(Problem problem, List<TestcaseResponse> testcases) {
         this.title = problem.getTitle();
         this.content = problem.getContent();
         this.inputContent = problem.getInputContent();
