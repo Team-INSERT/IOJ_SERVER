@@ -19,13 +19,16 @@ public class Testcase {
 
     private String output;
 
+    private Boolean example;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    public Testcase(String input, String output, Problem problem) {
+    public Testcase(String input, String output, Boolean example, Problem problem) {
         this.input = input;
         this.output = output;
+        this.example = example;
         this.problem = problem;
     }
 }
