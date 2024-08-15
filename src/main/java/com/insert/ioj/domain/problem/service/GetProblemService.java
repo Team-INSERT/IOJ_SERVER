@@ -5,6 +5,7 @@ import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.problem.presentation.dto.req.TestcaseDto;
 import com.insert.ioj.domain.problem.presentation.dto.res.ProblemResponse;
+import com.insert.ioj.domain.problem.presentation.dto.res.TestcaseResponse;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class GetProblemService {
     public ProblemResponse execute(Long id) {
         Problem problem = problemRepository.findById(id)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        List<TestcaseDto> testcases = testcaseRepository.findAllByProblem(problem)
+        List<TestcaseResponse> testcases = testcaseRepository.findAllByProblemAndExampleIsTrue(problem)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM))
-            .stream().map(TestcaseDto::new)
+            .stream().map(TestcaseResponse::new)
             .toList();
         return new ProblemResponse(problem, testcases);
     }
