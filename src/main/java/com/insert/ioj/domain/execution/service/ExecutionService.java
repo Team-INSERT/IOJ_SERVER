@@ -10,7 +10,10 @@ public class ExecutionService {
     private static final String TEST_CASE_ID_ENV_VARIABLE = "TEST_CASE_ID";
 
     public ProcessOutput run(Execution execution, String testcaseId) {
-        return DockerUtil.runContainer(
+        ProcessOutput processOutput = DockerUtil.runContainer(
             execution.getImageName(), TEST_CASE_ID_ENV_VARIABLE + "=" + testcaseId);
+
+        DockerUtil.deleteImage(execution.getImageName());
+        return processOutput;
     }
 }
