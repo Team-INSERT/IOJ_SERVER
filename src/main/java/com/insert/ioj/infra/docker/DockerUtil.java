@@ -28,4 +28,9 @@ public class DockerUtil {
         String[] dockerCommand = new String[] {"docker", "run", "--rm", "-e", env, containerName};
         return CmdUtil.executeProcess(dockerCommand, RUN_TIMEOUT);
     }
+
+    public static void deleteImage(String imageName) {
+        String[] dockerCommand = new String[] {"docker", "rmi", "-f", imageName};
+        CmdUtil.executeProcess(dockerCommand, RUN_TIMEOUT);
+    }
 }
