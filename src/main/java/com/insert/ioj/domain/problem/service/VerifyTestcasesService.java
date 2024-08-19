@@ -1,10 +1,7 @@
-package com.insert.ioj.domain.contest.service;
+package com.insert.ioj.domain.problem.service;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.Testcase.domain.repository.TestcaseRepository;
-import com.insert.ioj.domain.contest.domain.Contest;
-import com.insert.ioj.domain.contest.facade.ContestFacade;
-import com.insert.ioj.domain.contest.presentation.dto.req.SubmitContestRequest;
 import com.insert.ioj.domain.execution.domain.Execution;
 import com.insert.ioj.domain.execution.domain.ExecutionFactory;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
@@ -12,10 +9,8 @@ import com.insert.ioj.domain.execution.presentation.dto.res.TestcaseResult;
 import com.insert.ioj.domain.execution.service.ExecutionService;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
-import com.insert.ioj.domain.solveContest.domain.SolveContest;
-import com.insert.ioj.domain.solveContest.domain.repository.SolveContestRepository;
-import com.insert.ioj.domain.user.domain.User;
-import com.insert.ioj.domain.user.facade.UserFacade;
+import com.insert.ioj.domain.problem.presentation.dto.req.ExecutionProblemRequest;
+import com.insert.ioj.domain.problem.presentation.dto.res.TestcasesResponse;
 import com.insert.ioj.global.constants.FileConstants;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
@@ -27,28 +22,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class SubmitContestService {
+public class VerifyTestcasesService {
     private final TestcaseRepository testcaseRepository;
-    private final SolveContestRepository solveContestRepository;
-    private final ContestFacade contestFacade;
     private final ProblemRepository problemRepository;
-    private final UserFacade userFacade;
     private final ExecutionService executionService;
 
     @Transactional
-    public Verdict execute(SubmitContestRequest request) {
-        Problem problem = problemRepository.findById(request.getProblemId())
+    public List<TestcasesResponse> execute(ExecutionProblemRequest request) {
+        Problem problem = problemRepository.findById(request.getId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        List<Testcase> testcases = testcaseRepository.findAllByProblem(problem)
+        List<Testcase> testcases = testcaseRepository.findAllByProblemAndExampleIsTrue(problem)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        User user = userFacade.getCurrentUser();
-        Contest contest = contestFacade.getContest(request.getContestId());
-
-        contest.checkRole(user.getAuthority());
 
         Execution execution = ExecutionFactory.createExecution(
             request.getSourcecode(),
@@ -58,22 +47,25 @@ public class SubmitContestService {
             request.getLanguage()
         );
 
-        Verdict verdict = Verdict.ACCEPTED;
         createEnvironmentAndBuild(execution);
+
+        List<TestcasesResponse> testcasesResponses = new ArrayList<>();
         for (Testcase testcase : testcases) {
             TestcaseResult testcaseResult = getTestcaseResult(execution, testcase);
 
-            verdict = testcaseResult.getVerdict();
-            if (testcaseResult.getVerdict() != Verdict.ACCEPTED)
-                break;
+            switch (testcaseResult.getVerdict()) {
+                case ACCEPTED, WRONG_ANSWER ->
+                    testcasesResponses.add(new TestcasesResponse(
+                        testcase, testcaseResult.getOutput(), testcaseResult.getVerdict()));
+                default ->
+                    testcasesResponses.add(new TestcasesResponse(
+                        testcase, testcaseResult.getError(), testcaseResult.getVerdict()));
+            }
         }
-        solveContestRepository.save(new SolveContest(
-            user, contest, problem, execution.getSourcecode(), verdict, execution.getLanguage()));
-        
         DockerUtil.deleteImage(execution.getImageName());
         deleteEnvironment(execution);
 
-        return verdict;
+        return testcasesResponses;
     }
 
     private TestcaseResult getTestcaseResult(Execution execution, Testcase testcase) {
