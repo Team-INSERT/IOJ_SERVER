@@ -69,6 +69,8 @@ public class SubmitContestService {
         }
         solveContestRepository.save(new SolveContest(
             user, contest, problem, execution.getSourcecode(), verdict, execution.getLanguage()));
+        
+        DockerUtil.deleteImage(execution.getImageName());
         deleteEnvironment(execution);
 
         return verdict;
