@@ -57,9 +57,13 @@ public class ExecutionProblemService {
             solveRepository.save(testcaseResult.toEntity(
                 user, problem, execution.getSourcecode(), testcaseResult.getVerdict(), execution.getLanguage()));
 
-            if (testcaseResult.getVerdict() != Verdict.ACCEPTED)
+            if (testcaseResult.getVerdict() != Verdict.ACCEPTED) {
+                deleteEnvironment(execution);
                 return testcaseResult.getVerdict();
+            }
         }
+        deleteEnvironment(execution);
+
         return Verdict.ACCEPTED;
     }
 
@@ -99,6 +103,14 @@ public class ExecutionProblemService {
     private void buildExecutionEnvironment(Execution execution) {
         try {
             execution.createExecutionDirectory();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteEnvironment(Execution execution) {
+        try {
+            execution.deleteExecutionDirectory();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
