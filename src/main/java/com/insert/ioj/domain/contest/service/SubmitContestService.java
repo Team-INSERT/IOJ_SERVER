@@ -69,6 +69,7 @@ public class SubmitContestService {
         }
         solveContestRepository.save(new SolveContest(
             user, contest, problem, execution.getSourcecode(), verdict, execution.getLanguage()));
+        deleteEnvironment(execution);
 
         return verdict;
     }
@@ -109,6 +110,14 @@ public class SubmitContestService {
     private void buildExecutionEnvironment(Execution execution) {
         try {
             execution.createExecutionDirectory();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteEnvironment(Execution execution) {
+        try {
+            execution.deleteExecutionDirectory();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

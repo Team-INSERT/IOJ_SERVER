@@ -5,8 +5,10 @@ import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.global.constants.FileConstants;
 import com.insert.ioj.infra.file.FileUtil;
 import lombok.Getter;
+import org.springframework.util.FileSystemUtils;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,6 +49,10 @@ public abstract class Execution {
             String inputFileName = testcaseId + "-" + FileConstants.INPUT_FILE_NAME;
             createEntrypointFile(inputFileName, testcaseId);
         });
+    }
+
+    public void deleteExecutionDirectory() throws IOException {
+        FileSystemUtils.deleteRecursively(Path.of(path));
     }
 
     private void saveUploadedFiles() throws IOException {
