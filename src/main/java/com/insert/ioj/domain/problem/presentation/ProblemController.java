@@ -7,6 +7,7 @@ import com.insert.ioj.domain.problem.presentation.dto.req.SaveProblemRequest;
 import com.insert.ioj.domain.problem.presentation.dto.req.SubmitProblemRequest;
 import com.insert.ioj.domain.problem.presentation.dto.res.ListProblemResponse;
 import com.insert.ioj.domain.problem.presentation.dto.res.ProblemResponse;
+import com.insert.ioj.domain.problem.presentation.dto.res.TestcasesResponse;
 import com.insert.ioj.domain.problem.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,7 @@ public class ProblemController {
     private final GetProblemService getProblemService;
     private final SubmitProblemService submitProblemService;
     private final SaveProblemService saveProblemService;
+    private final VerifyTestcasesService verifyTestcasesService;
     private final ExecutionProblemService executionProblemService;
 
     @Operation(summary = "문제 리스트")
@@ -44,6 +46,12 @@ public class ProblemController {
     @PostMapping("/submit")
     public Verdict exe(@RequestBody @Valid ExecutionProblemRequest request) {
         return executionProblemService.execute(request);
+    }
+
+    @Operation(summary = "테스트 케이스 검증")
+    @PostMapping("/submit/testcases")
+    public List<TestcasesResponse> verifyTestcases(@RequestBody ExecutionProblemRequest request) {
+        return verifyTestcasesService.execute(request);
     }
 
     @Operation(summary = "문제 실행")
