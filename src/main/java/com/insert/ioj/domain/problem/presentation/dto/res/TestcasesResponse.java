@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class TestcasesResponse {
+    private int index;
     private String input;
     private String output;
     private String expectOutput;
     private Verdict verdict;
 
-    public TestcasesResponse(Testcase testcase, String output, Verdict verdict) {
+    public TestcasesResponse(int index, Testcase testcase, String output, Verdict verdict) {
+        this.index = index;
         this.input = testcase.getInput();
         this.output = output;
         this.expectOutput = testcase.getOutput();
