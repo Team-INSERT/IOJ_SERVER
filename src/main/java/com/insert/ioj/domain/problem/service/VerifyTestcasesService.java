@@ -23,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 @RequiredArgsConstructor
 @Service
@@ -50,16 +52,19 @@ public class VerifyTestcasesService {
         createEnvironmentAndBuild(execution);
 
         List<TestcasesResponse> testcasesResponses = new ArrayList<>();
-        for (Testcase testcase : testcases) {
+        ListIterator<Testcase> it = testcases.listIterator();
+        while (it.hasNext()) {
+            int index = it.nextIndex();
+            Testcase testcase = it.next();
             TestcaseResult testcaseResult = getTestcaseResult(execution, testcase);
 
             switch (testcaseResult.getVerdict()) {
                 case ACCEPTED, WRONG_ANSWER ->
                     testcasesResponses.add(new TestcasesResponse(
-                        testcase, testcaseResult.getOutput(), testcaseResult.getVerdict()));
+                        index, testcase, testcaseResult.getOutput(), testcaseResult.getVerdict()));
                 default ->
                     testcasesResponses.add(new TestcasesResponse(
-                        testcase, testcaseResult.getError(), testcaseResult.getVerdict()));
+                        index, testcase, testcaseResult.getError(), testcaseResult.getVerdict()));
             }
         }
         DockerUtil.deleteImage(execution.getImageName());
