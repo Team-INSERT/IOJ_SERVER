@@ -35,10 +35,11 @@ public class PythonExecution extends Execution {
 
     private String getCommand(String inputFileName) {
         String executionCommand =
-            "timeout --signal=SIGTERM " + getTimeLimit() + " python3 main.py" + " < " + inputFileName + "\n";
+            "timeout --signal=SIGTERM " + getTimeLimit() + " python3 main.py";
+        String inputCommand = inputFileName == null ? "" : " < " + inputFileName;
         return "#!/usr/bin/env bash\n" +
             "ulimit -s " + getMemoryLimit() + "\n" +
-            executionCommand +
+            executionCommand + inputCommand + "\n" +
             "exit $?\n";
     }
 
