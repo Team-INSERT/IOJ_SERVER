@@ -4,10 +4,9 @@ import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import com.insert.ioj.infra.cmd.dto.res.ProcessOutput;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class CmdUtil {
     public static String readOutput(BufferedReader reader) throws IOException {
@@ -51,5 +50,38 @@ public class CmdUtil {
         } catch (IOException | InterruptedException e) {
             throw new IojException(ErrorCode.PROCESS_EXECUTION);
         }
+    }
+
+    public static void writeInput(Process process, String input) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+        writer.write(input + "\n");
+        writer.flush();
+    }
+
+    public static void readOutputAsync(Process process, Consumer<String> callback) {
+        new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    callback.accept(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
+    public static void readErrorAsync(Process process, Consumer<String> callback) {
+        new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    callback.accept(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

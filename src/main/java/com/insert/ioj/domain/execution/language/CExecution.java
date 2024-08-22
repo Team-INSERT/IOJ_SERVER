@@ -25,6 +25,7 @@ public class CExecution extends Execution {
     @SneakyThrows
     protected void createEntrypointFile(String inputFileName, String testcaseId) {
         String content = getCommand(inputFileName);
+        testcaseId = testcaseId == null ? "execution" : testcaseId;
 
         String path = getPath()
             + "/"
@@ -38,6 +39,7 @@ public class CExecution extends Execution {
     private String getCommand(String inputFileName) {
         String executionCommand =
             "timeout --signal=SIGTERM " + getTimeLimit() + " ./exec" + " < " + inputFileName + "\n";
+        String inputCommand = inputFileName == null ? "" : " < "+ inputFileName;
         return "#!/usr/bin/env bash\n" +
             "gcc main.c" + " -o exec" + "\n" +
             "ret=$?\n" +
@@ -46,7 +48,7 @@ public class CExecution extends Execution {
             "  exit 2\n" +
             "fi\n" +
             "ulimit -s " + getMemoryLimit() + "\n" +
-            executionCommand +
+            executionCommand + inputCommand + "\n" +
             "exit $?\n";
     }
 

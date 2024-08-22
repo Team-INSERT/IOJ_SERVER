@@ -28,7 +28,7 @@ public class CppExecution extends Execution {
         String path = getPath()
             + "/"
             + FileConstants.ENTRYPOINT_FILE_NAME_PREFIX
-            + testcaseId
+            + testcaseId == null ? "execution" : testcaseId
             + ExtensionConstants.ENTRYPOINT_EXTENSION;
 
         FileUtil.saveUploadedFiles(content, path);
@@ -36,7 +36,8 @@ public class CppExecution extends Execution {
 
     private String getCommand(String inputFileName) {
         String executionCommand =
-            "timeout --signal=SIGTERM " + getTimeLimit() + " ./exec" + " < " + inputFileName + "\n";
+            "timeout --signal=SIGTERM " + getTimeLimit() + " ./exec";
+        String inputCommand = inputFileName == null ? "" : " < " + inputFileName;
         return "#!/usr/bin/env bash\n" +
             "g++ main.cpp" + " -o exec" + "\n" +
             "ret=$?\n" +
@@ -45,7 +46,7 @@ public class CppExecution extends Execution {
             "  exit 2\n" +
             "fi\n" +
             "ulimit -s " + getMemoryLimit() + "\n" +
-            executionCommand +
+            executionCommand + inputCommand + "\n" +
             "exit $?\n";
     }
 
