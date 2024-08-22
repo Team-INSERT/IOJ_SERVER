@@ -28,7 +28,7 @@ public class CppExecution extends Execution {
         String path = getPath()
             + "/"
             + FileConstants.ENTRYPOINT_FILE_NAME_PREFIX
-            + testcaseId
+            + testcaseId == null ? "execution" : testcaseId
             + ExtensionConstants.ENTRYPOINT_EXTENSION;
 
         FileUtil.saveUploadedFiles(content, path);

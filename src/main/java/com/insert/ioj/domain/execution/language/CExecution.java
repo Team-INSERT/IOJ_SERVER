@@ -25,6 +25,7 @@ public class CExecution extends Execution {
     @SneakyThrows
     protected void createEntrypointFile(String inputFileName, String testcaseId) {
         String content = getCommand(inputFileName);
+        testcaseId = testcaseId == null ? "execution" : testcaseId;
 
         String path = getPath()
             + "/"
