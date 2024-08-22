@@ -30,7 +30,7 @@ public class JavaExecution extends Execution {
         String path = getPath()
             + "/"
             + FileConstants.ENTRYPOINT_FILE_NAME_PREFIX
-            + testcaseId
+            + testcaseId == null ? "execution" : testcaseId
             + ExtensionConstants.ENTRYPOINT_EXTENSION;
 
         FileUtil.saveUploadedFiles(content, path);
@@ -39,8 +39,8 @@ public class JavaExecution extends Execution {
     private String getCommand(String inputFileName, String prefixName) {
         String executionCommand =
             "timeout --signal=SIGTERM " + getTimeLimit() + " java -Djava.security.manager " +
-            "-Djava.security.policy=./security.policy %s < %s\n"
-                .formatted(prefixName, inputFileName);
+            "-Djava.security.policy=./security.policy " + prefixName;
+        String inputCommand = inputFileName == null ? "" : " < " + inputFileName;
         return "#!/usr/bin/env bash\n" +
             "javac main.java" + "\n" +
             "ret=$?\n" +
@@ -49,7 +49,7 @@ public class JavaExecution extends Execution {
             "  exit 2\n" +
             "fi\n" +
             "ulimit -s " + getMemoryLimit() + "\n" +
-            executionCommand +
+            executionCommand + inputCommand + "\n" +
             "exit $?\n";
     }
 

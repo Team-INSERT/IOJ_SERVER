@@ -44,6 +44,11 @@ public abstract class Execution {
     }
 
     public void createEntrypointFiles() {
+        if (testcases == null) {
+            createEntrypointFile(null, null);
+            return;
+        }
+
         testcases.forEach(testcase -> {
             String testcaseId = testcase.getId().toString();
             String inputFileName = testcaseId + "-" + FileConstants.INPUT_FILE_NAME;
@@ -59,10 +64,12 @@ public abstract class Execution {
         String sourceCodeFileName = getLanguage().getSourcecodeFileName();
         FileUtil.saveUploadedFiles(sourcecode, path + "/" + sourceCodeFileName);
 
-        for (Testcase testcase : testcases) {
-            FileUtil.saveUploadedFiles(
-                testcase.getInput(),
-                path + "/" + testcase.getId() + "-" + FileConstants.INPUT_FILE_NAME);
+        if (testcases != null) {
+            for (Testcase testcase : testcases) {
+                FileUtil.saveUploadedFiles(
+                    testcase.getInput(),
+                    path + "/" + testcase.getId() + "-" + FileConstants.INPUT_FILE_NAME);
+            }
         }
     }
 
