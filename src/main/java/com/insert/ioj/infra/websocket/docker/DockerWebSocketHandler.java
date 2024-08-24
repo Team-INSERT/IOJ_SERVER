@@ -7,6 +7,7 @@ import com.insert.ioj.global.constants.FileConstants;
 import com.insert.ioj.infra.cmd.CmdUtil;
 import com.insert.ioj.infra.docker.DockerUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,14 +16,17 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+@Slf4j
 @RequiredArgsConstructor
 public class DockerWebSocketHandler extends TextWebSocketHandler {
     private static final String TEST_CASE_ID_ENV_VARIABLE = "TEST_CASE_ID";
     private static final int TIME_LIMIT = 600;
     private static final int MEMORY_LIMIT = 1024;
 
-    private Process process;
+    private final ConcurrentMap<WebSocketSession, Process> sessionProcessMap = new ConcurrentHashMap<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -44,7 +48,8 @@ public class DockerWebSocketHandler extends TextWebSocketHandler {
         String[] command = new String[] {"docker","run", "--rm", "-i", "-e",
             TEST_CASE_ID_ENV_VARIABLE+"=execution", execution.getImageName()};
 
-        process = new ProcessBuilder(command).start();
+        Process process = new ProcessBuilder(command).start();
+        sessionProcessMap.put(session, process);
 
         CmdUtil.readOutputAsync(process, output -> {
             try {
@@ -73,17 +78,21 @@ public class DockerWebSocketHandler extends TextWebSocketHandler {
                 }
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
+            } finally {
+                sessionProcessMap.remove(session);
             }
         }).start();
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        Process process = sessionProcessMap.get(session);
         CmdUtil.writeInput(process, message.getPayload());
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        Process process = sessionProcessMap.remove(session);
         if (process != null) {
             process.destroy();
         }
