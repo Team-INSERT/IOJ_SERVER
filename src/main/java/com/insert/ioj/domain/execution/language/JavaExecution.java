@@ -26,11 +26,12 @@ public class JavaExecution extends Execution {
         String fileName = getLanguage().getSourcecodeFileName();
         String prefixName = fileName.substring(0,fileName.length() - 5);
         String content = getCommand(inputFileName, prefixName);
+        testcaseId = testcaseId == null ? "execution" : testcaseId;
 
         String path = getPath()
             + "/"
             + FileConstants.ENTRYPOINT_FILE_NAME_PREFIX
-            + testcaseId == null ? "execution" : testcaseId
+            + testcaseId
             + ExtensionConstants.ENTRYPOINT_EXTENSION;
 
         FileUtil.saveUploadedFiles(content, path);

@@ -24,11 +24,12 @@ public class CppExecution extends Execution {
     @SneakyThrows
     protected void createEntrypointFile(String inputFileName, String testcaseId) {
         String content = getCommand(inputFileName);
+        testcaseId = testcaseId == null ? "execution" : testcaseId;
 
         String path = getPath()
             + "/"
             + FileConstants.ENTRYPOINT_FILE_NAME_PREFIX
-            + testcaseId == null ? "execution" : testcaseId
+            + testcaseId
             + ExtensionConstants.ENTRYPOINT_EXTENSION;
 
         FileUtil.saveUploadedFiles(content, path);
