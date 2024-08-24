@@ -13,6 +13,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new DockerWebSocketHandler(), "/execution")
-            .setAllowedOrigins("*");
+            .setAllowedOrigins("http://localhost:3000");
     }
 }
