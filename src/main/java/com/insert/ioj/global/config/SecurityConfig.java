@@ -47,8 +47,8 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .authorizeRequests(auth -> auth
                 .requestMatchers("/user").authenticated()
-                .requestMatchers(HttpMethod.POST, "/problem").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/problem").authenticated()
+                .requestMatchers(HttpMethod.POST, "/problem").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.POST, "/contest").hasRole(ADMIN)
                 .requestMatchers("/contest/admin").hasRole(ADMIN)
                 .anyRequest().permitAll()
             );
