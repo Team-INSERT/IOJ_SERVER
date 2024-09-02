@@ -21,6 +21,8 @@ public enum ErrorCode {
     INVALID_TOKEN(401, "TOKEN-401-1", "올바르지 않은 형식의 Token입니다."),
     EXPIRED_PERIOD_TOKEN(401, "TOKEN-401-2", "기한이 만료된 Token입니다."),
 
+    ALREADY_SOLVED_PROBLEM(409, "PROBLEM-409-1", "이미 해결된 문제입니다."),
+
     INTERNAL_SERVER_ERROR(500, "SERVER-500-1", "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요.");
 
     private final int status;
