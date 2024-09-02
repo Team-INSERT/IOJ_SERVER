@@ -13,6 +13,7 @@ import com.insert.ioj.domain.execution.service.ExecutionService;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.solveContest.domain.SolveContest;
+import com.insert.ioj.domain.solveContest.domain.repository.CustomSolveContestRepository;
 import com.insert.ioj.domain.solveContest.domain.repository.SolveContestRepository;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
@@ -34,6 +35,7 @@ import java.util.List;
 public class SubmitContestService {
     private final TestcaseRepository testcaseRepository;
     private final SolveContestRepository solveContestRepository;
+    private final CustomSolveContestRepository customSolveContestRepository;
     private final ContestFacade contestFacade;
     private final ProblemRepository problemRepository;
     private final UserFacade userFacade;
@@ -49,6 +51,8 @@ public class SubmitContestService {
         Contest contest = contestFacade.getContest(request.getContestId());
 
         contest.checkRole(user.getAuthority());
+
+        existsCorrectProblem(contest, user, problem);
 
         Execution execution = ExecutionFactory.createExecution(
             request.getSourcecode(),
@@ -74,6 +78,12 @@ public class SubmitContestService {
         deleteEnvironment(execution);
 
         return verdict;
+    }
+
+    private void existsCorrectProblem(Contest contest, User user, Problem problem) {
+        Boolean isCorrect = customSolveContestRepository.existsByCorrectProblem(contest, user, problem);
+        if (isCorrect)
+            throw new IojException(ErrorCode.ALREADY_SOLVED_PROBLEM);
     }
 
     private TestcaseResult getTestcaseResult(Execution execution, Testcase testcase) {

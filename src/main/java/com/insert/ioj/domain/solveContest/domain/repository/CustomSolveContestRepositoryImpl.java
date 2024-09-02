@@ -3,6 +3,7 @@ package com.insert.ioj.domain.solveContest.domain.repository;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListRankResponse;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
+import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.solveContest.domain.SolveContest;
 import com.insert.ioj.domain.user.domain.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -43,5 +44,17 @@ public class CustomSolveContestRepositoryImpl implements CustomSolveContestRepos
             .orderBy(solveContest.verdict.count().desc(),
                 solveContest.createDate.max().asc())
             .fetch();
+    }
+
+    @Override
+    public Boolean existsByCorrectProblem(Contest contest, User user, Problem problem) {
+        Integer fetchOne = queryFactory
+            .selectOne()
+            .from(solveContest)
+            .where(solveContest.contest.eq(contest).and(solveContest.user.eq(user)
+                .and(solveContest.problem.eq(problem)
+                .and(solveContest.verdict.eq(Verdict.ACCEPTED)))))
+            .fetchOne();
+        return fetchOne != null;
     }
 }
