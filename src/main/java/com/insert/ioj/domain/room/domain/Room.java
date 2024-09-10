@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.room.domain;
 
+import com.insert.ioj.domain.room.domain.type.roomStatus;
 import com.insert.ioj.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,6 +25,9 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User host;
+
+    @Enumerated(EnumType.STRING)
+    private roomStatus status = roomStatus.RECRUITING;
 
     public Room(String title,
                 int maxPeople,
