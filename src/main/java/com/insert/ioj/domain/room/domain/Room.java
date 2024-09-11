@@ -1,6 +1,6 @@
 package com.insert.ioj.domain.room.domain;
 
-import com.insert.ioj.domain.room.domain.type.roomStatus;
+import com.insert.ioj.domain.room.domain.type.RoomStatus;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
@@ -29,7 +29,7 @@ public class Room {
     private User host;
 
     @Enumerated(EnumType.STRING)
-    private roomStatus status = roomStatus.RECRUITING;
+    private RoomStatus status = RoomStatus.RECRUITING;
 
     public Room(String title,
                 int maxPeople,

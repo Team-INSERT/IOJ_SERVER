@@ -1,6 +1,6 @@
 package com.insert.ioj.domain.room.domain.type;
 
-public enum roomStatus {
+public enum RoomStatus {
     RECRUITING,
     STARTED,
     ENDED
