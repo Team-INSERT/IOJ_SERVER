@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Entry {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Boolean ready;
+    private Boolean ready = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -22,4 +22,9 @@ public class Entry {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    public Entry(Room room, User user) {
+        this.room = room;
+        this.user = user;
+    }
 }
