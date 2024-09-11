@@ -1,9 +1,11 @@
 package com.insert.ioj.domain.room.presentation;
 
 import com.insert.ioj.domain.room.presentation.dto.req.CreateRoomRequest;
+import com.insert.ioj.domain.room.presentation.dto.res.InfoRoomResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.ListRoomResponse;
 import com.insert.ioj.domain.room.service.CreateRoomService;
 import com.insert.ioj.domain.room.service.DeleteRoomService;
+import com.insert.ioj.domain.room.service.InfoRoomService;
 import com.insert.ioj.domain.room.service.ListRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @RestController
 public class RoomController {
     private final ListRoomService listRoomService;
+    private final InfoRoomService infoRoomService;
     private final CreateRoomService createRoomService;
     private final DeleteRoomService deleteRoomService;
 
@@ -28,6 +31,12 @@ public class RoomController {
     @GetMapping
     public List<ListRoomResponse> listRoom() {
         return listRoomService.execute();
+    }
+
+    @Operation(summary = "방 정보")
+    @GetMapping("/{roomId}")
+    public InfoRoomResponse getInfoRoom(@PathVariable UUID roomId) {
+        return infoRoomService.execute(roomId);
     }
 
     @Operation(summary = "방 생성")
