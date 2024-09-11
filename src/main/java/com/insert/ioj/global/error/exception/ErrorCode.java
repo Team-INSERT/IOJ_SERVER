@@ -12,11 +12,13 @@ public enum ErrorCode {
     FORBIDDEN_THIRD_YEAR(403, "USER-403-2", "요청한 사용자의 3학년 권한이 존재하지 않습니다."),
     FORBIDDEN_SECOND_YEAR(403, "USER-403-3", "요청한 사용자의 2학년 권한이 존재하지 않습니다."),
     FORBIDDEN_FIRST_YEAR(403, "USER-403-4", "요청한 사용자의 1학년 권한이 존재하지 않습니다."),
+    FORBIDDEN_ROOM(403, "ROOM-403-1", "요청한 방의 권한이 존재하지 않습니다."),
 
     NOT_FOUND_USER(404, "USER-404-1", "요청한 사용자가 존재하지 않습니다."),
     NOT_FOUND_PROBLEM(404, "PROBLEM-404-1", "요청한 문제가 존재하지 않습니다."),
     NOT_FOUND_CONTEST(404, "CONTEST-404-1", "요청한 대회가 존재하지 않습니다."),
     NOT_FOUND_LANGUAGE(404, "LANGUAGE-404-1", "요청한 언어가 존재하지 않습니다."),
+    NOT_FOUND_ROOM(404, "ROOM-404-1", "요청한 방이 존재하지 않습니다."),
 
     INVALID_TOKEN(401, "TOKEN-401-1", "올바르지 않은 형식의 Token입니다."),
     EXPIRED_PERIOD_TOKEN(401, "TOKEN-401-2", "기한이 만료된 Token입니다."),

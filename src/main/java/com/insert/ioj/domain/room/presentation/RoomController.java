@@ -3,6 +3,7 @@ package com.insert.ioj.domain.room.presentation;
 import com.insert.ioj.domain.room.presentation.dto.req.CreateRoomRequest;
 import com.insert.ioj.domain.room.presentation.dto.res.ListRoomResponse;
 import com.insert.ioj.domain.room.service.CreateRoomService;
+import com.insert.ioj.domain.room.service.DeleteRoomService;
 import com.insert.ioj.domain.room.service.ListRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class RoomController {
     private final ListRoomService listRoomService;
     private final CreateRoomService createRoomService;
+    private final DeleteRoomService deleteRoomService;
 
     @Operation(summary = "방 리스트")
     @GetMapping
@@ -33,5 +35,11 @@ public class RoomController {
     @PostMapping
     public UUID createRoom(@RequestBody @Valid CreateRoomRequest request) {
         return createRoomService.execute(request);
+    }
+
+    @Operation(summary = "방 삭제")
+    @DeleteMapping("/{roomId}")
+    public void deleteRoom(@PathVariable UUID roomId) {
+        deleteRoomService.execute(roomId);
     }
 }

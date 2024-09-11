@@ -2,6 +2,8 @@ package com.insert.ioj.domain.room.domain;
 
 import com.insert.ioj.domain.room.domain.type.roomStatus;
 import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.global.error.exception.ErrorCode;
+import com.insert.ioj.global.error.exception.IojException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,5 +45,11 @@ public class Room {
         this.maxDifficulty = maxDifficulty;
         this.time = time;
         this.host = host;
+    }
+
+    public void checkHost(User user) {
+        if (host != user) {
+            throw new IojException(ErrorCode.FORBIDDEN_ROOM);
+        }
     }
 }
