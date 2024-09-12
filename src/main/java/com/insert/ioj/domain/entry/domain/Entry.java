@@ -27,4 +27,9 @@ public class Entry {
         this.room = room;
         this.user = user;
     }
+
+    public Boolean changeReady() {
+        ready = !ready;
+        return ready;
+    }
 }
