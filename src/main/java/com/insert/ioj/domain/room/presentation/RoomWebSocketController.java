@@ -1,8 +1,10 @@
 package com.insert.ioj.domain.room.presentation;
 
+import com.insert.ioj.domain.room.presentation.dto.res.DeleteRoomResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.JoinRoomResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.LeaveRoomResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.ReadyResponse;
+import com.insert.ioj.domain.room.service.DeleteRoomService;
 import com.insert.ioj.domain.room.service.JoinRoomService;
 import com.insert.ioj.domain.room.service.LeaveRoomService;
 import com.insert.ioj.domain.room.service.ReadyService;
@@ -22,6 +24,7 @@ public class RoomWebSocketController {
     private final JoinRoomService joinRoomService;
     private final LeaveRoomService leaveRoomService;
     private final ReadyService readyService;
+    private final DeleteRoomService deleteRoomService;
 
     @GetMapping("/{roomId}/join")
     @SendTo("/topic/room/{roomId}")
@@ -39,5 +42,11 @@ public class RoomWebSocketController {
     @SendTo("/topic/room/{roomId}")
     public ReadyResponse ready(@PathVariable UUID roomId) {
         return readyService.execute(roomId);
+    }
+
+    @GetMapping("/{roomId}/delete")
+    @SendTo("/topic/room/{roomId}")
+    public DeleteRoomResponse deleteRoom(@PathVariable UUID roomId) {
+        return deleteRoomService.execute(roomId);
     }
 }
