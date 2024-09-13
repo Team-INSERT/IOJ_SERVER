@@ -6,9 +6,10 @@ import com.insert.ioj.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EntryRepository extends JpaRepository<Entry, Long> {
     List<Entry> findAllByRoom(Room room);
-    Entry findByRoomAndUser(Room room, User user);
+    Optional<Entry> findByRoomAndUser(Room room, User user);
     Boolean existsByUser(User user);
 }
