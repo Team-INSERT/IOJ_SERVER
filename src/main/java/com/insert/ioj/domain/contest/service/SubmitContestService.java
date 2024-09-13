@@ -50,6 +50,7 @@ public class SubmitContestService {
         User user = userFacade.getCurrentUser();
         Contest contest = contestFacade.getContest(request.getContestId());
 
+        contest.isFinished();
         contest.checkRole(user.getAuthority());
 
         existsCorrectProblem(contest, user, problem);
