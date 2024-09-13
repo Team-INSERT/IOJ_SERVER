@@ -56,6 +56,9 @@ public class Room {
     }
 
     public void updateStatus() {
+        if (status == RoomStatus.STARTED) {
+            throw new IojException(ErrorCode.STARTED_ROOM);
+        }
         this.status = RoomStatus.STARTED;
     }
 
