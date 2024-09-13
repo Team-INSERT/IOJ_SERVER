@@ -9,6 +9,7 @@ public enum ErrorCode {
     ALREADY_USER(400, "ROOM-400-1", "이미 유저가 방에 참가중입니다."),
     FULL_ROOM(400, "ROOM-400-2", "방에 유저가 가득 찼습니다."),
     NOT_READY_ROOM(400, "ROOM-400-3", "방에 준비를 하지 않은 유저가 있습니다."),
+    STARTED_ROOM(400, "ROOM-400-4", "이미 게임을 시작한 방입니다."),
 
     PROCESS_EXECUTION(500, "EXECUTION-1", "명령어를 실행하는 도중 에러가 발생하였습니다."),
 

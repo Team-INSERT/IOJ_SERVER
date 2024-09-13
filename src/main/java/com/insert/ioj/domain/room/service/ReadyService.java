@@ -3,6 +3,7 @@ package com.insert.ioj.domain.room.service;
 import com.insert.ioj.domain.entry.domain.Entry;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
 import com.insert.ioj.domain.room.domain.Room;
+import com.insert.ioj.domain.room.domain.type.RoomStatus;
 import com.insert.ioj.domain.room.facade.RoomFacade;
 import com.insert.ioj.domain.room.presentation.dto.res.ReadyResponse;
 import com.insert.ioj.domain.user.domain.User;
@@ -26,6 +27,10 @@ public class ReadyService {
     public ReadyResponse execute(UUID roomId) {
         Room room = roomFacade.getRoom(roomId);
         User user = userFacade.getCurrentUser();
+
+        if (room.getStatus() == RoomStatus.STARTED) {
+            throw new IojException(ErrorCode.STARTED_ROOM);
+        }
         Entry entryUser = entryRepository.findByRoomAndUser(room, user)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_USER));
 
