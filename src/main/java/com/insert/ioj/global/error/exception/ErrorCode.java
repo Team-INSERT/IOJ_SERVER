@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    ALREADY_USER(400, "ROOM-400-1", "이미 유저가 방에 참가중입니다."),
+
     PROCESS_EXECUTION(500, "EXECUTION-1", "명령어를 실행하는 도중 에러가 발생하였습니다."),
 
     FORBIDDEN_USER(403, "USER-403-1", "요청한 사용자의 권한이 존재하지 않습니다."),

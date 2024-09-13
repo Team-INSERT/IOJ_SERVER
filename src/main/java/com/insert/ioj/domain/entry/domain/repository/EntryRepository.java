@@ -10,4 +10,5 @@ import java.util.List;
 public interface EntryRepository extends JpaRepository<Entry, Long> {
     List<Entry> findAllByRoom(Room room);
     Entry findByRoomAndUser(Room room, User user);
+    Boolean existsByUser(User user);
 }

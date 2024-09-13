@@ -7,6 +7,8 @@ import com.insert.ioj.domain.room.facade.RoomFacade;
 import com.insert.ioj.domain.room.presentation.dto.res.JoinRoomResponse;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
+import com.insert.ioj.global.error.exception.ErrorCode;
+import com.insert.ioj.global.error.exception.IojException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +27,16 @@ public class JoinRoomService {
         Room room = roomFacade.getRoom(roomId);
         User user = userFacade.getCurrentUser();
 
+        alreadyUser(user);
         entryRepository.save(new Entry(room, user));
 
         return new JoinRoomResponse(user);
+    }
+
+    private void alreadyUser(User user) {
+        Boolean isUser = entryRepository.existsByUser(user);
+        if (isUser) {
+            throw new IojException(ErrorCode.ALREADY_USER);
+        }
     }
 }
