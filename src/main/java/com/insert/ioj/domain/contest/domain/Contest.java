@@ -45,4 +45,10 @@ public class Contest {
             case FIRST_YEAR -> throw new IojException(ErrorCode.FORBIDDEN_FIRST_YEAR);
         }
     }
+
+    public void isFinished() {
+        if (this.endTime.isBefore(LocalDateTime.now())) {
+            throw new IojException(ErrorCode.FINISHED_CONTEST);
+        }
+    }
 }
