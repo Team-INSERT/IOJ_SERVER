@@ -23,6 +23,7 @@ public class Room {
     private int minDifficulty;
     private int maxDifficulty;
     private int time;
+    private int peopleCnt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -45,6 +46,7 @@ public class Room {
         this.maxDifficulty = maxDifficulty;
         this.time = time;
         this.host = host;
+        this.peopleCnt = 1;
     }
 
     public void checkHost(User user) {
@@ -55,5 +57,14 @@ public class Room {
 
     public void updateStatus() {
         this.status = RoomStatus.STARTED;
+    }
+
+    public void addPeople(User user) {
+        if (peopleCnt >= maxPeople) {
+            throw new IojException(ErrorCode.FULL_ROOM);
+        } else if (host == user) {
+            throw new IojException(ErrorCode.ALREADY_USER);
+        }
+        peopleCnt++;
     }
 }

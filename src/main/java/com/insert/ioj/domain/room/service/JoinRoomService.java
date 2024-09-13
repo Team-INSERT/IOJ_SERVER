@@ -27,6 +27,7 @@ public class JoinRoomService {
         Room room = roomFacade.getRoom(roomId);
         User user = userFacade.getCurrentUser();
 
+        room.addPeople(user);
         alreadyUser(user);
         entryRepository.save(new Entry(room, user));
 
