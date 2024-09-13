@@ -52,4 +52,8 @@ public class Room {
             throw new IojException(ErrorCode.FORBIDDEN_ROOM);
         }
     }
+
+    public void updateStatus() {
+        this.status = RoomStatus.STARTED;
+    }
 }

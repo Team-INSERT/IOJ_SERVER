@@ -1,13 +1,7 @@
 package com.insert.ioj.domain.room.presentation;
 
-import com.insert.ioj.domain.room.presentation.dto.res.DeleteRoomResponse;
-import com.insert.ioj.domain.room.presentation.dto.res.JoinRoomResponse;
-import com.insert.ioj.domain.room.presentation.dto.res.LeaveRoomResponse;
-import com.insert.ioj.domain.room.presentation.dto.res.ReadyResponse;
-import com.insert.ioj.domain.room.service.DeleteRoomService;
-import com.insert.ioj.domain.room.service.JoinRoomService;
-import com.insert.ioj.domain.room.service.LeaveRoomService;
-import com.insert.ioj.domain.room.service.ReadyService;
+import com.insert.ioj.domain.room.presentation.dto.res.*;
+import com.insert.ioj.domain.room.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -24,6 +18,7 @@ public class RoomWebSocketController {
     private final JoinRoomService joinRoomService;
     private final LeaveRoomService leaveRoomService;
     private final ReadyService readyService;
+    private final StartGameService startGameService;
     private final DeleteRoomService deleteRoomService;
 
     @GetMapping("/{roomId}/join")
@@ -42,6 +37,12 @@ public class RoomWebSocketController {
     @SendTo("/topic/room/{roomId}")
     public ReadyResponse ready(@PathVariable UUID roomId) {
         return readyService.execute(roomId);
+    }
+
+    @GetMapping("/{roomId}/start")
+    @SendTo("/topic/room/{roomId}")
+    public StartGameResponse startGame(@PathVariable UUID roomId) {
+        return startGameService.execute(roomId);
     }
 
     @GetMapping("/{roomId}/delete")
