@@ -45,7 +45,7 @@ public class SecurityConfig {
 
         http
             .cors(Customizer.withDefaults())
-            .authorizeRequests(auth -> auth
+            .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/user").authenticated()
                 .requestMatchers(HttpMethod.POST, "/problem").hasRole(ADMIN)
                 .requestMatchers(HttpMethod.POST, "/contest").hasRole(ADMIN)
