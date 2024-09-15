@@ -11,7 +11,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOrigins("http://localhost:3000",
                 "https://ioj-seonghoon07s-projects.vercel.app",
-                "https://insert-ioj.com")
+                "https://insert-ioj.com",
+                "https://www.insert-ioj.com")
             .allowedMethods("*")
             .allowCredentials(true);
     }
