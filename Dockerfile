@@ -12,4 +12,4 @@ RUN apt update && apt install -y docker.io
 
 ADD executions executions
 
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
