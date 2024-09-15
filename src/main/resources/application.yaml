@@ -3,6 +3,8 @@ spring:
     location: classpath:banner.txt
   config:
     import: optional:configserver:${CONFIG_URL:http://localhost:8888/}
+  profiles:
+    active: ${PROFILE}
   cloud:
     config:
       name: ioj
