@@ -26,6 +26,9 @@ public class SaveProblemRequest {
     @NotNull(message = "inputContent가 비어있습니다.")
     private String inputContent;
 
+    @NotNull(message = "outputContent가 비어있습니다.")
+    private String outputContent;
+
     @Range(min = 1, max = 5, message = "level은 1혹은 5사이어야 합니다.")
     @NotNull(message = "level이 비어있습니다.")
     private Integer level;
@@ -44,7 +47,7 @@ public class SaveProblemRequest {
 
     public Problem toProblem() {
         return new Problem(
-            title, content, inputContent, level, memoryLimit, timeLimit
+            title, content, inputContent, outputContent, level, memoryLimit, timeLimit
         );
     }
 
