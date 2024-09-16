@@ -13,6 +13,7 @@ public class ProblemResponse {
     private String title;
     private String content;
     private String inputContent;
+    private String outputContent;
     private int level;
     private int memoryLimit;
     private int timeLimit;
@@ -22,6 +23,7 @@ public class ProblemResponse {
         this.title = problem.getTitle();
         this.content = problem.getContent();
         this.inputContent = problem.getInputContent();
+        this.outputContent = problem.getOutputContent();
         this.level = problem.getLevel();
         this.memoryLimit = problem.getMemoryLimit();
         this.timeLimit = problem.getTimeLimit();
