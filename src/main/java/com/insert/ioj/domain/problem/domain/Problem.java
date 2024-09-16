@@ -21,16 +21,19 @@ public class Problem {
 
     private String inputContent;
 
+    private String outputContent;
+
     private int level;
 
     private int memoryLimit;
 
     private int timeLimit;
 
-    public Problem(String title, String content, String inputContent, int level, int memoryLimit, int timeLimit) {
+    public Problem(String title, String content, String inputContent, String outputContent, int level, int memoryLimit, int timeLimit) {
         this.title = title;
         this.content = content;
         this.inputContent = inputContent;
+        this.outputContent = outputContent;
         this.level = level;
         this.memoryLimit = memoryLimit;
         this.timeLimit = timeLimit;
