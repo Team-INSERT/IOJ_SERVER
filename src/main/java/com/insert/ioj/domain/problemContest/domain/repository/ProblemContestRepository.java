@@ -10,8 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProblemContestRepository extends JpaRepository<ProblemContest, Long> {
-    ProblemContest findByContestAndProblem(Contest contest, Problem problem);
-
     @Query("SELECT problem FROM ProblemContest WHERE contest = :contest")
     List<Problem> getProblems(@Param("contest") Contest contest);
 }
