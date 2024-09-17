@@ -15,8 +15,10 @@ public class Testcase {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(columnDefinition = "TEXT")
     private String input;
 
+    @Column(columnDefinition = "TEXT")
     private String output;
 
     private Boolean example;
