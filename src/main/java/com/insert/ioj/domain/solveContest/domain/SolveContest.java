@@ -31,6 +31,7 @@ public class SolveContest extends BaseTimeEntity {
     @JoinColumn(name = "problem")
     private Problem problem;
 
+    @Column(columnDefinition = "TEXT")
     private String sourcecode;
 
     @Enumerated(EnumType.STRING)

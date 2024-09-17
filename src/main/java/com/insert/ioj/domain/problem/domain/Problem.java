@@ -1,9 +1,6 @@
 package com.insert.ioj.domain.problem.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,10 +14,13 @@ public class Problem {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column(columnDefinition = "TEXT")
     private String inputContent;
 
+    @Column(columnDefinition = "TEXT")
     private String outputContent;
 
     private int level;

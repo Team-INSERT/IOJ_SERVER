@@ -24,6 +24,7 @@ public class Solve {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
+    @Column(columnDefinition = "TEXT")
     private String sourcecode;
 
     @Enumerated(EnumType.STRING)
