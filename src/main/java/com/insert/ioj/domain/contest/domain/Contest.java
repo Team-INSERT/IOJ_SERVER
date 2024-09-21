@@ -34,7 +34,7 @@ public class Contest {
     }
 
     public void checkRole(Authority authority) {
-        if (authority == Authority.USER) return;
+        if (this.authority == Authority.USER) return;
         if (this.authority == authority) return;
         if (this.authority == Authority.ADMIN) return;
 
