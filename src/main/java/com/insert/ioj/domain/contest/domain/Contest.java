@@ -46,6 +46,12 @@ public class Contest {
         }
     }
 
+    public void isNotStarted() {
+        if (this.startTime.isAfter(LocalDateTime.now())) {
+            throw new IojException(ErrorCode.NOT_STARTED_CONTEST);
+        }
+    }
+
     public void isFinished() {
         if (this.endTime.isBefore(LocalDateTime.now())) {
             throw new IojException(ErrorCode.FINISHED_CONTEST);
