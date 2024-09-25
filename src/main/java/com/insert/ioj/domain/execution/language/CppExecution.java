@@ -40,7 +40,7 @@ public class CppExecution extends Execution {
             "timeout --signal=SIGTERM " + getTimeLimit() + " ./exec";
         String inputCommand = inputFileName == null ? "" : " < " + inputFileName;
         return "#!/usr/bin/env bash\n" +
-            "g++ main.cpp" + " -o exec" + "\n" +
+            "g++ main.cpp -o exec\n" +
             "ret=$?\n" +
             "if [ $ret -ne 0 ]\n" +
             "then\n" +

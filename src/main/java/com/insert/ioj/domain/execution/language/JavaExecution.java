@@ -43,7 +43,7 @@ public class JavaExecution extends Execution {
             "-Djava.security.policy=./security.policy " + prefixName;
         String inputCommand = inputFileName == null ? "" : " < " + inputFileName;
         return "#!/usr/bin/env bash\n" +
-            "javac main.java" + "\n" +
+            "javac main.java\n" +
             "ret=$?\n" +
             "if [ $ret -ne 0 ]\n" +
             "then\n" +
