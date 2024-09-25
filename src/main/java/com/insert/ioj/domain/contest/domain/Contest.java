@@ -34,7 +34,7 @@ public class Contest {
     }
 
     public void checkRole(Authority authority) {
-        if (authority == Authority.USER) return;
+        if (this.authority == Authority.USER) return;
         if (this.authority == authority) return;
         if (this.authority == Authority.ADMIN) return;
 
@@ -43,6 +43,12 @@ public class Contest {
             case THIRD_YEAR -> throw new IojException(ErrorCode.FORBIDDEN_THIRD_YEAR);
             case SECOND_YEAR -> throw new IojException(ErrorCode.FORBIDDEN_SECOND_YEAR);
             case FIRST_YEAR -> throw new IojException(ErrorCode.FORBIDDEN_FIRST_YEAR);
+        }
+    }
+
+    public void isNotStarted() {
+        if (this.startTime.isAfter(LocalDateTime.now())) {
+            throw new IojException(ErrorCode.NOT_STARTED_CONTEST);
         }
     }
 

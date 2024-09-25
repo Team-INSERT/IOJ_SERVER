@@ -24,6 +24,8 @@ public class GetContestService {
     public ContestResponse execute(Long contestId) {
         User user = userFacade.getCurrentUser();
         Contest contest = contestFacade.getContest(contestId);
+
+        contest.isNotStarted();
         contest.checkRole(user.getAuthority());
 
         List<ProblemStatusDto> problemStatuses = problemFacade.getProblemStatuses(contest, user);
