@@ -38,10 +38,10 @@ public class CExecution extends Execution {
 
     private String getCommand(String inputFileName) {
         String executionCommand =
-            "timeout --signal=SIGTERM " + getTimeLimit() + " ./exec" + " < " + inputFileName + "\n";
+            "timeout --signal=SIGTERM " + getTimeLimit() + " ./exec";
         String inputCommand = inputFileName == null ? "" : " < "+ inputFileName;
         return "#!/usr/bin/env bash\n" +
-            "gcc main.c" + " -o exec" + "\n" +
+            "gcc main.c -o exec\n" +
             "ret=$?\n" +
             "if [ $ret -ne 0 ]\n" +
             "then\n" +
