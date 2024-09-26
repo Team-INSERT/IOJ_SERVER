@@ -36,7 +36,7 @@ public class Contest {
     public void checkRole(Authority authority) {
         if (this.authority == Authority.USER) return;
         if (this.authority == authority) return;
-        if (this.authority == Authority.ADMIN) return;
+        if (authority == Authority.ADMIN) return;
 
         switch (authority) {
             case USER -> throw new IojException(ErrorCode.FORBIDDEN_USER);
