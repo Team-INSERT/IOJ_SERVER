@@ -18,7 +18,7 @@ import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import com.insert.ioj.infra.cmd.dto.res.ProcessOutput;
 import com.insert.ioj.infra.docker.DockerUtil;
-import com.insert.ioj.infra.status.StatusUtil;
+import com.insert.ioj.infra.testcase.TestcaseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,17 +72,7 @@ public class ExecutionProblemService {
     private TestcaseResult getTestcaseResult(Execution execution, Testcase testcase) {
         try {
             ProcessOutput processOutput = executionService.run(execution, testcase.getId().toString());
-
-            boolean ans = testcase.getOutput().equals(processOutput.getStdOut());
-            Verdict verdict = StatusUtil.statusResponse(processOutput.getStatus(), ans);
-
-            return new TestcaseResult(
-                verdict,
-                processOutput.getStdOut(),
-                processOutput.getStdErr(),
-                testcase,
-                processOutput.getExecutionDuration()
-            );
+            return TestcaseUtil.testcaseResponse(processOutput, testcase);
         } catch (Exception e) {
             return new TestcaseResult(
                 Verdict.TIME_LIMIT_EXCEEDED,
