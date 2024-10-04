@@ -26,7 +26,7 @@ public class CustomSolveContestRepositoryImpl implements CustomSolveContestRepos
             .selectFrom(solveContest)
             .where(solveContest.user.eq(user)
                 .and(solveContest.contest.eq(contest)))
-            .orderBy(solveContest.problem.id.asc(), solveContest.createDate.desc())
+            .orderBy(solveContest.problem.id.asc(), solveContest.createdAt.desc())
             .fetch();
     }
 
@@ -36,13 +36,13 @@ public class CustomSolveContestRepositoryImpl implements CustomSolveContestRepos
             .select(constructor(ListRankResponse.class,
                 solveContest.user,
                 solveContest.verdict.count(),
-                solveContest.createDate.max()))
+                solveContest.createdAt.max()))
             .from(solveContest)
             .where(solveContest.contest.eq(contest)
                 .and(solveContest.verdict.eq(Verdict.ACCEPTED)))
             .groupBy(solveContest.user)
             .orderBy(solveContest.verdict.count().desc(),
-                solveContest.createDate.max().asc())
+                solveContest.createdAt.max().asc())
             .fetch();
     }
 
