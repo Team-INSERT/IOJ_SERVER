@@ -47,7 +47,7 @@ public class ProblemFacade {
                 status = "failed";
             }
 
-            LocalDateTime solveTime = solveContest != null ? solveContest.getCreateDate() : null;
+            LocalDateTime solveTime = solveContest != null ? solveContest.getCreatedAt() : null;
             problemStatuses.add(new ProblemStatusDto(problem, status, solveTime));
         }
         return problemStatuses;

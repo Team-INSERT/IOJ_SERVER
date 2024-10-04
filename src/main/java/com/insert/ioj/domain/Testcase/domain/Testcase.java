@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.Testcase.domain;
 
 import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Testcase {
+public class Testcase extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

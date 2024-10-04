@@ -2,6 +2,7 @@ package com.insert.ioj.domain.room.domain;
 
 import com.insert.ioj.domain.room.domain.type.RoomStatus;
 import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.global.entity.BaseTimeEntity;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Room {
+public class Room extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String title;

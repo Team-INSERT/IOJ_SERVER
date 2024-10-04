@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.contest.domain;
 
 import com.insert.ioj.domain.user.domain.type.Authority;
+import com.insert.ioj.global.entity.BaseTimeEntity;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import jakarta.persistence.*;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Contest {
+public class Contest extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
