@@ -1,12 +1,11 @@
-package com.insert.ioj.domain.solveContest.domain;
+package com.insert.ioj.domain.solve.contest;
 
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.domain.problem.domain.Problem;
-import com.insert.ioj.domain.solve.domain.Solve;
+import com.insert.ioj.domain.solve.solve.Solve;
 import com.insert.ioj.domain.user.domain.User;
-import com.insert.ioj.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

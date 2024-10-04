@@ -1,4 +1,4 @@
-package com.insert.ioj.domain.solve.domain;
+package com.insert.ioj.domain.solve.solve;
 
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.execution.language.Language;
