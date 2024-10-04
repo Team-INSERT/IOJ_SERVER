@@ -2,6 +2,7 @@ package com.insert.ioj.domain.user.domain;
 
 import com.insert.ioj.domain.user.domain.type.Authority;
 import com.insert.ioj.domain.user.domain.type.Color;
+import com.insert.ioj.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "tbl_user")
-public class User {
+public class User extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
