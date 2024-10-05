@@ -1,6 +1,5 @@
 package com.insert.ioj.global.config;
 
-import com.insert.ioj.domain.user.domain.type.Authority;
 import com.insert.ioj.global.security.jwt.JwtTokenFilter;
 import com.insert.ioj.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;

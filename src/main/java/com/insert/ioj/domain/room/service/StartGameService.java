@@ -1,6 +1,5 @@
 package com.insert.ioj.domain.room.service;
 
-import com.insert.ioj.domain.entry.domain.Entry;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
 import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.room.facade.RoomFacade;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor

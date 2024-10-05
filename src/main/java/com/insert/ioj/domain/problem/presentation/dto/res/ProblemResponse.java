@@ -1,7 +1,6 @@
 package com.insert.ioj.domain.problem.presentation.dto.res;
 
 import com.insert.ioj.domain.problem.domain.Problem;
-import com.insert.ioj.domain.problem.presentation.dto.req.TestcaseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
