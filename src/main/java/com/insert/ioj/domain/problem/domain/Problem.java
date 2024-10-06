@@ -19,6 +19,8 @@ public class Problem extends BaseTimeEntity {
 
     private String title;
 
+    private String source;
+
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -34,9 +36,10 @@ public class Problem extends BaseTimeEntity {
 
     private int timeLimit;
 
-    public Problem(String title, String content, String inputContent, String outputContent, int level, int memoryLimit, int timeLimit) {
+    public Problem(String title, String content, String source, String inputContent, String outputContent, int level, int memoryLimit, int timeLimit) {
         this.title = title;
         this.content = content;
+        this.source = source;
         this.inputContent = inputContent;
         this.outputContent = outputContent;
         this.level = level;
