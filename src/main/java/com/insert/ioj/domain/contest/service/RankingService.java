@@ -7,7 +7,7 @@ import com.insert.ioj.domain.contest.presentation.dto.res.ProblemStatusResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.RankingResponse;
 import com.insert.ioj.domain.problem.facade.ProblemFacade;
 import com.insert.ioj.domain.problem.presentation.dto.res.ProblemStatusDto;
-import com.insert.ioj.domain.solveContest.domain.repository.CustomSolveContestRepository;
+import com.insert.ioj.domain.solve.contest.repository.CustomSolveContestRepository;
 import com.insert.ioj.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

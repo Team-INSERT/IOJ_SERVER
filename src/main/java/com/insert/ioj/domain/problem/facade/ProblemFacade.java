@@ -5,8 +5,8 @@ import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.CustomProblemRepository;
 import com.insert.ioj.domain.problem.presentation.dto.res.ProblemStatusDto;
-import com.insert.ioj.domain.solveContest.domain.SolveContest;
-import com.insert.ioj.domain.solveContest.domain.repository.CustomSolveContestRepository;
+import com.insert.ioj.domain.solve.contest.SolveContest;
+import com.insert.ioj.domain.solve.contest.repository.CustomSolveContestRepository;
 import com.insert.ioj.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class ProblemFacade {
                 status = "failed";
             }
 
-            LocalDateTime solveTime = solveContest != null ? solveContest.getCreateDate() : null;
+            LocalDateTime solveTime = solveContest != null ? solveContest.getCreatedAt() : null;
             problemStatuses.add(new ProblemStatusDto(problem, status, solveTime));
         }
         return problemStatuses;

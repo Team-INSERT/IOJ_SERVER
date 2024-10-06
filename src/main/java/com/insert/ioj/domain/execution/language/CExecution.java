@@ -2,7 +2,6 @@ package com.insert.ioj.domain.execution.language;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.domain.Execution;
-import com.insert.ioj.global.constants.CommandConstants;
 import com.insert.ioj.global.constants.ExtensionConstants;
 import com.insert.ioj.global.constants.FileConstants;
 import com.insert.ioj.infra.file.FileUtil;

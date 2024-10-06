@@ -3,7 +3,6 @@ package com.insert.ioj.domain.problem.service;
 import com.insert.ioj.domain.Testcase.domain.repository.TestcaseRepository;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
-import com.insert.ioj.domain.problem.presentation.dto.req.TestcaseDto;
 import com.insert.ioj.domain.problem.presentation.dto.res.ProblemResponse;
 import com.insert.ioj.domain.problem.presentation.dto.res.TestcaseResponse;
 import com.insert.ioj.global.error.exception.ErrorCode;
