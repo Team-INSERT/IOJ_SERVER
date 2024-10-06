@@ -11,6 +11,7 @@ import java.util.List;
 public class ProblemResponse {
     private String title;
     private String content;
+    private String source;
     private String inputContent;
     private String outputContent;
     private int level;
@@ -21,6 +22,7 @@ public class ProblemResponse {
     public ProblemResponse(Problem problem, List<TestcaseResponse> testcases) {
         this.title = problem.getTitle();
         this.content = problem.getContent();
+        this.source = problem.getSource();
         this.inputContent = problem.getInputContent();
         this.outputContent = problem.getOutputContent();
         this.level = problem.getLevel();
