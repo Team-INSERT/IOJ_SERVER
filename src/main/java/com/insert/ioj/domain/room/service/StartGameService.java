@@ -3,7 +3,6 @@ package com.insert.ioj.domain.room.service;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.CustomProblemRepository;
-import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.problemRoom.domain.ProblemRoom;
 import com.insert.ioj.domain.problemRoom.domain.repository.ProblemRoomRepository;
 import com.insert.ioj.domain.room.domain.Room;
@@ -56,7 +55,6 @@ public class StartGameService {
     private void checkReadyUser(Room room) {
         Long cntIsReady = entryRepository.countIsReady(room)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER));
-        System.out.println("ready" + cntIsReady);
         if (room.getMaxPeople()-1 == cntIsReady) {
             throw new IojException(ErrorCode.NOT_READY_ROOM);
         }
