@@ -51,6 +51,11 @@ public class ExecutionWebSocketController {
             sessionProcessMap.put(sessionId, process);
 
             CmdUtil.readOutputAsync(process, output -> {
+                try {
+                    Thread.sleep(3);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 messagingTemplate.convertAndSend("/topic/output/" + sessionId, output);
             });
 
@@ -61,6 +66,7 @@ public class ExecutionWebSocketController {
             new Thread(() -> {
                 try {
                     int status = process.waitFor();
+                    Thread.sleep(5);
                     messagingTemplate.convertAndSend("/topic/output/" + sessionId,
                         "Process finished with exit code " + status);
                 } catch (InterruptedException e) {
