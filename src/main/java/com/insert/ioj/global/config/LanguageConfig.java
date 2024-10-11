@@ -2,7 +2,11 @@ package com.insert.ioj.global.config;
 
 import com.insert.ioj.domain.execution.domain.AbstractExecutionFactory;
 import com.insert.ioj.domain.execution.domain.ExecutionFactory;
-import com.insert.ioj.domain.execution.language.*;
+import com.insert.ioj.domain.execution.language.CExecution;
+import com.insert.ioj.domain.execution.language.CppExecution;
+import com.insert.ioj.domain.execution.language.JavaExecution;
+import com.insert.ioj.domain.execution.language.Language;
+import com.insert.ioj.domain.execution.language.PythonExecution;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

@@ -7,7 +7,7 @@ import com.insert.ioj.domain.compiler.service.CompilerService;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.problem.presentation.dto.req.SubmitProblemRequest;
-import com.insert.ioj.domain.solve.domain.repository.SolveRepository;
+import com.insert.ioj.domain.solve.solve.repository.SolveRepository;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.error.exception.ErrorCode;
