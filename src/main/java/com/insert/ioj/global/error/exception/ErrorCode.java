@@ -12,6 +12,7 @@ public enum ErrorCode {
     FULL_ROOM(400, "ROOM-400-2", "방에 유저가 가득 찼습니다."),
     NOT_READY_ROOM(400, "ROOM-400-3", "방에 준비를 하지 않은 유저가 있습니다."),
     STARTED_ROOM(400, "ROOM-400-4", "이미 게임을 시작한 방입니다."),
+    NOT_READY_HOST(400, "HOST-400-1", "호스트는 준비상태 변경이 가능하지 않습니다."),
 
     PROCESS_EXECUTION(500, "EXECUTION-1", "명령어를 실행하는 도중 에러가 발생하였습니다."),
 

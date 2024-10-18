@@ -1,5 +1,8 @@
 package com.insert.ioj.domain.room.service;
 
+import com.insert.ioj.domain.entry.domain.Entry;
+import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
+import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.room.domain.repository.RoomRepository;
 import com.insert.ioj.domain.room.presentation.dto.req.CreateRoomRequest;
 import com.insert.ioj.domain.user.domain.User;
@@ -15,10 +18,14 @@ import java.util.UUID;
 public class CreateRoomService {
     private final UserFacade userFacade;
     private final RoomRepository roomRepository;
+    private final EntryRepository entryRepository;
 
     @Transactional
     public UUID execute(CreateRoomRequest request) {
         User host = userFacade.getCurrentUser();
-        return roomRepository.save(request.toEntity(host)).getId();
+        Room room = request.toEntity(host);
+
+        entryRepository.save(new Entry(room, host, true));
+        return roomRepository.save(room).getId();
     }
 }
