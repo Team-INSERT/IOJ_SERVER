@@ -26,6 +26,7 @@ import com.insert.ioj.infra.docker.DockerUtil;
 import com.insert.ioj.infra.testcase.TestcaseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +43,7 @@ public class SubmitRoomService {
     private final ExecutionService executionService;
     private final CustomSolveRoomRepository customSolveRoomRepository;
 
+    @Transactional
     public Verdict execute(SubmitRoomRequest request) {
         Problem problem = problemRepository.findById(request.getProblemId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
