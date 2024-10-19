@@ -82,4 +82,11 @@ public class Room extends BaseTimeEntity {
     public void removePeople() {
         peopleCnt--;
     }
+
+    public void isActive() {
+        switch (status) {
+            case RECRUITING -> throw new IojException(ErrorCode.NOT_STARTED_ROOM);
+            case ENDED -> throw new IojException(ErrorCode.FINISHED_ROOM);
+        }
+    }
 }
