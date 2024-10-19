@@ -78,4 +78,8 @@ public class Room extends BaseTimeEntity {
         }
         peopleCnt++;
     }
+
+    public void removePeople() {
+        peopleCnt--;
+    }
 }
