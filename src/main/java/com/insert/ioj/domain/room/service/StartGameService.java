@@ -38,6 +38,7 @@ public class StartGameService {
         checkReadyUser(room);
         room.updateStatus();
         saveProblems(room);
+        room.startRoom();
 
         return new StartGameResponse();
     }
