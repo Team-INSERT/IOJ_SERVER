@@ -47,4 +47,10 @@ public class UserItem extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "target_user_id")
     private User targetUser;
+
+    public void attack(User targetUser) {
+        used = true;
+        usedAt = LocalDateTime.now();
+        this.targetUser = targetUser;
+    }
 }
