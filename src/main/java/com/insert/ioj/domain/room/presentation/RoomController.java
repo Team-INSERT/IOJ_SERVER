@@ -3,9 +3,11 @@ package com.insert.ioj.domain.room.presentation;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.room.presentation.dto.req.CreateRoomRequest;
 import com.insert.ioj.domain.room.presentation.dto.req.SubmitRoomRequest;
+import com.insert.ioj.domain.room.presentation.dto.res.InfoGameResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.InfoRoomResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.ListRoomResponse;
 import com.insert.ioj.domain.room.service.CreateRoomService;
+import com.insert.ioj.domain.room.service.InfoGameService;
 import com.insert.ioj.domain.room.service.InfoRoomService;
 import com.insert.ioj.domain.room.service.ListRoomService;
 import com.insert.ioj.domain.room.service.SubmitRoomService;
@@ -32,6 +34,7 @@ import java.util.UUID;
 public class RoomController {
     private final ListRoomService listRoomService;
     private final InfoRoomService infoRoomService;
+    private final InfoGameService infoGameService;
     private final CreateRoomService createRoomService;
     private final SubmitRoomService submitRoomService;
 
@@ -45,6 +48,12 @@ public class RoomController {
     @GetMapping("/{roomId}")
     public InfoRoomResponse getInfoRoom(@PathVariable UUID roomId) {
         return infoRoomService.execute(roomId);
+    }
+
+    @Operation(summary = "게임 정보")
+    @GetMapping("/game/{roomId}")
+    public InfoGameResponse getInfoGame(@PathVariable UUID roomId) {
+        return infoGameService.execute(roomId);
     }
 
     @Operation(summary = "방 생성")
