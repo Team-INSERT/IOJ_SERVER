@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ListAttackUsersResponse {
-    private Long id;
+    private Long targetId;
     private String nickname;
     private Color color;
 
     public ListAttackUsersResponse(Entry entry) {
         User user = entry.getUser();
-        this.id = user.getId();
+        this.targetId = entry.getId();
         this.nickname = user.getNickname();
         this.color = user.getColor();
     }

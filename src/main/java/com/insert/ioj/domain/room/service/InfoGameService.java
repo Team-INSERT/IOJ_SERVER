@@ -29,19 +29,13 @@ public class InfoGameService {
         Room room = roomFacade.getRoom(roomId);
 
         room.isActive();
-        notInUser(user, room);
+        Long userId = entryRepository.findByRoomAndUser(room, user)
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER)).getId();
 
         List<Long> problems = problemRoomRepository.findByRoom(room).stream()
             .map(ProblemRoom::getId)
             .toList();
 
-        return new InfoGameResponse(room, problems);
-    }
-
-    private void notInUser(User user, Room room) {
-        Boolean isUser = entryRepository.existsByUserAndRoom(user, room);
-        if (!isUser) {
-            throw new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER);
-        }
+        return new InfoGameResponse(userId, room, problems);
     }
 }

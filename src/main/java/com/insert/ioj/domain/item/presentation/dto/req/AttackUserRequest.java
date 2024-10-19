@@ -10,6 +10,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class AttackUserRequest {
     private UUID roomId;
-    private Long userId;
+    private Long targetUserId;
     private Item attackItem;
 }
