@@ -30,7 +30,7 @@ public class ItemController {
     }
 
     @Operation(summary = "공격할 수 있는 유저 반환")
-    @GetMapping("/attack/{roomId}")
+    @GetMapping("/users/{roomId}")
     public List<ListAttackUsersResponse> listAttackUsers(@PathVariable UUID roomId) {
         return listAttackUsersService.execute(roomId);
     }
