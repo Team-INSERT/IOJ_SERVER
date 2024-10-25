@@ -31,6 +31,7 @@ public class ListAttackUsersService {
         notInUser(user, room);
 
         return entryRepository.findAllByRoom(room).stream()
+            .filter(entry -> !entry.getUser().equals(user))
             .map(ListAttackUsersResponse::new)
             .toList();
     }
