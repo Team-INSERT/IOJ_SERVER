@@ -16,7 +16,7 @@ public class ItemWebSocketController {
     private final SimpMessagingTemplate messagingTemplate;
     private final AttackUserService attackUserService;
 
-    @GetMapping("/{roomId}/attack")
+    @GetMapping("/attack")
     public void joinRoom(@RequestBody AttackUserRequest request) {
         messagingTemplate.convertAndSend("/topic/room/" + request.getRoomId(), attackUserService.execute(request));
     }
