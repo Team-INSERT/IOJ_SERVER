@@ -31,7 +31,7 @@ public class UserItem extends BaseTimeEntity {
 
     private Boolean used = false;
 
-    private Boolean booked = false;
+    private Boolean blocked = false;
 
     @Column(name = "used_at")
     private LocalDateTime usedAt;
