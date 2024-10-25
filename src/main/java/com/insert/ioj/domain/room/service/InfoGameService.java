@@ -1,7 +1,6 @@
 package com.insert.ioj.domain.room.service;
 
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
-import com.insert.ioj.domain.problemRoom.domain.ProblemRoom;
 import com.insert.ioj.domain.problemRoom.domain.repository.ProblemRoomRepository;
 import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.room.facade.RoomFacade;
@@ -33,7 +32,7 @@ public class InfoGameService {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER)).getId();
 
         List<Long> problems = problemRoomRepository.findByRoom(room).stream()
-            .map(ProblemRoom::getId)
+            .map(problemRoom -> problemRoom.getProblem().getId())
             .toList();
 
         return new InfoGameResponse(userId, room, problems);
