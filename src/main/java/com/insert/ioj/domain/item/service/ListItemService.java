@@ -25,7 +25,7 @@ public class ListItemService {
         User user = userFacade.getCurrentUser();
         Room room = roomFacade.getRoom(roomId);
 
-        return userItemRepository.findByUserAndRoom(user, room).stream()
+        return userItemRepository.findByUserAndRoomAndUsedIsFalse(user, room).stream()
             .map(ListItemResponse::new)
             .toList();
     }

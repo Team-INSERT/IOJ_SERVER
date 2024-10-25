@@ -10,6 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserItemRepository extends JpaRepository<UserItem, Long> {
-    List<UserItem> findByUserAndRoom(User user, Room room);
-    Optional<UserItem> findByUserAndItem(User user, Item item);
+    List<UserItem> findByUserAndRoomAndUsedIsFalse(User user, Room room);
+    Optional<UserItem> findByUserAndItemAndUsedIsFalse(User user, Item item);
 }
