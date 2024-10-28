@@ -7,6 +7,7 @@ import com.insert.ioj.domain.item.domain.type.Item;
 import com.insert.ioj.domain.room.domain.Room;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,9 @@ public class ItemGiveService {
     private final Map<UUID, ScheduledFuture<?>> itemGiveFutureTasks = new ConcurrentHashMap<>();
     private final TaskScheduler taskScheduler;
 
+    @Value("${item.delay}")
+    private Integer delay;
+
     @Transactional
     public void execute(Room room, List<Entry> entry) {
         log.info("into");
@@ -37,7 +41,7 @@ public class ItemGiveService {
             } else {
                 giveItem(room, entry);
             }
-        }, 180000);
+        }, delay);
         itemGiveFutureTasks.put(room.getId(), task);
     }
 
