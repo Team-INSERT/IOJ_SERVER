@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +42,7 @@ public class ItemController {
     }
 
     @Operation(summary = "공격받은 아이템 방어")
-    @GetMapping("/protect")
+    @PostMapping("/protect")
     public Boolean protectItem(@RequestBody @Valid ProtectRequest request) {
         return protectService.execute(request);
     }
