@@ -3,7 +3,7 @@ package com.insert.ioj.domain.item.service;
 import com.insert.ioj.domain.entry.domain.Entry;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
 import com.insert.ioj.domain.item.domain.UserItem;
-import com.insert.ioj.domain.item.domain.repository.UserItemRepository;
+import com.insert.ioj.domain.item.domain.repository.CustomUserItemRepository;
 import com.insert.ioj.domain.item.presentation.dto.req.AttackUserRequest;
 import com.insert.ioj.domain.item.presentation.dto.res.AttackResponse;
 import com.insert.ioj.domain.room.domain.Room;
@@ -22,7 +22,7 @@ public class AttackUserService {
     private final UserFacade userFacade;
     private final RoomFacade roomFacade;
     private final EntryRepository entryRepository;
-    private final UserItemRepository userItemRepository;
+    private final CustomUserItemRepository userItemRepository;
 
     @Transactional
     public AttackResponse execute(AttackUserRequest request) {
@@ -35,7 +35,7 @@ public class AttackUserService {
 
         Long attackUserId = entryRepository.findByRoomAndUser(room, user)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER)).getId();
-        UserItem userItem = userItemRepository.findFirstByUserAndItemAndUsedIsFalse(user, request.getAttackItem())
+        UserItem userItem = userItemRepository.findNotUseUserItem(user, request.getAttackItem())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_HAVE_ITEM));
 
         userItem.attack(targetUser.getUser());
