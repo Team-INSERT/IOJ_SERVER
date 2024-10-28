@@ -1,4 +1,4 @@
-package com.insert.ioj.domain.room.presentation.dto.res;
+package com.insert.ioj.domain.item.presentation.dto.res;
 
 import com.insert.ioj.domain.entry.domain.Entry;
 import com.insert.ioj.domain.user.domain.User;
@@ -8,17 +8,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserInfo {
+public class ListAttackUsersResponse {
+    private Long targetId;
     private String nickname;
     private Color color;
-    private Boolean ready;
-    private Boolean host;
 
-    public UserInfo(Entry entry) {
+    public ListAttackUsersResponse(Entry entry) {
         User user = entry.getUser();
+        this.targetId = entry.getId();
         this.nickname = user.getNickname();
         this.color = user.getColor();
-        this.ready = entry.getReady();
-        this.host = entry.getHost();
     }
 }

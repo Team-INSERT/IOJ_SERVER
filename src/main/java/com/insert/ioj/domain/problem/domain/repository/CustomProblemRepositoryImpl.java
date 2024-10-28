@@ -24,4 +24,12 @@ public class CustomProblemRepositoryImpl implements CustomProblemRepository {
             .where(problemContest.contest.eq(contest))
             .fetch();
     }
+
+    @Override
+    public List<Problem> getBetweenLevelProblems(int minLevel, int maxLevel) {
+        return queryFactory
+            .selectFrom(problem)
+            .where(problem.level.between(minLevel, maxLevel))
+            .fetch();
+    }
 }

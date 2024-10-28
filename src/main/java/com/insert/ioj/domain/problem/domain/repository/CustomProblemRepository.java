@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CustomProblemRepository {
     List<Problem> getContestProblems(Contest contest);
+    List<Problem> getBetweenLevelProblems(int minLevel, int maxLevel);
 }

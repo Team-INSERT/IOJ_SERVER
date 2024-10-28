@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface EntryRepository extends JpaRepository<Entry, Long> {
     List<Entry> findAllByRoom(Room room);
     Optional<Entry> findByRoomAndUser(Room room, User user);
-    Boolean existsByUser(User user);
+    Boolean existsByUserAndRoom(User user, Room room);
 
     @Query("SELECT COUNT(*) FROM Entry WHERE room = :room and ready = true")
     Optional<Long> countIsReady(@Param("room") Room room);

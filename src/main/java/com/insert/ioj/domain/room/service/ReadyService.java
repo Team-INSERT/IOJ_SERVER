@@ -34,6 +34,10 @@ public class ReadyService {
         Entry entryUser = entryRepository.findByRoomAndUser(room, user)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_USER));
 
+        if (entryUser.getHost()) {
+            throw new IojException(ErrorCode.NOT_READY_HOST);
+        }
+
         Boolean ready = entryUser.changeReady();
         return new ReadyResponse(user.getNickname(), ready);
     }
