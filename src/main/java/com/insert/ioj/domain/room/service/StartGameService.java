@@ -1,6 +1,8 @@
 package com.insert.ioj.domain.room.service;
 
+import com.insert.ioj.domain.entry.domain.Entry;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
+import com.insert.ioj.domain.item.service.ItemGiveService;
 import com.insert.ioj.domain.problem.domain.Problem;
 import com.insert.ioj.domain.problem.domain.repository.CustomProblemRepository;
 import com.insert.ioj.domain.problemRoom.domain.ProblemRoom;
@@ -26,6 +28,7 @@ public class StartGameService {
     private final RoomFacade roomFacade;
     private final UserFacade userFacade;
     private final EntryRepository entryRepository;
+    private final ItemGiveService itemGiveService;
     private final CustomProblemRepository problemRepository;
     private final ProblemRoomRepository problemRoomRepository;
 
@@ -39,6 +42,9 @@ public class StartGameService {
         room.updateStatus();
         saveProblems(room);
         room.startRoom();
+
+        List<Entry> entry = entryRepository.findAllByRoom(room);
+        itemGiveService.execute(room, entry);
 
         return new StartGameResponse();
     }

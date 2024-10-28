@@ -48,6 +48,12 @@ public class UserItem extends BaseTimeEntity {
     @JoinColumn(name = "target_user_id")
     private User targetUser;
 
+    public UserItem(Item item, Room room, User user) {
+        this.item = item;
+        this.room = room;
+        this.user = user;
+    }
+
     public void attack(User targetUser) {
         used = true;
         usedAt = LocalDateTime.now();
