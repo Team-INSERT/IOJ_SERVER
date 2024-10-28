@@ -32,7 +32,9 @@ public enum ErrorCode {
     NOT_FOUND_ROOM(404, "ROOM-404-1", "요청한 방이 존재하지 않습니다."),
     NOT_FOUND_ROOM_IN_USER(404, "ROOM-404-2", "방 안에 유저가 존재하지 않습니다."),
     NOT_FOUND_ROOM_IN_TARGET(404, "ROOM-404-3", "방 안에 타겟이 존재하지 않습니다."),
+    FAIL_PROTECT_ITEM(400, "ITEM-400-1", "아아템 방어에 실패하였습니다."),
     NOT_HAVE_ITEM(404, "ITEM-404-1", "소지하고 있지 않은 아이템 입니다."),
+    NOT_FOUND_ITEM(404, "ITEM-404-2", "공격하지 않은 아이템입니다."),
 
     INVALID_TOKEN(401, "TOKEN-401-1", "올바르지 않은 형식의 Token입니다."),
     EXPIRED_PERIOD_TOKEN(401, "TOKEN-401-2", "기한이 만료된 Token입니다."),

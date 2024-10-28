@@ -4,6 +4,8 @@ import com.insert.ioj.domain.item.domain.type.Item;
 import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.global.entity.BaseTimeEntity;
+import com.insert.ioj.global.error.exception.ErrorCode;
+import com.insert.ioj.global.error.exception.IojException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -58,5 +60,17 @@ public class UserItem extends BaseTimeEntity {
         used = true;
         usedAt = LocalDateTime.now();
         this.targetUser = targetUser;
+    }
+
+    public void useShield() {
+        used = true;
+        usedAt = LocalDateTime.now();
+    }
+
+    public void protect() {
+        if (usedAt.plusSeconds(2).isBefore(LocalDateTime.now())) {
+            throw new IojException(ErrorCode.FAIL_PROTECT_ITEM);
+        }
+        blocked = true;
     }
 }
