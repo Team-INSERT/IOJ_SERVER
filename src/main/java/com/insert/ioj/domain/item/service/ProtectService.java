@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @RequiredArgsConstructor
 @Service
 public class ProtectService {
@@ -25,8 +23,8 @@ public class ProtectService {
     private final UserItemRepository userItemRepository;
 
     @Transactional
-    public Boolean execute(UUID roomId, ProtectRequest request) {
-        Room room = roomFacade.getRoom(roomId);
+    public Boolean execute(ProtectRequest request) {
+        Room room = roomFacade.getRoom(request.getRoomId());
         User user = userFacade.getCurrentUser();
         User attackUser = entryRepository.findById(request.getAttackUser())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_TARGET)).getUser();

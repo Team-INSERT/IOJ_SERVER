@@ -41,9 +41,8 @@ public class ItemController {
     }
 
     @Operation(summary = "공격받은 아이템 방어")
-    @GetMapping("/protect/{roomId}")
-    public Boolean protectItem(@PathVariable UUID roomId,
-                                                     @RequestBody @Valid ProtectRequest request) {
-        return protectService.execute(roomId, request);
+    @GetMapping("/protect")
+    public Boolean protectItem(@RequestBody @Valid ProtectRequest request) {
+        return protectService.execute(request);
     }
 }
