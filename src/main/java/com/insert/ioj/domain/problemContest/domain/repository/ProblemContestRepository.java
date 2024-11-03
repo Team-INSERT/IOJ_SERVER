@@ -1,7 +1,7 @@
 package com.insert.ioj.domain.problemContest.domain.repository;
 
 import com.insert.ioj.domain.problemContest.domain.ProblemContest;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface ProblemContestRepository extends JpaRepository<ProblemContest, Long> {
+public interface ProblemContestRepository extends CrudRepository<ProblemContest, Long> {
 }
