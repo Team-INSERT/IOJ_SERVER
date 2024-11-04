@@ -1,7 +1,7 @@
 package com.insert.ioj.domain.Testcase.domain.repository;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
-import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problem.domain.Problem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

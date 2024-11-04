@@ -2,7 +2,7 @@ package com.insert.ioj.domain.solve.solve;
 
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.execution.language.Language;
-import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
