@@ -1,6 +1,6 @@
 package com.insert.ioj.domain.solve.room.repository;
 
-import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.user.domain.User;
 

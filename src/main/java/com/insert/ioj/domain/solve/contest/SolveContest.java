@@ -3,7 +3,7 @@ package com.insert.ioj.domain.solve.contest;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.execution.language.Language;
-import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.solve.solve.Solve;
 import com.insert.ioj.domain.user.domain.User;
 import jakarta.persistence.Entity;
