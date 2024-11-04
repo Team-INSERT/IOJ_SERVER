@@ -5,7 +5,7 @@ import com.insert.ioj.domain.compiler.presentation.dto.req.CompileCodeRequest;
 import com.insert.ioj.domain.compiler.presentation.dto.res.CompileResponse;
 import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
-import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.infra.cmd.dto.res.ProcessOutput;
 import com.insert.ioj.infra.docker.DockerUtil;
 import com.insert.ioj.infra.file.FileUtil;

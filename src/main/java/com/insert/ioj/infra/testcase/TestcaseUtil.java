@@ -22,17 +22,11 @@ public class TestcaseUtil {
     }
 
     private static String processString(String input) {
-        String[] lines = input.split("\n");
-        StringBuilder sb = new StringBuilder();
-
-        for (String line : lines) {
-            sb.append(line.stripLeading()).append("\n");
-        }
-
+        String output = input.replaceAll("\\s+\\n", "\n");
         if (!input.endsWith("\n")) {
-            sb.append("\n");
+            output += "\n";
         }
 
-        return sb.toString();
+        return output;
     }
 }

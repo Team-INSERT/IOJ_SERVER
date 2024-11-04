@@ -20,6 +20,7 @@ public class Entry extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Boolean ready = false;
+    private Boolean host = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,6 +33,13 @@ public class Entry extends BaseTimeEntity {
     public Entry(Room room, User user) {
         this.room = room;
         this.user = user;
+    }
+
+    public Entry(Room room, User user, Boolean host) {
+        this.room = room;
+        this.user = user;
+        this.host = host;
+        this.ready = true;
     }
 
     public Boolean changeReady() {

@@ -27,8 +27,13 @@ public class LeaveRoomService {
         Room room = roomFacade.getRoom(roomId);
         User user = userFacade.getCurrentUser();
         Entry entryUser = entryRepository.findByRoomAndUser(room, user)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_USER));
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER));
 
+        if (entryUser.getHost()) {
+            throw new IojException(ErrorCode.NOT_LEAVE_HOST);
+        }
+
+        room.removePeople();
         entryRepository.delete(entryUser);
         return new LeaveRoomResponse(user.getNickname());
     }

@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -32,6 +33,7 @@ public class Room extends BaseTimeEntity {
     private int maxDifficulty;
     private int time;
     private int peopleCnt;
+    private LocalDateTime endTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -77,5 +79,20 @@ public class Room extends BaseTimeEntity {
             throw new IojException(ErrorCode.ALREADY_USER);
         }
         peopleCnt++;
+    }
+
+    public void removePeople() {
+        peopleCnt--;
+    }
+
+    public void isActive() {
+        switch (status) {
+            case RECRUITING -> throw new IojException(ErrorCode.NOT_STARTED_ROOM);
+            case ENDED -> throw new IojException(ErrorCode.FINISHED_ROOM);
+        }
+    }
+
+    public void startRoom() {
+        endTime = LocalDateTime.now().plusMinutes(time);
     }
 }

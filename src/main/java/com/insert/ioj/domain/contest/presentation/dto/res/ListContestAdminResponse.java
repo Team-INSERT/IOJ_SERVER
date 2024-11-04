@@ -1,7 +1,7 @@
 package com.insert.ioj.domain.contest.presentation.dto.res;
 
 import com.insert.ioj.domain.contest.domain.Contest;
-import com.insert.ioj.domain.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.user.domain.type.Authority;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

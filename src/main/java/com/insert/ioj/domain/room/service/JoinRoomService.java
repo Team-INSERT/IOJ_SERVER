@@ -28,14 +28,14 @@ public class JoinRoomService {
         User user = userFacade.getCurrentUser();
 
         room.addPeople(user);
-        alreadyUser(user);
+        alreadyUser(user, room);
         entryRepository.save(new Entry(room, user));
 
         return new JoinRoomResponse(user);
     }
 
-    private void alreadyUser(User user) {
-        Boolean isUser = entryRepository.existsByUser(user);
+    private void alreadyUser(User user, Room room) {
+        Boolean isUser = entryRepository.existsByUserAndRoom(user, room);
         if (isUser) {
             throw new IojException(ErrorCode.ALREADY_USER);
         }

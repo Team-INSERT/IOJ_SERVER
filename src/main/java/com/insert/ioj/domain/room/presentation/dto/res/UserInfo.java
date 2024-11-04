@@ -12,19 +12,13 @@ public class UserInfo {
     private String nickname;
     private Color color;
     private Boolean ready;
-    private Boolean host = false;
+    private Boolean host;
 
     public UserInfo(Entry entry) {
         User user = entry.getUser();
         this.nickname = user.getNickname();
         this.color = user.getColor();
         this.ready = entry.getReady();
-    }
-
-    public UserInfo(User user) {
-        this.nickname = user.getNickname();
-        this.color = user.getColor();
-        this.ready = true;
-        this.host = true;
+        this.host = entry.getHost();
     }
 }

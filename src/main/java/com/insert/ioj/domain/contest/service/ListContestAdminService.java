@@ -3,8 +3,8 @@ package com.insert.ioj.domain.contest.service;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.contest.domain.repository.ContestRepository;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestAdminResponse;
-import com.insert.ioj.domain.problem.domain.Problem;
-import com.insert.ioj.domain.problemContest.domain.repository.ProblemContestRepository;
+import com.insert.ioj.domain.problem.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problemContest.domain.repository.CustomProblemContestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class ListContestAdminService {
     private final ContestRepository contestRepository;
-    private final ProblemContestRepository problemContestRepository;
+    private final CustomProblemContestRepository problemContestRepository;
 
     @Transactional(readOnly = true)
     public List<ListContestAdminResponse> execute() {

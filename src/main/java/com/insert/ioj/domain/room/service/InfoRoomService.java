@@ -23,7 +23,6 @@ public class InfoRoomService {
         List<UserInfo> users = entryRepository.findAllByRoom(room)
             .stream().map(UserInfo::new)
             .collect(Collectors.toList());
-        users.add(new UserInfo(room.getHost()));
 
         return new InfoRoomResponse(room, users);
     }
