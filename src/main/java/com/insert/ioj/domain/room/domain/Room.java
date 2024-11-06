@@ -86,9 +86,11 @@ public class Room extends BaseTimeEntity {
     }
 
     public void isActive() {
-        switch (status) {
-            case RECRUITING -> throw new IojException(ErrorCode.NOT_STARTED_ROOM);
-            case ENDED -> throw new IojException(ErrorCode.FINISHED_ROOM);
+        if (status == RoomStatus.RECRUITING) {
+            throw new IojException(ErrorCode.NOT_STARTED_ROOM);
+        }
+        if (endTime.isBefore(LocalDateTime.now())) {
+            throw new IojException(ErrorCode.FINISHED_ROOM);
         }
     }
 
