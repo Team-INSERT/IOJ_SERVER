@@ -14,6 +14,7 @@ public enum ErrorCode {
     STARTED_ROOM(400, "ROOM-400-4", "이미 게임을 시작한 방입니다."),
     NOT_STARTED_ROOM(400, "ROOM-400-5", "시작 전 방입니다."),
     FINISHED_ROOM(400, "ROOM-400-6", "종료된 방입니다."),
+    STARTED_OR_FINISHED_ROOM(400, "ROOM-400-7", "게임이 시작되었거나 종료되었습니다."),
     NOT_READY_HOST(400, "HOST-400-1", "호스트는 준비상태 변경이 가능하지 않습니다."),
     NOT_LEAVE_HOST(400, "HOST-400-2", "호스트는 방에서 떠날 수 없습니다."),
 
