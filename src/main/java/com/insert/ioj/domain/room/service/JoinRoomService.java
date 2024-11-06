@@ -3,6 +3,7 @@ package com.insert.ioj.domain.room.service;
 import com.insert.ioj.domain.entry.domain.Entry;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
 import com.insert.ioj.domain.room.domain.Room;
+import com.insert.ioj.domain.room.domain.type.RoomStatus;
 import com.insert.ioj.domain.room.facade.RoomFacade;
 import com.insert.ioj.domain.room.presentation.dto.res.JoinRoomResponse;
 import com.insert.ioj.domain.user.domain.User;
@@ -27,6 +28,9 @@ public class JoinRoomService {
         Room room = roomFacade.getRoom(roomId);
         User user = userFacade.getCurrentUser();
 
+        if (room.getStatus() != RoomStatus.RECRUITING) {
+            throw new IojException(ErrorCode.STARTED_OR_FINISHED_ROOM);
+        }
         room.addPeople(user);
         alreadyUser(user, room);
         entryRepository.save(new Entry(room, user));
