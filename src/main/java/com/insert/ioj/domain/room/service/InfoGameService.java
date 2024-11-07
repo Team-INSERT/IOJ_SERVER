@@ -1,7 +1,7 @@
 package com.insert.ioj.domain.room.service;
 
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
-import com.insert.ioj.domain.problem.problemContest.domain.repository.ProblemRoomRepository;
+import com.insert.ioj.domain.problem.ProblemRoom.domain.repository.ProblemRoomRepository;
 import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.room.facade.RoomFacade;
 import com.insert.ioj.domain.room.presentation.dto.res.InfoGameResponse;
