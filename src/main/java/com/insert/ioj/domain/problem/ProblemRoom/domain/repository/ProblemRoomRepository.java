@@ -1,4 +1,4 @@
-package com.insert.ioj.domain.problem.problemContest.domain.repository;
+package com.insert.ioj.domain.problem.ProblemRoom.domain.repository;
 
 import com.insert.ioj.domain.problem.ProblemRoom.domain.ProblemRoom;
 import com.insert.ioj.domain.room.domain.Room;
