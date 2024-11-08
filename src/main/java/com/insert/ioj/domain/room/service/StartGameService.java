@@ -60,9 +60,10 @@ public class StartGameService {
     }
 
     private void checkReadyUser(Room room) {
-        Long cntIsReady = entryRepository.countIsReady(room)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER));
-        if (room.getMaxPeople()-1 == cntIsReady) {
+        if (room.getPeopleCnt() == 1) {
+            throw new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER);
+        }
+        if (room.getPeopleCnt() == entryRepository.countIsReady(room)) {
             throw new IojException(ErrorCode.NOT_READY_ROOM);
         }
     }
