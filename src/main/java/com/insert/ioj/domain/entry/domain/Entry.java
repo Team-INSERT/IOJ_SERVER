@@ -24,9 +24,9 @@ public class Entry extends BaseTimeEntity {
     private Boolean ready = false;
     private Boolean host = false;
     private Integer correctProblem = 0;
+    private Integer useItemCnt = 0;
+    private Integer protectCnt = 0;
     private LocalTime finishTime;
-    private Integer useItemCnt;
-    private Integer protectCnt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -51,5 +51,9 @@ public class Entry extends BaseTimeEntity {
     public Boolean changeReady() {
         ready = !ready;
         return ready;
+    }
+
+    public void successProtect() {
+        protectCnt++;
     }
 }
