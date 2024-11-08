@@ -33,13 +33,14 @@ public class AttackUserService {
 
         room.isActive();
 
-        Long attackUserId = entryRepository.findByRoomAndUser(room, user)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER)).getId();
+        Entry attackUser = entryRepository.findByRoomAndUser(room, user)
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER));
         UserItem userItem = userItemRepository.findNotUseUserItem(user, request.getAttackItem())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_HAVE_ITEM));
 
         userItem.attack(targetUser.getUser());
+        attackUser.useItem();
 
-        return new AttackResponse(request.getAttackItem(), targetUser.getId(), attackUserId);
+        return new AttackResponse(request.getAttackItem(), targetUser.getId(), attackUser.getId());
     }
 }
