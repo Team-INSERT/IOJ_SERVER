@@ -16,5 +16,5 @@ public interface EntryRepository extends JpaRepository<Entry, Long> {
     Boolean existsByUserAndRoom(User user, Room room);
 
     @Query("SELECT COUNT(*) FROM Entry WHERE room = :room and ready = true")
-    Optional<Long> countIsReady(@Param("room") Room room);
+    Long countIsReady(@Param("room") Room room);
 }
