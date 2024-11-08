@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -21,6 +23,10 @@ public class Entry extends BaseTimeEntity {
     private Long id;
     private Boolean ready = false;
     private Boolean host = false;
+    private Integer correctProblem = 0;
+    private LocalTime finishTime;
+    private Integer useItemCnt;
+    private Integer protectCnt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
