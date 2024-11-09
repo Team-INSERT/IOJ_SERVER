@@ -39,6 +39,7 @@ public class ItemGiveService {
                 stopItemGive(room.getId());
             } else {
                 giveItem(room, entry);
+                messagingTemplate.convertAndSend("/topic/room/" + room.getId(), new GiveItemResponse());
             }
         }, delay);
         itemGiveFutureTasks.put(room.getId(), task);
@@ -50,7 +51,6 @@ public class ItemGiveService {
             userItemRepository.save(
                 new UserItem(item, room, entry.getUser())
             );
-            messagingTemplate.convertAndSend("/topic/room/" + room.getId(), new GiveItemResponse(entry.getId(), item));
         }
     }
 
