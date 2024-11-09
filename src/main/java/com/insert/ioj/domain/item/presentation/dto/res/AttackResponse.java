@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AttackResponse {
+    private final String type = "ATTACK";
     private Item item;
     private Long targetUser;
     private Long attackUser;

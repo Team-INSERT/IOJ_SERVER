@@ -3,10 +3,10 @@ package com.insert.ioj.domain.room.service;
 import com.insert.ioj.domain.entry.domain.Entry;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
 import com.insert.ioj.domain.item.service.ItemGiveService;
+import com.insert.ioj.domain.problem.ProblemRoom.domain.ProblemRoom;
+import com.insert.ioj.domain.problem.ProblemRoom.domain.repository.ProblemRoomRepository;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problem.problem.domain.repository.CustomProblemRepository;
-import com.insert.ioj.domain.problem.ProblemRoom.domain.ProblemRoom;
-import com.insert.ioj.domain.problem.problemContest.domain.repository.ProblemRoomRepository;
 import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.room.facade.RoomFacade;
 import com.insert.ioj.domain.room.presentation.dto.res.StartGameResponse;
@@ -60,9 +60,10 @@ public class StartGameService {
     }
 
     private void checkReadyUser(Room room) {
-        Long cntIsReady = entryRepository.countIsReady(room)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER));
-        if (room.getMaxPeople()-1 == cntIsReady) {
+        if (room.getPeopleCnt() == 1) {
+            throw new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER);
+        }
+        if (room.getPeopleCnt() == entryRepository.countIsReady(room)) {
             throw new IojException(ErrorCode.NOT_READY_ROOM);
         }
     }
