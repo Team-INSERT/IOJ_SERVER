@@ -40,4 +40,16 @@ public class CustomUserItemRepositoryImpl implements CustomUserItemRepository {
                     .and(userItem.blocked.isFalse()))
                 .fetchFirst());
     }
+
+    @Override
+    public Integer countByUseItem(Room room, User user) {
+        return queryFactory
+            .selectFrom(userItem)
+            .where(
+                userItem.room.eq(room),
+                userItem.user.eq(user),
+                userItem.used.isTrue()
+            )
+            .fetch().size();
+    }
 }

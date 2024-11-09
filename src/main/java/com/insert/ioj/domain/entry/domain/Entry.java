@@ -61,4 +61,8 @@ public class Entry extends BaseTimeEntity {
     public void useItem() {
         useItemCnt++;
     }
+
+    public void correctProblem() {
+        correctProblem++;
+    }
 }

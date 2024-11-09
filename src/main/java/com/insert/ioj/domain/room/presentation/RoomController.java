@@ -6,10 +6,12 @@ import com.insert.ioj.domain.room.presentation.dto.req.SubmitRoomRequest;
 import com.insert.ioj.domain.room.presentation.dto.res.InfoGameResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.InfoRoomResponse;
 import com.insert.ioj.domain.room.presentation.dto.res.ListRoomResponse;
+import com.insert.ioj.domain.room.presentation.dto.res.ResultResponse;
 import com.insert.ioj.domain.room.service.CreateRoomService;
 import com.insert.ioj.domain.room.service.InfoGameService;
 import com.insert.ioj.domain.room.service.InfoRoomService;
 import com.insert.ioj.domain.room.service.ListRoomService;
+import com.insert.ioj.domain.room.service.ResultService;
 import com.insert.ioj.domain.room.service.SubmitRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,6 +39,7 @@ public class RoomController {
     private final InfoGameService infoGameService;
     private final CreateRoomService createRoomService;
     private final SubmitRoomService submitRoomService;
+    private final ResultService resultService;
 
     @Operation(summary = "방 리스트")
     @GetMapping
@@ -67,5 +70,11 @@ public class RoomController {
     @PostMapping("/submit")
     public Verdict submitRoom(@RequestBody @Valid SubmitRoomRequest request) {
         return submitRoomService.execute(request);
+    }
+
+    @Operation(summary = "게임 결과 출력")
+    @PostMapping("/result/{roomId}")
+    public List<ResultResponse> submitRoom(@PathVariable UUID roomId) {
+        return resultService.execute(roomId);
     }
 }

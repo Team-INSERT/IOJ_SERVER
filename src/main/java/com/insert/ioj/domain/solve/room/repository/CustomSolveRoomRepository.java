@@ -6,4 +6,5 @@ import com.insert.ioj.domain.user.domain.User;
 
 public interface CustomSolveRoomRepository {
     Boolean existsByCorrectProblem(Room room, User user, Problem problem);
+    Integer countByCorrectProblem(Room room, User user);
 }

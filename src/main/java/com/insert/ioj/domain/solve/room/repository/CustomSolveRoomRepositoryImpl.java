@@ -26,4 +26,16 @@ public class CustomSolveRoomRepositoryImpl implements CustomSolveRoomRepository 
             .fetchOne();
         return fetchOne != null;
     }
+
+    @Override
+    public Integer countByCorrectProblem(Room room, User user) {
+        return queryFactory
+            .selectFrom(solveRoom)
+            .where(
+                solveRoom.verdict.eq(Verdict.ACCEPTED),
+                solveRoom.room.eq(room),
+                solveRoom.user.eq(user)
+            )
+            .fetch().size();
+    }
 }
