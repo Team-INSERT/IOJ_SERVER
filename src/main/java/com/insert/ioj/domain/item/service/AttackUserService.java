@@ -35,7 +35,7 @@ public class AttackUserService {
 
         Long attackUserId = entryRepository.findByRoomAndUser(room, user)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER)).getId();
-        UserItem userItem = userItemRepository.findNotUseUserItem(user, request.getAttackItem())
+        UserItem userItem = userItemRepository.findNotUseUserItem(room, user, request.getAttackItem())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_HAVE_ITEM));
 
         userItem.attack(targetUser.getUser());
