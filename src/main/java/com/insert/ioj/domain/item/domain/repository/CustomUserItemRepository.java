@@ -8,6 +8,6 @@ import com.insert.ioj.domain.user.domain.User;
 import java.util.Optional;
 
 public interface CustomUserItemRepository {
-    Optional<UserItem> findNotUseUserItem(User user, Item item);
+    Optional<UserItem> findNotUseUserItem(Room room, User user, Item item);
     Optional<UserItem> findAttackUserItem(Item item, User user, User targetUser, Room room);
 }
