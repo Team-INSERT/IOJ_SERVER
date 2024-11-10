@@ -63,7 +63,7 @@ public class StartGameService {
         if (room.getPeopleCnt() == 1) {
             throw new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER);
         }
-        if (room.getPeopleCnt() == entryRepository.countIsReady(room)) {
+        if (room.getPeopleCnt() != entryRepository.countIsReady(room)) {
             throw new IojException(ErrorCode.NOT_READY_ROOM);
         }
     }
