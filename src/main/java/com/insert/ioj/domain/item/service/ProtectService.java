@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.item.service;
 
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
+import com.insert.ioj.domain.item.domain.UserItem;
 import com.insert.ioj.domain.item.domain.repository.CustomUserItemRepository;
 import com.insert.ioj.domain.item.domain.type.Item;
 import com.insert.ioj.domain.item.presentation.dto.req.ProtectRequest;
@@ -33,14 +34,14 @@ public class ProtectService {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_HAVE_ITEM))
             .useShield();
 
-        userItemRepository.findAttackUserItem(request.getItem(), attackUser, user, room)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ITEM))
-            .protect();
+        Boolean isProtect = userItemRepository.findAttackUserItem(request.getItem(), attackUser, user, room)
+            .map(UserItem::protect)
+            .orElse(false);
 
         entryRepository.findByRoomAndUser(room, user)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER))
-            .successProtect();
+            .successProtect(isProtect);
 
-        return true;
+        return isProtect;
     }
 }

@@ -53,16 +53,14 @@ public class Entry extends BaseTimeEntity {
         return ready;
     }
 
-    public void successProtect() {
-        protectCnt++;
+    public void successProtect(Boolean isProtect) {
+        if (isProtect) {
+            protectCnt++;
+        }
         useItemCnt++;
     }
 
     public void useItem() {
         useItemCnt++;
-    }
-
-    public void correctProblem() {
-        correctProblem++;
     }
 }
