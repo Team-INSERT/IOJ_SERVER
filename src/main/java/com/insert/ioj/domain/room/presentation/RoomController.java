@@ -73,7 +73,7 @@ public class RoomController {
     }
 
     @Operation(summary = "게임 결과 출력")
-    @PostMapping("/result/{roomId}")
+    @GetMapping("/result/{roomId}")
     public List<ResultResponse> submitRoom(@PathVariable UUID roomId) {
         return resultService.execute(roomId);
     }

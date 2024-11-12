@@ -1,30 +1,34 @@
 package com.insert.ioj.domain.room.presentation.dto.res;
 
-import com.insert.ioj.domain.entry.domain.Entry;
+import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.domain.user.domain.type.Color;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 public class ResultResponse {
     private String nickname;
+    private Color color;
     private Integer correctProblem;
     private Integer totalProblem;
-    private LocalTime finishedTime;
+    private LocalDateTime finishedTime;
     private Integer useItemCnt;
     private Integer protectCnt;
 
-    public ResultResponse(Entry entry,
+    public ResultResponse(User user,
                           Integer correctProblemCnt,
-                          Integer totalProblem,
+                          Integer totalProblemCnt,
+                          LocalDateTime finishTime,
                           Integer useItemCnt,
                           Integer protectCnt) {
-        this.nickname = entry.getUser().getNickname();
+        this.nickname = user.getNickname();
+        this.color = user.getColor();
         this.correctProblem = correctProblemCnt;
-        this.totalProblem = totalProblem;
-        this.finishedTime = entry.getFinishTime();
+        this.totalProblem = totalProblemCnt;
+        this.finishedTime = finishTime;
         this.useItemCnt = useItemCnt;
         this.protectCnt = protectCnt;
     }
