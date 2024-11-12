@@ -18,13 +18,14 @@ public class CustomUserItemRepositoryImpl implements CustomUserItemRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<UserItem> findNotUseUserItem(User user, Item item) {
+    public Optional<UserItem> findNotUseUserItem(Room room, User user, Item item) {
         return Optional.ofNullable(
             queryFactory
                 .selectFrom(userItem)
-                .where(userItem.user.eq(user)
+                .where(userItem.room.eq(room)
+                    .and(userItem.user.eq(user)
                     .and(userItem.item.eq(item))
-                    .and(userItem.used.isFalse()))
+                    .and(userItem.used.isFalse())))
                 .fetchFirst());
     }
 
@@ -38,6 +39,7 @@ public class CustomUserItemRepositoryImpl implements CustomUserItemRepository {
                     .and(userItem.targetUser.eq(targetUser))
                     .and(userItem.room.eq(room))
                     .and(userItem.blocked.isFalse()))
+                .orderBy(userItem.usedAt.desc())
                 .fetchFirst());
     }
 

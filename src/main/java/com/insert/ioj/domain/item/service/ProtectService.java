@@ -29,7 +29,7 @@ public class ProtectService {
         User attackUser = entryRepository.findById(request.getAttackUser())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_TARGET)).getUser();
 
-        userItemRepository.findNotUseUserItem(user, Item.SHIELD)
+        userItemRepository.findNotUseUserItem(room, user, Item.SHIELD)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_HAVE_ITEM))
             .useShield();
 
