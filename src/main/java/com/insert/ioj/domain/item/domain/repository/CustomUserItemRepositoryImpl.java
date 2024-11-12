@@ -42,4 +42,16 @@ public class CustomUserItemRepositoryImpl implements CustomUserItemRepository {
                 .orderBy(userItem.usedAt.desc())
                 .fetchFirst());
     }
+
+    @Override
+    public Integer countByUseItem(Room room, User user) {
+        return queryFactory
+            .selectFrom(userItem)
+            .where(
+                userItem.room.eq(room),
+                userItem.user.eq(user),
+                userItem.used.isTrue()
+            )
+            .fetch().size();
+    }
 }

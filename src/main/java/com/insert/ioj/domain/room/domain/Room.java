@@ -97,4 +97,10 @@ public class Room extends BaseTimeEntity {
     public void startRoom() {
         endTime = LocalDateTime.now().plusMinutes(time);
     }
+
+    public void isFinished() {
+        if (!endTime.isBefore(LocalDateTime.now())) {
+            throw new IojException(ErrorCode.NOT_FINISHED_ROOM);
+        }
+    }
 }
