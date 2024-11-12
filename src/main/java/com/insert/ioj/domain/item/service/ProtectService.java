@@ -37,6 +37,10 @@ public class ProtectService {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ITEM))
             .protect();
 
+        entryRepository.findByRoomAndUser(room, user)
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_USER))
+            .successProtect();
+
         return true;
     }
 }
