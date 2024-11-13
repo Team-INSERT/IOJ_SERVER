@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.insert.ioj.domain.item.domain.QUserItem.userItem;
@@ -53,5 +54,17 @@ public class CustomUserItemRepositoryImpl implements CustomUserItemRepository {
                 userItem.used.isTrue()
             )
             .fetch().size();
+    }
+
+    @Override
+    public List<UserItem> findAllByNotUseItem(Room room, User user) {
+        return queryFactory
+            .selectFrom(userItem)
+            .where(userItem.user.eq(user),
+                userItem.room.eq(room),
+                userItem.used.isFalse())
+            .orderBy(userItem.createdAt.asc())
+            .limit(5)
+            .fetch();
     }
 }
