@@ -1,6 +1,6 @@
 package com.insert.ioj.domain.item.service;
 
-import com.insert.ioj.domain.item.domain.repository.UserItemRepository;
+import com.insert.ioj.domain.item.domain.repository.CustomUserItemRepository;
 import com.insert.ioj.domain.item.presentation.dto.res.ListItemResponse;
 import com.insert.ioj.domain.room.domain.Room;
 import com.insert.ioj.domain.room.facade.RoomFacade;
@@ -18,14 +18,14 @@ import java.util.UUID;
 public class ListItemService {
     private final UserFacade userFacade;
     private final RoomFacade roomFacade;
-    private final UserItemRepository userItemRepository;
+    private final CustomUserItemRepository userItemRepository;
 
     @Transactional(readOnly = true)
     public List<ListItemResponse> execute(UUID roomId) {
         User user = userFacade.getCurrentUser();
         Room room = roomFacade.getRoom(roomId);
 
-        return userItemRepository.findByUserAndRoomAndUsedIsFalse(user, room).stream()
+        return userItemRepository.findAllByNotUseItem(room, user).stream()
             .map(ListItemResponse::new)
             .toList();
     }
