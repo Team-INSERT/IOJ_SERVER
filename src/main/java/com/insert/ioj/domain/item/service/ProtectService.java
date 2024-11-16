@@ -3,6 +3,7 @@ package com.insert.ioj.domain.item.service;
 import com.insert.ioj.domain.entry.domain.repository.EntryRepository;
 import com.insert.ioj.domain.item.domain.UserItem;
 import com.insert.ioj.domain.item.domain.repository.CustomUserItemRepository;
+import com.insert.ioj.domain.item.domain.repository.UserItemRepository;
 import com.insert.ioj.domain.item.domain.type.Item;
 import com.insert.ioj.domain.item.presentation.dto.req.ProtectRequest;
 import com.insert.ioj.domain.room.domain.Room;
@@ -21,20 +22,19 @@ public class ProtectService {
     private final UserFacade userFacade;
     private final RoomFacade roomFacade;
     private final EntryRepository entryRepository;
-    private final CustomUserItemRepository userItemRepository;
+    private final UserItemRepository userItemRepository;
+    private final CustomUserItemRepository customUserItemRepository;
 
     @Transactional
     public Boolean execute(ProtectRequest request) {
         Room room = roomFacade.getRoom(request.getRoomId());
         User user = userFacade.getCurrentUser();
-        User attackUser = entryRepository.findById(request.getAttackUser())
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_ROOM_IN_TARGET)).getUser();
 
-        userItemRepository.findNotUseUserItem(room, user, Item.SHIELD)
+        customUserItemRepository.findNotUseUserItem(room, user, Item.SHIELD)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_HAVE_ITEM))
             .useShield();
 
-        Boolean isProtect = userItemRepository.findAttackUserItem(request.getItem(), attackUser, user, room)
+        Boolean isProtect = userItemRepository.findById(request.getAttackItemId())
             .map(UserItem::protect)
             .orElse(false);
 

@@ -11,5 +11,5 @@ import java.util.UUID;
 public class ProtectRequest {
     private UUID roomId;
     private Item item;
-    private Long attackUser;
+    private Long attackItemId;
 }
