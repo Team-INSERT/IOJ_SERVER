@@ -31,20 +31,6 @@ public class CustomUserItemRepositoryImpl implements CustomUserItemRepository {
     }
 
     @Override
-    public Optional<UserItem> findAttackUserItem(Item item, User user, User targetUser, Room room) {
-        return Optional.ofNullable(
-            queryFactory
-                .selectFrom(userItem)
-                .where(userItem.item.eq(item)
-                    .and(userItem.user.eq(user))
-                    .and(userItem.targetUser.eq(targetUser))
-                    .and(userItem.room.eq(room))
-                    .and(userItem.blocked.isFalse()))
-                .orderBy(userItem.usedAt.desc())
-                .fetchFirst());
-    }
-
-    @Override
     public Integer countByUseItem(Room room, User user) {
         return queryFactory
             .selectFrom(userItem)

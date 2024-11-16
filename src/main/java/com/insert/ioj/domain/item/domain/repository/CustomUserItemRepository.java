@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface CustomUserItemRepository {
     Optional<UserItem> findNotUseUserItem(Room room, User user, Item item);
-    Optional<UserItem> findAttackUserItem(Item item, User user, User targetUser, Room room);
     Integer countByUseItem(Room room, User user);
     List<UserItem> findAllByNotUseItem(Room room, User user);
 }

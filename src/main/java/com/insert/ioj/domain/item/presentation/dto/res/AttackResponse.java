@@ -10,11 +10,11 @@ public class AttackResponse {
     private final String type = "ATTACK";
     private Item item;
     private Long targetUser;
-    private Long attackUser;
+    private Long attackItemId;
 
-    public AttackResponse(Item item, Long targetUser, Long attackUser) {
+    public AttackResponse(Item item, Long targetUser, Long attackItemId) {
         this.item = item;
         this.targetUser = targetUser;
-        this.attackUser = attackUser;
+        this.attackItemId = attackItemId;
     }
 }
