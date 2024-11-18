@@ -3,6 +3,7 @@ package com.insert.ioj.domain.item.presentation;
 import com.insert.ioj.domain.item.presentation.dto.req.ProtectRequest;
 import com.insert.ioj.domain.item.presentation.dto.res.ListAttackUsersResponse;
 import com.insert.ioj.domain.item.presentation.dto.res.ListItemResponse;
+import com.insert.ioj.domain.item.service.AttackStartService;
 import com.insert.ioj.domain.item.service.ListAttackUsersService;
 import com.insert.ioj.domain.item.service.ListItemService;
 import com.insert.ioj.domain.item.service.ProtectService;
@@ -27,6 +28,7 @@ import java.util.UUID;
 public class ItemController {
     private final ListItemService listItemService;
     private final ListAttackUsersService listAttackUsersService;
+    private final AttackStartService attackStartService;
     private final ProtectService protectService;
 
     @Operation(summary = "가지고있는 아이템 리스트 반환")
@@ -39,6 +41,12 @@ public class ItemController {
     @GetMapping("/users/{roomId}")
     public List<ListAttackUsersResponse> listAttackUsers(@PathVariable UUID roomId) {
         return listAttackUsersService.execute(roomId);
+    }
+
+    @Operation(summary = "아이템 공격 시작")
+    @GetMapping("/attack/start/{attackItemId}")
+    public void attackStart(@PathVariable Long attackItemId) {
+        attackStartService.execute(attackItemId);
     }
 
     @Operation(summary = "공격받은 아이템 방어")

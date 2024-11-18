@@ -56,7 +56,6 @@ public class UserItem extends BaseTimeEntity {
 
     public void attack(User targetUser) {
         used = true;
-        usedAt = LocalDateTime.now();
         this.targetUser = targetUser;
     }
 
@@ -71,5 +70,9 @@ public class UserItem extends BaseTimeEntity {
         }
         blocked = true;
         return true;
+    }
+
+    public void attackStart() {
+        usedAt = LocalDateTime.now();
     }
 }
