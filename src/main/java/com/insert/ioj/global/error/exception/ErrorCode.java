@@ -36,6 +36,7 @@ public enum ErrorCode {
     NOT_FOUND_ROOM_IN_USER(404, "ROOM-404-2", "방 안에 유저가 존재하지 않습니다."),
     NOT_FOUND_ROOM_IN_TARGET(404, "ROOM-404-3", "방 안에 타겟이 존재하지 않습니다."),
     FAIL_PROTECT_ITEM(400, "ITEM-400-1", "아아템 방어에 실패하였습니다."),
+    NOT_MATCH_USER_ITEM(400, "ITEM-400-2", "공격을 받지 않는 유저가 공격을 시작할 수 없습니다."),
     NOT_HAVE_ITEM(404, "ITEM-404-1", "소지하고 있지 않은 아이템 입니다."),
     NOT_FOUND_ITEM(404, "ITEM-404-2", "공격하지 않은 아이템입니다."),
 
