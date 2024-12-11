@@ -60,7 +60,7 @@ public class ProblemController {
 
     @Operation(summary = "테스트 케이스 검증")
     @PostMapping("/submit/testcases")
-    public List<TestcasesResponse> verifyTestcases(@RequestBody ExecutionProblemRequest request) {
+    public List<TestcasesResponse> verifyTestcases(@RequestBody @Valid ExecutionProblemRequest request) {
         return verifyTestcasesService.execute(request);
     }
 
