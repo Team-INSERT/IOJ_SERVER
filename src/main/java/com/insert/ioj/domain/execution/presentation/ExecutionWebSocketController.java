@@ -8,6 +8,7 @@ import com.insert.ioj.domain.execution.presentation.dto.req.InputRequest;
 import com.insert.ioj.global.constants.FileConstants;
 import com.insert.ioj.infra.cmd.CmdUtil;
 import com.insert.ioj.infra.docker.DockerUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -28,7 +29,7 @@ public class ExecutionWebSocketController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/execution")
-    public void handleExecutionRequest(ExecutionRequest request) {
+    public void handleExecutionRequest(@Valid ExecutionRequest request) {
         String sessionId = request.getSessionId();
         Language language = Language.valueOf(request.getLanguage());
 
@@ -83,7 +84,7 @@ public class ExecutionWebSocketController {
     }
 
     @MessageMapping("/input")
-    public void handleUserInput(InputRequest request) {
+    public void handleUserInput(@Valid InputRequest request) {
         Process process = sessionProcessMap.get(request.getSessionId());
         if (process != null) {
             try {

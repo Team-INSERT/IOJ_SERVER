@@ -72,7 +72,7 @@ public class ContestController {
 
     @Operation(summary = "대회 문제 제출")
     @PostMapping("/execution")
-    public Verdict submitContest(@RequestBody SubmitContestRequest request) {
+    public Verdict submitContest(@RequestBody @Valid SubmitContestRequest request) {
         return submitContestService.execute(request);
     }
 }
