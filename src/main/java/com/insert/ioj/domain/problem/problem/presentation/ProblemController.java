@@ -1,10 +1,8 @@
 package com.insert.ioj.domain.problem.problem.presentation;
 
-import com.insert.ioj.domain.compiler.presentation.dto.res.ProblemCompileResponse;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.problem.presentation.dto.req.ExecutionProblemRequest;
 import com.insert.ioj.domain.problem.problem.presentation.dto.req.SaveProblemRequest;
-import com.insert.ioj.domain.problem.problem.presentation.dto.req.SubmitProblemRequest;
 import com.insert.ioj.domain.problem.problem.presentation.dto.res.ListProblemResponse;
 import com.insert.ioj.domain.problem.problem.presentation.dto.res.ProblemResponse;
 import com.insert.ioj.domain.problem.problem.presentation.dto.res.TestcasesResponse;
@@ -12,7 +10,6 @@ import com.insert.ioj.domain.problem.problem.service.ExecutionProblemService;
 import com.insert.ioj.domain.problem.problem.service.GetProblemService;
 import com.insert.ioj.domain.problem.problem.service.ListProblemService;
 import com.insert.ioj.domain.problem.problem.service.SaveProblemService;
-import com.insert.ioj.domain.problem.problem.service.SubmitProblemService;
 import com.insert.ioj.domain.problem.problem.service.VerifyTestcasesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,7 +32,6 @@ import java.util.List;
 public class ProblemController {
     private final ListProblemService listProblemService;
     private final GetProblemService getProblemService;
-    private final SubmitProblemService submitProblemService;
     private final SaveProblemService saveProblemService;
     private final VerifyTestcasesService verifyTestcasesService;
     private final ExecutionProblemService executionProblemService;
@@ -62,12 +58,6 @@ public class ProblemController {
     @PostMapping("/submit/testcases")
     public List<TestcasesResponse> verifyTestcases(@RequestBody @Valid ExecutionProblemRequest request) {
         return verifyTestcasesService.execute(request);
-    }
-
-    @Operation(summary = "문제 실행")
-    @PostMapping("/execution")
-    public ProblemCompileResponse submitProblem(@RequestBody @Valid SubmitProblemRequest request) throws Exception {
-        return submitProblemService.execute(request);
     }
 
     @Operation(summary = "문제 저장")
