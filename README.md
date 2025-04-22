@@ -88,3 +88,10 @@
 
 **ExecutionFactory를 만들어 각 언어의 객체 생성을 편리하게 함**
 - LanguageConfig를 이용하여 각 언어의 생성자를 registerExecution에 등록 후 ExecutionFactory를 사용하여 생성하는 객체의 Language를 확인 후 객체 생성
+
+## 팀원
+|                           Backend(팀장)                           |                            Frontend                             |                            Frontend                             |                            Designer                             |
+|:---------------------------------------------------------------:|:---------------------------------------------------------------:|:---------------------------------------------------------------:|:---------------------------------------------------------------:|
+| ![image](https://avatars.githubusercontent.com/u/127452485?v=4) | ![image](https://avatars.githubusercontent.com/u/128461588?v=4) | ![image](https://avatars.githubusercontent.com/u/128370837?v=4) | ![image](https://avatars.githubusercontent.com/u/119480957?v=4) |
+|                [안예성](https://github.com/anys34)                 |               [김시연](https://github.com/kimsiyeon0223)                |             [김영은](https://github.com/winternuary)              |                [최성훈](https://github.com/seonghoon07)                |
+
