@@ -89,6 +89,9 @@
 **ExecutionFactory를 만들어 각 언어의 객체 생성을 편리하게 함**
 - LanguageConfig를 이용하여 각 언어의 생성자를 registerExecution에 등록 후 ExecutionFactory를 사용하여 생성하는 객체의 Language를 확인 후 객체 생성
 
+## ERD
+![erd](https://i.postimg.cc/ryCVQ96c/IOJ-ERD.png)
+
 ## 화면 설계
 
 |                                 메인 페이지                                 |                             문제 풀이 페이지                             |
