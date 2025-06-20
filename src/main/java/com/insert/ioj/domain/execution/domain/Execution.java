@@ -2,20 +2,24 @@ package com.insert.ioj.domain.execution.domain;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.language.Language;
+import com.insert.ioj.global.constants.ExtensionConstants;
 import com.insert.ioj.global.constants.FileConstants;
 import com.insert.ioj.infra.file.FileUtil;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileSystemUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 public abstract class Execution {
     private static final String IMAGE_PREFIX_NAME = "image-";
     private static final String EXECUTION_FOLDER_PREFIX_NAME = "execution-";
+
+    @Value("${volume.path}")
+    private String volumePath;
 
     private String id;
     private String sourcecode;
@@ -24,23 +28,24 @@ public abstract class Execution {
     private int memoryLimit;
     private String path;
 
-    protected Execution(String sourcecode,
+    protected Execution(String id,
+                        String sourcecode,
                         List<Testcase> testcases,
                         int timeLimit,
                         int memoryLimit) {
-        this.id = UUID.randomUUID().toString();
+        this.id = id;
         this.sourcecode = sourcecode;
         this.testcases = testcases;
         this.timeLimit = timeLimit;
         this.memoryLimit = memoryLimit;
-        this.path = getLanguage().getFolderName() + "/" + getExecutionFolderName();
+        this.path = volumePath + "/" + id;
     }
 
     public void createExecutionDirectory() throws IOException {
         FileUtil.createDirectory(path);
         saveUploadedFiles();
-        copyDockerFile();
-        copySpecialFile();
+//        copyDockerFile();
+//        copySpecialFile();
     }
 
     public void createEntrypointFiles() {
@@ -65,10 +70,11 @@ public abstract class Execution {
         FileUtil.saveUploadedFiles(sourcecode, path + "/" + sourceCodeFileName);
 
         if (testcases != null) {
-            for (Testcase testcase : testcases) {
+            FileUtil.createDirectory(path + "/testcases");
+            for (int i = 0; i < testcases.size(); i++) {
                 FileUtil.saveUploadedFiles(
-                    testcase.getInput(),
-                    path + "/" + testcase.getId() + "-" + FileConstants.INPUT_FILE_NAME);
+                    testcases.get(i).getInput(),
+                    path + "/testcases/input" + i + ExtensionConstants.TEXT_EXTENSION);
             }
         }
     }

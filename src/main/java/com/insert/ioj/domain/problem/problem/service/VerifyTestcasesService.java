@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -41,6 +42,7 @@ public class VerifyTestcasesService {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
 
         Execution execution = ExecutionFactory.createExecution(
+            UUID.randomUUID().toString(),
             request.getSourcecode(),
             testcases,
             problem.getTimeLimit(),

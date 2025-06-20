@@ -12,7 +12,10 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedOrigins("http://localhost:3000",
                 "https://ioj-seonghoon07s-projects.vercel.app",
                 "https://insert-ioj.com",
-                "https://www.insert-ioj.com")
+                "https://www.insert-ioj.com",
+                "https://ioj-insert.com",
+                "https://www.ioj-insert.com"
+            )
             .allowedMethods("*")
             .allowCredentials(true);
     }

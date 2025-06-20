@@ -1,0 +1,6 @@
+spring:
+  config:
+    import: optional:configserver:${CONFIG_URL}
+  cloud:
+    config:
+      enabled: true

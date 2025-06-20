@@ -9,4 +9,5 @@ public class ExtensionConstants {
     public static final String JAVA_EXTENSION = ".java";
     public static final String PYTHON_EXTENSION = ".py";
     public static final String ENTRYPOINT_EXTENSION = ".sh";
+    public static final String TEXT_EXTENSION = ".txt";
 }

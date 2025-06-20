@@ -5,7 +5,8 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import java.util.List;
 
 public interface AbstractExecutionFactory {
-    Execution createExecution(String sourcecode,
+    Execution createExecution(String id,
+                              String sourcecode,
                               List<Testcase> testcases,
                               int timeLimit,
                               int memoryLimit);

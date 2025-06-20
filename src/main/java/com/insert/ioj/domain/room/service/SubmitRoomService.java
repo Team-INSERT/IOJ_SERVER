@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -57,6 +58,7 @@ public class SubmitRoomService {
         existsCorrectProblem(room, user, problem);
 
         Execution execution = ExecutionFactory.createExecution(
+            UUID.randomUUID().toString(),
             request.getSourcecode(),
             testcases,
             problem.getTimeLimit(),

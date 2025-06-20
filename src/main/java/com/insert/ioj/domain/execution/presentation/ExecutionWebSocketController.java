@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -34,6 +35,7 @@ public class ExecutionWebSocketController {
         Language language = Language.valueOf(request.getLanguage());
 
         Execution execution = ExecutionFactory.createExecution(
+            UUID.randomUUID().toString(),
             request.getSourcecode(),
             null,
             TIME_LIMIT,
