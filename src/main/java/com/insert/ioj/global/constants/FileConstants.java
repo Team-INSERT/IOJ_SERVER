@@ -12,4 +12,7 @@ public class FileConstants {
     public static final String ENTRYPOINT_FILE_NAME_PREFIX = "entrypoint-";
     public static final String INPUT_FILE_NAME = "input.txt";
     public static final String DOCKER_FILE_NAME = "Dockerfile.execution";
+    public static final String META_FILE = "meta%d.txt";
+    public static final String STDOUT_FILE = "stdout%d.txt";
+    public static final String STDERR_FILE = "stderr%d.txt";
 }

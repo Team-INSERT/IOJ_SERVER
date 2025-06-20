@@ -4,6 +4,7 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.Testcase.domain.repository.TestcaseRepository;
 import com.insert.ioj.domain.execution.domain.Execution;
 import com.insert.ioj.domain.execution.domain.ExecutionFactory;
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problem.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.submission.domain.Submission;
@@ -15,6 +16,7 @@ import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import com.insert.ioj.global.feign.kubernetes.KubernetesClient;
 import com.insert.ioj.global.feign.kubernetes.dto.req.KubernetesSubmissionRequest;
+import com.insert.ioj.infra.status.VerificationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,5 +64,24 @@ public class SubmissionService {
 
         submissionRepository.save(submission);
         return submission.getId();
+    }
+
+    @Transactional
+    public void complete(String id) throws IOException {
+        Submission submission = submissionRepository.findById(UUID.fromString(id))
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
+        List<Testcase> testcases = testcaseRepository.findAllByProblem(submission.getProblem())
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+
+        Verdict verdict = VerificationUtil.verify(submission, testcases);
+        submission.updateVerdict(verdict);
+    }
+
+    @Transactional
+    public void completeCompile(String id) {
+        Submission submission = submissionRepository.findById(UUID.fromString(id))
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
+
+        submission.updateVerdict(Verdict.COMPILATION_ERROR);
     }
 }

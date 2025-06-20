@@ -51,4 +51,8 @@ public class Submission extends BaseTimeEntity {
         this.user = user;
         this.problem = problem;
     }
+
+    public void updateVerdict(Verdict verdict) {
+        this.verdict = verdict;
+    }
 }

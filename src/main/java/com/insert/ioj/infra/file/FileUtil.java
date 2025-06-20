@@ -13,6 +13,10 @@ public class FileUtil {
         Files.createDirectory(Path.of(path));
     }
 
+    public static String readFile(String path) throws IOException {
+        return Files.readString(Paths.get(path));
+    }
+
     public static void saveUploadedFiles(String content, String path) throws IOException {
         try(OutputStream os = new FileOutputStream(path)) {
             os.write(content.getBytes());

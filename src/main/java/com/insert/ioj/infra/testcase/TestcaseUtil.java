@@ -21,7 +21,7 @@ public class TestcaseUtil {
         );
     }
 
-    private static String processString(String input) {
+    public static String processString(String input) {
         String output = input.replaceAll("\\s+\\n", "\n");
         if (!input.endsWith("\n")) {
             output += "\n";

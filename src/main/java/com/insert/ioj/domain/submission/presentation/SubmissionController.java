@@ -4,6 +4,8 @@ import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.service.SubmissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,17 +27,17 @@ public class SubmissionController {
         return submissionService.create(request);
     }
 
-//    @GetMapping("/{submission-id}/complete")
-//    public void complete(
-//        @PathVariable("submission-id") UUID id
-//    ) {
-//
-//    }
-//
-//    @GetMapping("/{submission-id}/complete/compile")
-//    public void complete(
-//        @PathVariable("submission-id") UUID id
-//    ) {
-//
-//    }
+    @GetMapping("/{submission-id}/complete")
+    public void complete(
+        @PathVariable("submission-id") String id
+    ) throws IOException {
+        submissionService.complete(id);
+    }
+
+    @GetMapping("/{submission-id}/complete/compile")
+    public void completeCompile(
+        @PathVariable("submission-id") String id
+    ) {
+        submissionService.completeCompile(id);
+    }
 }

@@ -4,9 +4,9 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.global.constants.ExtensionConstants;
 import com.insert.ioj.global.constants.FileConstants;
+import com.insert.ioj.global.constants.FolderConstants;
 import com.insert.ioj.infra.file.FileUtil;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileSystemUtils;
 
 import java.io.IOException;
@@ -17,9 +17,6 @@ import java.util.List;
 public abstract class Execution {
     private static final String IMAGE_PREFIX_NAME = "image-";
     private static final String EXECUTION_FOLDER_PREFIX_NAME = "execution-";
-
-    @Value("${volume.path}")
-    private String volumePath;
 
     private String id;
     private String sourcecode;
@@ -38,7 +35,7 @@ public abstract class Execution {
         this.testcases = testcases;
         this.timeLimit = timeLimit;
         this.memoryLimit = memoryLimit;
-        this.path = volumePath + "/" + id;
+        this.path = FolderConstants.VOLUME_PATH + "/" + id;
     }
 
     public void createExecutionDirectory() throws IOException {
