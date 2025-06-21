@@ -5,7 +5,6 @@ import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.submission.domain.Submission;
 import com.insert.ioj.global.constants.FileConstants;
-import com.insert.ioj.global.constants.FolderConstants;
 import com.insert.ioj.infra.file.FileUtil;
 import com.insert.ioj.infra.testcase.TestcaseUtil;
 
@@ -18,9 +17,9 @@ public class VerificationUtil {
     private static final Pattern timePattern = Pattern.compile("time-wall:(\\d+)");
 
     public static Verdict verify(
-        Submission submission, List<Testcase> testcases
+        Submission submission, List<Testcase> testcases, String volumePath
     ) throws IOException {
-        String basePath = FolderConstants.VOLUME_PATH + "/" + submission.getId().toString() + "/";
+        String basePath = volumePath + "/" + submission.getId().toString() + "/results/";
         Problem problem = submission.getProblem();
 
         for (int i = 0; i < testcases.size(); i++) {

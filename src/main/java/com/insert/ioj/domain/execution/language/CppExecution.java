@@ -17,8 +17,9 @@ public class CppExecution extends Execution {
                         String sourcecode,
                         List<Testcase> testcases,
                         int timeLimit,
-                        int memoryLimit) {
-        super(id, sourcecode, testcases, timeLimit, memoryLimit);
+                        int memoryLimit,
+                        String volumePath) {
+        super(id, sourcecode, testcases, timeLimit, memoryLimit, volumePath);
     }
 
     @Override

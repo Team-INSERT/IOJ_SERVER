@@ -18,7 +18,8 @@ public class ExecutionFactory {
                                             List<Testcase> testcases,
                                             int timeLimit,
                                             int memoryLimit,
-                                            Language language) {
+                                            Language language,
+                                            String volumePath) {
         AbstractExecutionFactory factory = executions.get(language);
 
         return factory.createExecution(
@@ -26,7 +27,8 @@ public class ExecutionFactory {
                 sourcecode,
                 testcases,
                 timeLimit,
-                memoryLimit
+                memoryLimit,
+                volumePath
         );
     }
 }

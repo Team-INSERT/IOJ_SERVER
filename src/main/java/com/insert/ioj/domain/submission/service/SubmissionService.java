@@ -15,9 +15,9 @@ import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import com.insert.ioj.global.feign.kubernetes.KubernetesClient;
-import com.insert.ioj.global.feign.kubernetes.dto.req.KubernetesSubmissionRequest;
 import com.insert.ioj.infra.status.VerificationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +28,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class SubmissionService {
+    @Value("${volume.path}")
+    private String volumePath;
+
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
     private final SubmissionRepository submissionRepository;
@@ -46,23 +49,25 @@ public class SubmissionService {
             request.language(), request.sourcecode(), user, problem
         );
 
+        submissionRepository.save(submission);
+
         Execution execution = ExecutionFactory.createExecution(
             submission.getId().toString(),
             request.sourcecode(),
             testcases,
             problem.getTimeLimit(),
             problem.getMemoryLimit(),
-            request.language()
+            request.language(),
+            volumePath
         );
         execution.createExecutionDirectory();
 
-        kubernetesClient.kubernetesSubmission(
-            new KubernetesSubmissionRequest(
-                execution.getId(), execution.getMemoryLimit(), execution.getTimeLimit(), execution.getLanguage()
-            )
-        );
+//        kubernetesClient.kubernetesSubmission(
+//            new KubernetesSubmissionRequest(
+//                execution.getId(), execution.getMemoryLimit(), execution.getTimeLimit(), execution.getLanguage()
+//            )
+//        );
 
-        submissionRepository.save(submission);
         return submission.getId();
     }
 
@@ -73,7 +78,7 @@ public class SubmissionService {
         List<Testcase> testcases = testcaseRepository.findAllByProblem(submission.getProblem())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
 
-        Verdict verdict = VerificationUtil.verify(submission, testcases);
+        Verdict verdict = VerificationUtil.verify(submission, testcases, volumePath);
         submission.updateVerdict(verdict);
     }
 

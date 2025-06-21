@@ -4,7 +4,6 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.language.Language;
 import com.insert.ioj.global.constants.ExtensionConstants;
 import com.insert.ioj.global.constants.FileConstants;
-import com.insert.ioj.global.constants.FolderConstants;
 import com.insert.ioj.infra.file.FileUtil;
 import lombok.Getter;
 import org.springframework.util.FileSystemUtils;
@@ -29,13 +28,15 @@ public abstract class Execution {
                         String sourcecode,
                         List<Testcase> testcases,
                         int timeLimit,
-                        int memoryLimit) {
+                        int memoryLimit,
+                        String volumePath
+    ) {
         this.id = id;
         this.sourcecode = sourcecode;
         this.testcases = testcases;
         this.timeLimit = timeLimit;
         this.memoryLimit = memoryLimit;
-        this.path = FolderConstants.VOLUME_PATH + "/" + id;
+        this.path = volumePath + "/" + id;
     }
 
     public void createExecutionDirectory() throws IOException {

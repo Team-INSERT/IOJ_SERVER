@@ -40,7 +40,8 @@ public class ExecutionWebSocketController {
             null,
             TIME_LIMIT,
             MEMORY_LIMIT,
-            language
+            language,
+            language.getFolderName()
         );
 
         createEnvironmentAndBuild(execution);

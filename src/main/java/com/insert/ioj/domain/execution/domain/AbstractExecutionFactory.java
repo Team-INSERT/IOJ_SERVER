@@ -9,5 +9,6 @@ public interface AbstractExecutionFactory {
                               String sourcecode,
                               List<Testcase> testcases,
                               int timeLimit,
-                              int memoryLimit);
+                              int memoryLimit,
+                              String volumePath);
 }

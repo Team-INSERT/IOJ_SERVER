@@ -47,7 +47,8 @@ public class VerifyTestcasesService {
             testcases,
             problem.getTimeLimit(),
             problem.getMemoryLimit(),
-            request.getLanguage()
+            request.getLanguage(),
+            request.getLanguage().getFolderName()
         );
 
         createEnvironmentAndBuild(execution);

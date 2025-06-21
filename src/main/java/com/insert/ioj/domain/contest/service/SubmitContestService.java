@@ -63,7 +63,8 @@ public class SubmitContestService {
             testcases,
             problem.getTimeLimit(),
             problem.getMemoryLimit(),
-            request.getLanguage()
+            request.getLanguage(),
+            request.getLanguage().getFolderName()
         );
 
         Verdict verdict = Verdict.ACCEPTED;
