@@ -15,6 +15,7 @@ import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import com.insert.ioj.global.feign.kubernetes.KubernetesClient;
+import com.insert.ioj.global.feign.kubernetes.dto.req.KubernetesSubmissionRequest;
 import com.insert.ioj.infra.status.VerificationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,11 +63,11 @@ public class SubmissionService {
         );
         execution.createExecutionDirectory();
 
-//        kubernetesClient.kubernetesSubmission(
-//            new KubernetesSubmissionRequest(
-//                execution.getId(), execution.getMemoryLimit(), execution.getTimeLimit(), execution.getLanguage()
-//            )
-//        );
+        kubernetesClient.kubernetesSubmission(
+            new KubernetesSubmissionRequest(
+                execution.getId(), execution.getMemoryLimit(), execution.getTimeLimit(), execution.getLanguage()
+            )
+        );
 
         return submission.getId();
     }
