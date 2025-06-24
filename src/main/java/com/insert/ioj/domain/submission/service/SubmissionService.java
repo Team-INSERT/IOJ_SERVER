@@ -14,11 +14,10 @@ import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
-import com.insert.ioj.global.feign.kubernetes.KubernetesClient;
-import com.insert.ioj.global.feign.kubernetes.dto.req.KubernetesSubmissionRequest;
 import com.insert.ioj.infra.status.VerificationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +34,8 @@ public class SubmissionService {
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
     private final SubmissionRepository submissionRepository;
-    private final KubernetesClient kubernetesClient;
     private final UserFacade userFacade;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public UUID create(SubmissionRequest request) throws IOException {
@@ -63,11 +62,7 @@ public class SubmissionService {
         );
         execution.createExecutionDirectory();
 
-        kubernetesClient.kubernetesSubmission(
-            new KubernetesSubmissionRequest(
-                execution.getId(), execution.getMemoryLimit(), execution.getTimeLimit(), execution.getLanguage()
-            )
-        );
+        publisher.publishEvent(execution);
 
         return submission.getId();
     }
