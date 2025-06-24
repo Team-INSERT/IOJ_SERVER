@@ -4,6 +4,9 @@ import com.insert.ioj.domain.execution.language.Language;
 import jakarta.validation.constraints.NotNull;
 
 public record SubmissionRequest(
+    @NotNull(message = "contestId가 비어있습니다.")
+    Long contestId,
+
     @NotNull(message = "problemId가 비어있습니다.")
     Long problemId,
 

@@ -1,5 +1,7 @@
 package com.insert.ioj.domain.submission.presentation;
 
+import com.insert.ioj.domain.execution.domain.type.Verdict;
+import com.insert.ioj.domain.submission.presentation.dto.req.GetContestSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.service.SubmissionService;
 import jakarta.validation.Valid;
@@ -20,6 +22,13 @@ import java.util.UUID;
 @RestController
 public class SubmissionController {
     private final SubmissionService submissionService;
+
+    @GetMapping("/status/contest")
+    public Verdict getContestSubmissionStatus(
+        @RequestBody @Valid GetContestSubmissionRequest request
+    ) {
+        return submissionService.contestSubmissionStatus(request);
+    }
 
     @PostMapping
     public UUID create(
