@@ -15,4 +15,5 @@ public class FileConstants {
     public static final String META_FILE = "meta%d.txt";
     public static final String STDOUT_FILE = "stdout%d.txt";
     public static final String STDERR_FILE = "stderr%d.txt";
+    public static final String COMPILE_STDERR_FILE = "compile_stderr.txt";
 }

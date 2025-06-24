@@ -2,57 +2,63 @@ package com.insert.ioj.infra.status;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
-import com.insert.ioj.domain.problem.problem.domain.Problem;
-import com.insert.ioj.domain.submission.domain.Submission;
-import com.insert.ioj.global.constants.FileConstants;
-import com.insert.ioj.infra.file.FileUtil;
+import com.insert.ioj.domain.submission.domain.Artifact;
 import com.insert.ioj.infra.testcase.TestcaseUtil;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VerificationUtil {
-    private static final Pattern timePattern = Pattern.compile("time-wall:(\\d+)");
+    private static final Pattern EXIT_CODE_PATTERN = Pattern.compile("exitcode:(\\d+)");
+    private static final Pattern TIME_WALL_PATTERN = Pattern.compile("time-wall:(\\d+)");
+    private static final String OOM_KEY = "cg-oom-killed";
 
-    public static Verdict verify(
-        Submission submission, List<Testcase> testcases, String volumePath
-    ) throws IOException {
-        String basePath = volumePath + "/" + submission.getId().toString() + "/results/";
-        Problem problem = submission.getProblem();
+    public static Verdict verify(List<Artifact> artifacts, List<Testcase> testcases, int timeLimit) {
+        if (artifacts.size() != testcases.size()) {
+            throw new IllegalArgumentException("Artifact 수와 Testcase 수가 일치하지 않습니다.");
+        }
 
-        for (int i = 0; i < testcases.size(); i++) {
-            Testcase testcase = testcases.get(i);
-            String metaResult = FileUtil.readFile(
-                basePath + FileConstants.META_FILE.formatted(i)
-            );
-
-            Matcher timeMatcher = timePattern.matcher(metaResult);
-            if (timeMatcher.find()) {
-                int timeWall = Integer.parseInt(timeMatcher.group(1));
-
-                if (timeWall > problem.getTimeLimit()) {
-                    return Verdict.TIME_LIMIT_EXCEEDED;
-                }
+        for (int i = 0; i < artifacts.size(); i++) {
+            Verdict result = evaluateTestcase(artifacts.get(i), testcases.get(i), timeLimit);
+            if (result != Verdict.ACCEPTED) {
+                return result;
             }
-            if (metaResult.contains("cg-oom-killed:")) {
-                return Verdict.OUT_OF_MEMORY;
-            }
-            if (metaResult.contains("exitcode:0")) {
-                String stdoutResult = FileUtil.readFile(
-                    basePath + FileConstants.STDOUT_FILE.formatted(i)
-                );
-
-                String stdout = TestcaseUtil.processString(stdoutResult);
-                if (!testcase.getOutput().equals(stdout)) {
-                    return Verdict.WRONG_ANSWER;
-                }
-            } else {
-                return Verdict.COMPILATION_ERROR;
-            }
-        };
-
+        }
         return Verdict.ACCEPTED;
+    }
+
+    private static Verdict evaluateTestcase(Artifact artifact, Testcase testcase, int timeLimit) {
+        String meta        = artifact.getMeta();
+        String stdOutput   = artifact.getStdout();
+
+        Integer timeWall = extractTimeWall(meta);
+        if (timeWall != null && timeWall > timeLimit) {
+            return Verdict.TIME_LIMIT_EXCEEDED;
+        }
+
+        if (meta.contains(OOM_KEY)) {
+            return Verdict.OUT_OF_MEMORY;
+        }
+
+        Integer exitCode = extractExitCode(meta);
+        if (exitCode == null || exitCode != 0) {
+            return Verdict.COMPILATION_ERROR;
+        }
+
+        String processedOutput = TestcaseUtil.processString(stdOutput);
+        return testcase.getOutput().equals(processedOutput)
+                ? Verdict.ACCEPTED
+                : Verdict.WRONG_ANSWER;
+    }
+
+    private static Integer extractTimeWall(String meta) {
+        Matcher matcher = TIME_WALL_PATTERN.matcher(meta);
+        return matcher.find() ? Integer.parseInt(matcher.group(1)) : null;
+    }
+
+    private static Integer extractExitCode(String meta) {
+        Matcher matcher = EXIT_CODE_PATTERN.matcher(meta);
+        return matcher.find() ? Integer.parseInt(matcher.group(1)) : null;
     }
 }

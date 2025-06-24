@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -29,15 +30,9 @@ public class SubmissionController {
 
     @GetMapping("/{submission-id}/complete")
     public void complete(
-        @PathVariable("submission-id") String id
+        @PathVariable("submission-id") String id,
+        @RequestParam String status
     ) throws IOException {
-        submissionService.complete(id);
-    }
-
-    @GetMapping("/{submission-id}/complete/compile")
-    public void completeCompile(
-        @PathVariable("submission-id") String id
-    ) {
-        submissionService.completeCompile(id);
+        submissionService.complete(id, status);
     }
 }
