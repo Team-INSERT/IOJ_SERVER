@@ -68,7 +68,6 @@ public class SubmissionService {
     public List<TestcaseSubmissionStatusResponse> testcaseSubmissionStatus(UUID id) {
         Submission submission = submissionRepository.findById(id)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
-        Problem problem = submission.getProblem();
 
         List<Artifact> artifacts = artifactRepository.findAllBySubmission(submission);
         List<TestcaseSubmission> testcaseSubmissions = testcaseSubmissionRepository.findAllBySubmission(submission);
