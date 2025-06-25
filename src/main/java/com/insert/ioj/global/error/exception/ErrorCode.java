@@ -41,6 +41,7 @@ public enum ErrorCode {
     NOT_HAVE_ITEM(404, "ITEM-404-1", "소지하고 있지 않은 아이템 입니다."),
     NOT_FOUND_ITEM(404, "ITEM-404-2", "공격하지 않은 아이템입니다."),
     NOT_FOUND_SUBMISSION(404, "SUBMISSION-404-1", "제출 기록을 찾을 수 없습니다."),
+    NOT_FOUND_ARTIFACT(404, "ARTIFACT-404-1", "제출 결과를 찾을 수 없습니다."),
 
     INVALID_TOKEN(401, "TOKEN-401-1", "올바르지 않은 형식의 Token입니다."),
     EXPIRED_PERIOD_TOKEN(401, "TOKEN-401-2", "기한이 만료된 Token입니다."),

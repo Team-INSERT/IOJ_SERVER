@@ -28,9 +28,13 @@ public class VerificationUtil {
         return Verdict.ACCEPTED;
     }
 
-    private static Verdict evaluateTestcase(Artifact artifact, Testcase testcase, int timeLimit) {
+    public static Verdict evaluateTestcase(Artifact artifact, Testcase testcase, int timeLimit) {
         String meta        = artifact.getMeta();
         String stdOutput   = artifact.getStdout();
+
+        if (meta == null || stdOutput == null) {
+            return Verdict.COMPILATION_ERROR;
+        }
 
         Integer timeWall = extractTimeWall(meta);
         if (timeWall != null && timeWall > timeLimit) {
@@ -43,7 +47,7 @@ public class VerificationUtil {
 
         Integer exitCode = extractExitCode(meta);
         if (exitCode == null || exitCode != 0) {
-            return Verdict.COMPILATION_ERROR;
+            return Verdict.RUNTIME_ERROR;
         }
 
         String processedOutput = TestcaseUtil.processString(stdOutput);

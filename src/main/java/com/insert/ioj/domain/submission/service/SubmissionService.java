@@ -12,11 +12,15 @@ import com.insert.ioj.domain.problem.problem.domain.repository.ProblemRepository
 import com.insert.ioj.domain.submission.domain.Artifact;
 import com.insert.ioj.domain.submission.domain.ContestSubmission;
 import com.insert.ioj.domain.submission.domain.Submission;
+import com.insert.ioj.domain.submission.domain.TestcaseSubmission;
 import com.insert.ioj.domain.submission.domain.repository.ArtifactRepository;
 import com.insert.ioj.domain.submission.domain.repository.ContestSubmissionRepository;
 import com.insert.ioj.domain.submission.domain.repository.SubmissionRepository;
+import com.insert.ioj.domain.submission.domain.repository.TestcaseSubmissionRepository;
 import com.insert.ioj.domain.submission.presentation.dto.req.GetContestSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
+import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
+import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.constants.FileConstants;
@@ -35,6 +39,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,6 +51,7 @@ public class SubmissionService {
     private final TestcaseRepository testcaseRepository;
     private final SubmissionRepository submissionRepository;
     private final ContestSubmissionRepository contestSubmissionRepository;
+    private final TestcaseSubmissionRepository testcaseSubmissionRepository;
     private final ArtifactRepository artifactRepository;
     private final ContestFacade contestFacade;
     private final UserFacade userFacade;
@@ -56,14 +62,98 @@ public class SubmissionService {
         Contest contest = contestFacade.getContest(request.contestId());
         Problem problem = problemRepository.findById(request.problemId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        Submission submission
-            = contestSubmissionRepository.findByProblemAndContest(problem, contest);
+        Submission submission = contestSubmissionRepository.findByProblemAndContest(problem, contest)
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
 
         if (submission.getVerdict() == null) {
             throw new IojException(ErrorCode.SUBMISSION_IN_PROGRESS);
         }
 
         return submission.getVerdict();
+    }
+
+    @Transactional
+    public List<TestcaseSubmissionStatusResponse> testcaseSubmissionStatus(UUID id) {
+        Submission submission = submissionRepository.findById(id)
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
+        Problem problem = submission.getProblem();
+
+        List<Artifact> artifacts = artifactRepository.findAllBySubmission(submission);
+        List<TestcaseSubmission> testcaseSubmissions = testcaseSubmissionRepository.findAllBySubmission(submission);
+
+        List<TestcaseSubmissionStatusResponse> response = new ArrayList<>();
+        for (int i=0; i < artifacts.size(); i++) {
+            Artifact artifact = artifacts.get(i);
+            TestcaseSubmission testcaseSubmission = testcaseSubmissions.get(i);
+
+            if (submission.getVerdict() == Verdict.COMPILATION_ERROR) {
+                response.add(
+                    new TestcaseSubmissionStatusResponse(
+                        testcaseSubmission.getInput(), artifact.getStderr(),
+                        testcaseSubmission.getExpectedOutput(), Verdict.COMPILATION_ERROR
+                    )
+                );
+
+                testcaseSubmission.updateVerdict(Verdict.COMPILATION_ERROR);
+            } else {
+                Verdict verdict = VerificationUtil.evaluateTestcase(
+                    artifact, testcaseSubmission.toTestcase(), problem.getTimeLimit()
+                );
+                String output = (verdict == Verdict.ACCEPTED || verdict == Verdict.WRONG_ANSWER)
+                    ? artifact.getStdout()
+                    : artifact.getStderr();
+
+                response.add(
+                    new TestcaseSubmissionStatusResponse(
+                        testcaseSubmission.getInput(), output,
+                        testcaseSubmission.getExpectedOutput(), verdict
+                    )
+                );
+                testcaseSubmission.updateVerdict(verdict);
+            }
+        }
+
+        return response;
+    }
+
+    @Transactional
+    public UUID testcasesSubmission(TestcasesSubmissionRequest request) throws IOException {
+        Problem problem = problemRepository.findById(request.problemId())
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+        User user = userFacade.getCurrentUser();
+
+        Submission submission = new Submission(
+            request.language(), request.sourcecode(), user, problem
+        );
+        submissionRepository.save(submission);
+
+        List<TestcaseSubmission> submissions = request.testcaseResultDto().stream()
+            .map(dto -> new TestcaseSubmission(
+                dto.input(),
+                dto.expectedOutput(),
+                submission
+            ))
+            .collect(Collectors.toList());
+        testcaseSubmissionRepository.saveAll(submissions);
+
+        List<Testcase> testcases = submissions.stream()
+            .map(TestcaseSubmission::toTestcase)
+            .collect(Collectors.toList());
+
+        Execution execution = ExecutionFactory.createExecution(
+            submission.getId().toString(),
+            request.sourcecode(),
+            testcases,
+            problem.getTimeLimit(),
+            problem.getMemoryLimit(),
+            request.language(),
+            volumePath
+        );
+        execution.createExecutionDirectory();
+
+        publisher.publishEvent(execution);
+
+        return submission.getId();
     }
 
     @Transactional
