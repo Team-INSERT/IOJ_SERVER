@@ -121,7 +121,7 @@ public class SubmissionService {
         List<TestcaseSubmission> submissions = request.testcaseResultDto().stream()
             .map(dto -> new TestcaseSubmission(
                 dto.input(),
-                dto.expectedOutput(),
+                dto.expectedOutput()+"\n",
                 submission
             ))
             .collect(Collectors.toList());

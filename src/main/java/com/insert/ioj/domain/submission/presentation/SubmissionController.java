@@ -32,7 +32,7 @@ public class SubmissionController {
         return submissionService.submissionStatus(id);
     }
 
-    @GetMapping("/status/testcase/{testcaseSubmission-id}")
+    @GetMapping("/{testcaseSubmission-id}/status/testcase")
     public List<TestcaseSubmissionStatusResponse> getTestcaseSubmissionStatus(
         @PathVariable("testcaseSubmission-id") UUID id
     ) {
