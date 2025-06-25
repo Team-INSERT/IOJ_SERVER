@@ -11,16 +11,16 @@ import java.util.regex.Pattern;
 
 public class VerificationUtil {
     private static final Pattern EXIT_CODE_PATTERN = Pattern.compile("exitcode:(\\d+)");
-    private static final Pattern TIME_WALL_PATTERN = Pattern.compile("time-wall:(\\d+)");
     private static final String OOM_KEY = "cg-oom-killed";
+    private static final String TIME_OUT_KEY = "status:TO";
 
-    public static Verdict verify(List<Artifact> artifacts, List<Testcase> testcases, int timeLimit) {
+    public static Verdict verify(List<Artifact> artifacts, List<Testcase> testcases) {
         if (artifacts.size() != testcases.size()) {
             throw new IllegalArgumentException("Artifact 수와 Testcase 수가 일치하지 않습니다.");
         }
 
         for (int i = 0; i < artifacts.size(); i++) {
-            Verdict result = evaluateTestcase(artifacts.get(i), testcases.get(i), timeLimit);
+            Verdict result = evaluateTestcase(artifacts.get(i), testcases.get(i));
             if (result != Verdict.ACCEPTED) {
                 return result;
             }
@@ -28,16 +28,15 @@ public class VerificationUtil {
         return Verdict.ACCEPTED;
     }
 
-    public static Verdict evaluateTestcase(Artifact artifact, Testcase testcase, int timeLimit) {
+    public static Verdict evaluateTestcase(Artifact artifact, Testcase testcase) {
         String meta        = artifact.getMeta();
         String stdOutput   = artifact.getStdout();
 
-        if (meta == null || stdOutput == null) {
+        if (meta == null) {
             return Verdict.COMPILATION_ERROR;
         }
 
-        Integer timeWall = extractTimeWall(meta);
-        if (timeWall != null && timeWall > timeLimit) {
+        if (meta.contains(TIME_OUT_KEY)) {
             return Verdict.TIME_LIMIT_EXCEEDED;
         }
 
@@ -54,11 +53,6 @@ public class VerificationUtil {
         return testcase.getOutput().equals(processedOutput)
                 ? Verdict.ACCEPTED
                 : Verdict.WRONG_ANSWER;
-    }
-
-    private static Integer extractTimeWall(String meta) {
-        Matcher matcher = TIME_WALL_PATTERN.matcher(meta);
-        return matcher.find() ? Integer.parseInt(matcher.group(1)) : null;
     }
 
     private static Integer extractExitCode(String meta) {

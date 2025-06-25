@@ -17,7 +17,6 @@ import com.insert.ioj.domain.submission.domain.repository.ArtifactRepository;
 import com.insert.ioj.domain.submission.domain.repository.ContestSubmissionRepository;
 import com.insert.ioj.domain.submission.domain.repository.SubmissionRepository;
 import com.insert.ioj.domain.submission.domain.repository.TestcaseSubmissionRepository;
-import com.insert.ioj.domain.submission.presentation.dto.req.GetContestSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
@@ -58,16 +57,9 @@ public class SubmissionService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional(readOnly = true)
-    public Verdict contestSubmissionStatus(GetContestSubmissionRequest request) {
-        Contest contest = contestFacade.getContest(request.contestId());
-        Problem problem = problemRepository.findById(request.problemId())
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        Submission submission = contestSubmissionRepository.findByProblemAndContest(problem, contest)
+    public Verdict submissionStatus(UUID id) {
+        Submission submission = contestSubmissionRepository.findById(id)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
-
-        if (submission.getVerdict() == null) {
-            throw new IojException(ErrorCode.SUBMISSION_IN_PROGRESS);
-        }
 
         return submission.getVerdict();
     }
@@ -97,7 +89,7 @@ public class SubmissionService {
                 testcaseSubmission.updateVerdict(Verdict.COMPILATION_ERROR);
             } else {
                 Verdict verdict = VerificationUtil.evaluateTestcase(
-                    artifact, testcaseSubmission.toTestcase(), problem.getTimeLimit()
+                    artifact, testcaseSubmission.toTestcase()
                 );
                 String output = (verdict == Verdict.ACCEPTED || verdict == Verdict.WRONG_ANSWER)
                     ? artifact.getStdout()
@@ -216,7 +208,7 @@ public class SubmissionService {
             List<Artifact> artifacts = toArtifacts(submission, testcases.size());
             artifactRepository.saveAll(artifacts);
 
-            verdict = VerificationUtil.verify(artifacts, testcases, problem.getTimeLimit());
+            verdict = VerificationUtil.verify(artifacts, testcases);
         }
 
         submission.updateVerdict(verdict);

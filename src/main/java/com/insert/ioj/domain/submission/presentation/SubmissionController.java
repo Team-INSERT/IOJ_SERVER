@@ -1,7 +1,6 @@
 package com.insert.ioj.domain.submission.presentation;
 
 import com.insert.ioj.domain.execution.domain.type.Verdict;
-import com.insert.ioj.domain.submission.presentation.dto.req.GetContestSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
@@ -26,11 +25,11 @@ import java.util.UUID;
 public class SubmissionController {
     private final SubmissionService submissionService;
 
-    @GetMapping("/status/contest")
-    public Verdict getContestSubmissionStatus(
-        @RequestBody @Valid GetContestSubmissionRequest request
+    @GetMapping("/{submission-id}/status")
+    public Verdict getSubmissionStatus(
+        @PathVariable("submission-id") UUID id
     ) {
-        return submissionService.contestSubmissionStatus(request);
+        return submissionService.submissionStatus(id);
     }
 
     @GetMapping("/status/testcase/{testcaseSubmission-id}")
