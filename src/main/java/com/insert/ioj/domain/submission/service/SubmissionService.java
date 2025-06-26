@@ -188,9 +188,6 @@ public class SubmissionService {
     public void complete(String id, String status) throws IOException {
         Submission submission = submissionRepository.findById(UUID.fromString(id))
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
-        Problem problem = submission.getProblem();
-        List<Testcase> testcases = testcaseRepository.findAllByProblem(problem)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
 
         Verdict verdict;
         if ("compile".equals(status)) {
@@ -202,13 +199,31 @@ public class SubmissionService {
                 new Artifact(null, result, null, submission)
             );
 
-            verdict = Verdict.COMPILATION_ERROR;
-        } else {
-            List<Artifact> artifacts = toArtifacts(submission, testcases.size());
+            submission.updateVerdict(Verdict.COMPILATION_ERROR);
+            return;
+        }
+
+        List<TestcaseSubmission> testcaseSubmissions = testcaseSubmissionRepository.findAllBySubmission(submission);
+        Problem problem = submission.getProblem();
+        List<Testcase> testcases;
+        List<Artifact> artifacts;
+
+        if (testcaseSubmissions.isEmpty()) {
+            testcases = testcaseRepository.findAllByProblem(problem)
+                .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+
+            artifacts = toArtifacts(submission, testcases.size());
             artifactRepository.saveAll(artifacts);
 
-            verdict = VerificationUtil.verify(artifacts, testcases);
+        } else {
+            testcases = testcaseSubmissions.stream()
+                .map(TestcaseSubmission::toTestcase)
+                .toList();
+
+            artifacts = toArtifacts(submission, testcaseSubmissions.size());
+            artifactRepository.saveAll(artifacts);
         }
+        verdict = VerificationUtil.verify(artifacts, testcases);
 
         submission.updateVerdict(verdict);
     }
