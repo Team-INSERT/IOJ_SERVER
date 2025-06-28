@@ -19,11 +19,11 @@ public class CustomContestSubmissionRepositoryImpl implements CustomContestSubmi
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Boolean existsByCorrectProblem(Contest contest, User user, Problem problem) {
+    public Boolean existsByCorrectProblem(Contest contest, Long userId, Problem problem) {
         Integer fetchOne = queryFactory
             .selectOne()
             .from(contestSubmission)
-            .where(contestSubmission.contest.eq(contest).and(contestSubmission.user.eq(user)
+            .where(contestSubmission.contest.eq(contest).and(contestSubmission.user.id.eq(userId)
                 .and(contestSubmission.problem.eq(problem)
                     .and(contestSubmission.verdict.eq(Verdict.ACCEPTED)))))
             .fetchOne();

@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -27,15 +26,15 @@ public class GoogleAuthService {
         GoogleInformationResponse response = googleInformationClient
                 .getUserInformation(accessToken);
         String email = response.getEmail();
-        Optional<User> user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElse(null);
 
-        if (user.isEmpty()) {
-            userRepository.save(
+        if (user == null) {
+            user = userRepository.save(
                 new User(email, response.getName(), ramdomColor(), getAuthority(email)));
         }
 
         return new TokenResponse(
-            jwtTokenProvider.createAccessToken(email),
+            jwtTokenProvider.createAccessToken(email, user.getId(), user.getAuthority()),
             jwtTokenProvider.createRefreshToken(email)
         );
     }

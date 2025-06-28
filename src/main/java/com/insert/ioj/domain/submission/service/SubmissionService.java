@@ -21,6 +21,8 @@ import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.domain.user.domain.repository.UserRepository;
+import com.insert.ioj.domain.user.domain.type.Authority;
 import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.constants.FileConstants;
 import com.insert.ioj.global.error.exception.ErrorCode;
@@ -46,6 +48,7 @@ public class SubmissionService {
     @Value("${volume.path}")
     private String volumePath;
 
+    private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
     private final SubmissionRepository submissionRepository;
@@ -153,14 +156,16 @@ public class SubmissionService {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
         List<Testcase> testcases = testcaseRepository.findAllByProblem(problem)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        User user = userFacade.getCurrentUser();
+        Long userId = userFacade.getCurrentUserId();
+        User user = userRepository.getReferenceById(userId);
+        Authority userAuthority = userFacade.getCurrentUserAuthority();
         Contest contest = contestFacade.getContest(request.contestId());
 
         contest.isNotStarted();
         contest.isFinished();
-        contest.checkRole(user.getAuthority());
+        contest.checkRole(userAuthority);
 
-        existsCorrectProblem(contest, user, problem);
+        existsCorrectProblem(contest, userId, problem);
 
         ContestSubmission submission = new ContestSubmission(
             request.language(), request.sourcecode(), user, problem, contest
@@ -251,8 +256,8 @@ public class SubmissionService {
         return artifacts;
     }
 
-    private void existsCorrectProblem(Contest contest, User user, Problem problem) {
-        Boolean isCorrect = contestSubmissionRepository.existsByCorrectProblem(contest, user, problem);
+    private void existsCorrectProblem(Contest contest, Long userId, Problem problem) {
+        Boolean isCorrect = contestSubmissionRepository.existsByCorrectProblem(contest, userId, problem);
         if (isCorrect)
             throw new IojException(ErrorCode.ALREADY_SOLVED_PROBLEM);
     }

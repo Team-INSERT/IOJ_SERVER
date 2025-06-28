@@ -1,6 +1,6 @@
 package com.insert.ioj.global.security.principle;
 
-import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.domain.user.domain.type.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,16 +13,18 @@ import java.util.Collections;
 @Getter
 @AllArgsConstructor
 public class AuthDetails implements UserDetails {
-    private User user;
+    private String email;
+    private Long userId;
+    private Authority authority;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getAuthority()));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + authority));
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return email;
     }
 
     @Override

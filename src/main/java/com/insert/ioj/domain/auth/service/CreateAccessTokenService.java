@@ -3,6 +3,8 @@ package com.insert.ioj.domain.auth.service;
 import com.insert.ioj.domain.auth.domain.RefreshToken;
 import com.insert.ioj.domain.auth.domain.repository.RefreshTokenRepository;
 import com.insert.ioj.domain.auth.presentation.dto.res.AccessTokenResponse;
+import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import com.insert.ioj.global.security.jwt.JwtTokenProvider;
@@ -15,12 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateAccessTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserFacade userFacade;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AccessTokenResponse execute(String token) {
         RefreshToken refreshToken = getRefreshToken(token);
-        return new AccessTokenResponse(jwtTokenProvider
-                .createAccessToken(refreshToken.getEmail()));
+        User user = userFacade.getUserByEmail(refreshToken.getEmail());
+
+        return new AccessTokenResponse(
+            jwtTokenProvider.createAccessToken(user.getEmail(), user.getId(), user.getAuthority())
+        );
     }
 
     private RefreshToken getRefreshToken(String token) {

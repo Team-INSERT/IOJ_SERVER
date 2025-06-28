@@ -8,6 +8,6 @@ import com.insert.ioj.domain.user.domain.User;
 import java.util.List;
 
 public interface CustomContestSubmissionRepository {
-    Boolean existsByCorrectProblem(Contest contest, User user, Problem problem);
+    Boolean existsByCorrectProblem(Contest contest, Long userId, Problem problem);
     List<ContestSubmission> getUserProblemSubmission(User user, Contest contest);
 }
