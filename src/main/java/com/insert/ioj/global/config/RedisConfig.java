@@ -3,6 +3,7 @@ package com.insert.ioj.global.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -21,5 +22,10 @@ public class RedisConfig {
         if (redisPassword != null && !redisPassword.isBlank()) config.setPassword(redisPassword);
 
         return new LettuceConnectionFactory(config);
+    }
+
+    @Bean
+    public RedisCacheManager cacheManager(RedisConnectionFactory cf) {
+        return RedisCacheManager.create(cf);
     }
 }

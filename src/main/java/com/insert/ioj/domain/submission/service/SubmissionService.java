@@ -1,14 +1,11 @@
 package com.insert.ioj.domain.submission.service;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
-import com.insert.ioj.domain.Testcase.domain.repository.TestcaseRepository;
 import com.insert.ioj.domain.contest.domain.Contest;
-import com.insert.ioj.domain.contest.facade.ContestFacade;
 import com.insert.ioj.domain.execution.domain.Execution;
 import com.insert.ioj.domain.execution.domain.ExecutionFactory;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
-import com.insert.ioj.domain.problem.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.submission.domain.Artifact;
 import com.insert.ioj.domain.submission.domain.ContestSubmission;
 import com.insert.ioj.domain.submission.domain.Submission;
@@ -17,6 +14,7 @@ import com.insert.ioj.domain.submission.domain.repository.ArtifactRepository;
 import com.insert.ioj.domain.submission.domain.repository.ContestSubmissionRepository;
 import com.insert.ioj.domain.submission.domain.repository.SubmissionRepository;
 import com.insert.ioj.domain.submission.domain.repository.TestcaseSubmissionRepository;
+import com.insert.ioj.domain.submission.facade.EntityFacade;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
@@ -48,15 +46,13 @@ public class SubmissionService {
     @Value("${volume.path}")
     private String volumePath;
 
+    private final UserFacade userFacade;
+    private final EntityFacade entityFacade;
     private final UserRepository userRepository;
-    private final ProblemRepository problemRepository;
-    private final TestcaseRepository testcaseRepository;
+    private final ArtifactRepository artifactRepository;
     private final SubmissionRepository submissionRepository;
     private final ContestSubmissionRepository contestSubmissionRepository;
     private final TestcaseSubmissionRepository testcaseSubmissionRepository;
-    private final ArtifactRepository artifactRepository;
-    private final ContestFacade contestFacade;
-    private final UserFacade userFacade;
     private final ApplicationEventPublisher publisher;
 
     @Transactional(readOnly = true)
@@ -69,9 +65,7 @@ public class SubmissionService {
 
     @Transactional
     public List<TestcaseSubmissionStatusResponse> testcaseSubmissionStatus(UUID id) {
-        Submission submission = submissionRepository.findById(id)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
-
+        Submission submission = entityFacade.getSubmissionById(id);
         List<Artifact> artifacts = artifactRepository.findAllBySubmission(submission);
         List<TestcaseSubmission> testcaseSubmissions = testcaseSubmissionRepository.findAllBySubmission(submission);
 
@@ -112,9 +106,9 @@ public class SubmissionService {
 
     @Transactional
     public UUID testcasesSubmission(TestcasesSubmissionRequest request) throws IOException {
-        Problem problem = problemRepository.findById(request.problemId())
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        User user = userFacade.getCurrentUser();
+        Problem problem = entityFacade.getProblemById(request.problemId());
+        Long userId = userFacade.getCurrentUserId();
+        User user = userRepository.getReferenceById(userId);
 
         Submission submission = new Submission(
             request.language(), request.sourcecode(), user, problem
@@ -152,14 +146,12 @@ public class SubmissionService {
 
     @Transactional
     public UUID create(SubmissionRequest request) throws IOException {
-        Problem problem = problemRepository.findById(request.problemId())
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        List<Testcase> testcases = testcaseRepository.findAllByProblem(problem)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+        Problem problem = entityFacade.getProblemById(request.problemId());
+        List<Testcase> testcases = entityFacade.getTestcasesByProblem(problem);
         Long userId = userFacade.getCurrentUserId();
         User user = userRepository.getReferenceById(userId);
         Authority userAuthority = userFacade.getCurrentUserAuthority();
-        Contest contest = contestFacade.getContest(request.contestId());
+        Contest contest = entityFacade.getContestById(request.contestId());
 
         contest.isNotStarted();
         contest.isFinished();
@@ -191,8 +183,7 @@ public class SubmissionService {
 
     @Transactional
     public void complete(String id, String status) throws IOException {
-        Submission submission = submissionRepository.findById(UUID.fromString(id))
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
+        Submission submission = entityFacade.getSubmissionById(UUID.fromString(id));
 
         Verdict verdict;
         if ("compile".equals(status)) {
@@ -214,8 +205,7 @@ public class SubmissionService {
         List<Artifact> artifacts;
 
         if (testcaseSubmissions.isEmpty()) {
-            testcases = testcaseRepository.findAllByProblem(problem)
-                .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+            testcases = entityFacade.getTestcasesByProblem(problem);
 
             artifacts = toArtifacts(submission, testcases.size());
             artifactRepository.saveAll(artifacts);
