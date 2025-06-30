@@ -19,4 +19,13 @@ public class GoogleAuthLinkService {
                         authProperties.getGoogleRedirectUrl()
                 );
     }
+
+    public String executeAdmin() {
+        return authProperties.getGoogleBaseUrl() +
+            String.format(
+                QUERY_STRING,
+                authProperties.getGoogleClientId(),
+                "https://admin.ioj-insert.com/google/callback"
+            );
+    }
 }

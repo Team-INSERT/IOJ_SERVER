@@ -14,7 +14,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "https://insert-ioj.com",
                 "https://www.insert-ioj.com",
                 "https://ioj-insert.com",
-                "https://www.ioj-insert.com"
+                "https://www.ioj-insert.com",
+                "https://admin.ioj-insert.com"
             )
             .allowedMethods("*")
             .allowCredentials(true);

@@ -37,6 +37,12 @@ public class AuthController {
         return googleAuthLinkService.execute();
     }
 
+    @Operation(summary = "어드민 구글 로그인 링크 조회")
+    @GetMapping("/admin")
+    public String getAdminGoogleAuthLink() {
+        return googleAuthLinkService.executeAdmin();
+    }
+
     @Operation(summary = "유저 인증을 위한 토큰 발급")
     @PostMapping
     public TokenResponse login(@RequestBody @Valid AccessTokenRequest accessTokenRequest) {
