@@ -47,11 +47,11 @@ public class GoogleAuthService {
 
     private Authority getAuthority(String email) {
         if (email.endsWith("@bssm.hs.kr")) {
-            if (email.startsWith("2022")) {
+            if (email.startsWith("2023")) {
                 return Authority.THIRD_YEAR;
-            } else if (email.startsWith("2023")) {
-                return Authority.SECOND_YEAR;
             } else if (email.startsWith("24.")) {
+                return Authority.SECOND_YEAR;
+            } else if (email.startsWith("25_")) {
                 return Authority.FIRST_YEAR;
             } else {
                 return Authority.USER;
