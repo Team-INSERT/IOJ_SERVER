@@ -26,6 +26,7 @@ public class CacheFacade {
 
     @Cacheable(cacheNames = "contests", key = "#id")
     public Optional<Contest> findContestById(Long id) {
+        System.out.println("DB hit");
         return contestRepository.findById(id);
     }
 
@@ -34,9 +35,9 @@ public class CacheFacade {
         return submissionRepository.findById(id);
     }
 
-    @Cacheable(cacheNames = "testcases", key = "#problem.id")
-    public Optional<List<Testcase>> findTestcasesById(Problem problem) {
-        return testcaseRepository.findAllByProblem(problem);
+    @Cacheable(cacheNames = "testcases", key = "#id")
+    public List<Testcase> findTestcasesById(Long id) {
+        return testcaseRepository.findAllByProblem_Id(id);
     }
 
     @Cacheable(cacheNames = "problems", key = "#id")

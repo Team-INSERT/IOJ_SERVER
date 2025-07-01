@@ -147,7 +147,7 @@ public class SubmissionService {
     @Transactional
     public UUID create(SubmissionRequest request) throws IOException {
         Problem problem = entityFacade.getProblemById(request.problemId());
-        List<Testcase> testcases = entityFacade.getTestcasesByProblem(problem);
+        List<Testcase> testcases = entityFacade.getTestcasesByProblem(request.problemId());
         Long userId = userFacade.getCurrentUserId();
         User user = userRepository.getReferenceById(userId);
         Authority userAuthority = userFacade.getCurrentUserAuthority();
@@ -205,7 +205,7 @@ public class SubmissionService {
         List<Artifact> artifacts;
 
         if (testcaseSubmissions.isEmpty()) {
-            testcases = entityFacade.getTestcasesByProblem(problem);
+            testcases = entityFacade.getTestcasesByProblem(problem.getId());
 
             artifacts = toArtifacts(submission, testcases.size());
             artifactRepository.saveAll(artifacts);

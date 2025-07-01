@@ -27,9 +27,8 @@ public class EntityFacade {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
     }
 
-    public List<Testcase> getTestcasesByProblem(Problem problem) {
-        return cacheFacade.findTestcasesById(problem)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+    public List<Testcase> getTestcasesByProblem(Long id) {
+        return cacheFacade.findTestcasesById(id);
     }
 
     public Problem getProblemById(Long id) {
