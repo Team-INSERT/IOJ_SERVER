@@ -6,6 +6,7 @@ import com.insert.ioj.domain.contest.presentation.dto.res.ContestResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestAdminResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.ListContestResponse;
 import com.insert.ioj.domain.contest.presentation.dto.res.RankingResponse;
+import com.insert.ioj.domain.contest.service.GetContestEndtimeService;
 import com.insert.ioj.domain.contest.service.GetContestService;
 import com.insert.ioj.domain.contest.service.ListContestAdminService;
 import com.insert.ioj.domain.contest.service.ListContestService;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Tag(name = "Contest API")
@@ -38,6 +40,7 @@ public class ContestController {
     private final RankingService rankingService;
     private final SaveContestService saveContestService;
     private final SubmitContestService submitContestService;
+    private final GetContestEndtimeService getContestEndtimeService;
 
     @Operation(summary = "대회 리스트")
     @GetMapping
@@ -74,5 +77,11 @@ public class ContestController {
     @PostMapping("/execution")
     public Verdict submitContest(@RequestBody @Valid SubmitContestRequest request) {
         return submitContestService.execute(request);
+    }
+
+    @Operation(summary = "대회 종료 시간")
+    @PostMapping("/{id}/endtime")
+    public LocalDateTime endtimeContest(@PathVariable Long id) {
+        return getContestEndtimeService.execute(id);
     }
 }
