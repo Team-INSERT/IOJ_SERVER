@@ -8,9 +8,9 @@ spring:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:}
     hikari:
-      maximum-pool-size: 120
+      maximum-pool-size: 100
       idle-timeout: 60000
-      max-lifetime: 1800000
+      max-lifetime: 600000
 
   jpa:
     database: mysql
