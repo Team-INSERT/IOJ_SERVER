@@ -3,12 +3,14 @@ package com.insert.ioj.domain.submission.facade;
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
+import com.insert.ioj.domain.submission.facade.dto.TestcaseCacheDto;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,7 +24,11 @@ public class EntityFacade {
     }
 
     public List<Testcase> getTestcasesByProblem(Long id) {
-        return cacheFacade.findTestcasesById(id);
+        TestcaseCacheDto[] testcaseDtos = cacheFacade.findTestcasesById(id);
+
+        return Arrays.stream(testcaseDtos)
+            .map(TestcaseCacheDto::toTestcase)
+            .toList();
     }
 
     public Problem getProblemById(Long id) {

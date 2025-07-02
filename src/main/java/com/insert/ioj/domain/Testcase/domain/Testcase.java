@@ -41,4 +41,10 @@ public class Testcase extends BaseTimeEntity {
         this.example = example;
         this.problem = problem;
     }
+
+    public Testcase(String input, String output, Boolean example) {
+        this.input = input;
+        this.output = output;
+        this.example = example;
+    }
 }

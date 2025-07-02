@@ -6,6 +6,7 @@ import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.contest.domain.repository.ContestRepository;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problem.problem.domain.repository.ProblemRepository;
+import com.insert.ioj.domain.submission.facade.dto.TestcaseCacheDto;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,11 @@ public class CacheFacade {
     }
 
     @Cacheable(cacheNames = "testcases", key = "#id")
-    public List<Testcase> findTestcasesById(Long id) {
-        return testcaseRepository.findAllByProblem_Id(id);
+    public TestcaseCacheDto[] findTestcasesById(Long id) {
+        List<Testcase> testcases = testcaseRepository.findAllByProblem_Id(id);
+        return testcases.stream()
+            .map(TestcaseCacheDto::new)
+            .toArray(TestcaseCacheDto[]::new);
     }
 
     @Cacheable(cacheNames = "problems", key = "#id")
