@@ -65,7 +65,8 @@ public class SubmissionService {
 
     @Transactional
     public List<TestcaseSubmissionStatusResponse> testcaseSubmissionStatus(UUID id) {
-        Submission submission = entityFacade.getSubmissionById(id);
+        Submission submission = submissionRepository.findById(id)
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
         List<Artifact> artifacts = artifactRepository.findAllBySubmission(submission);
         List<TestcaseSubmission> testcaseSubmissions = testcaseSubmissionRepository.findAllBySubmission(submission);
 
@@ -183,7 +184,8 @@ public class SubmissionService {
 
     @Transactional
     public void complete(String id, String status) throws IOException {
-        Submission submission = entityFacade.getSubmissionById(UUID.fromString(id));
+        Submission submission = submissionRepository.findById(UUID.fromString(id))
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
 
         Verdict verdict;
         if ("compile".equals(status)) {
