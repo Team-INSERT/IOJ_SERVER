@@ -3,6 +3,7 @@ package com.insert.ioj.domain.submission.facade;
 import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
+import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,10 @@ public class EntityFacade {
     public Problem getProblemById(Long id) {
         return cacheFacade.findProblemById(id)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+    }
+
+    public User getUserById(Long id) {
+        return cacheFacade.findUserById(id)
+            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_USER));
     }
 }

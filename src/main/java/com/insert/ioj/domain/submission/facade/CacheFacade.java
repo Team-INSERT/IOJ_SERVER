@@ -6,6 +6,8 @@ import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.contest.domain.repository.ContestRepository;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problem.problem.domain.repository.ProblemRepository;
+import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,10 @@ public class CacheFacade {
     private final ContestRepository contestRepository;
     private final TestcaseRepository testcaseRepository;
     private final ProblemRepository problemRepository;
+    private final UserRepository userRepository;
 
     @Cacheable(cacheNames = "contests", key = "#id")
     public Optional<Contest> findContestById(Long id) {
-        System.out.println("DB hit");
         return contestRepository.findById(id);
     }
 
@@ -34,5 +36,10 @@ public class CacheFacade {
     @Cacheable(cacheNames = "problems", key = "#id")
     public Optional<Problem> findProblemById(Long id) {
         return problemRepository.findById(id);
+    }
+
+    @Cacheable(cacheNames = "users", key = "#id")
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 }

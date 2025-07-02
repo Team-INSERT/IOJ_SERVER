@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.user.presentation;
 
+import com.insert.ioj.domain.user.facade.UserFacade;
 import com.insert.ioj.domain.user.presentation.dto.res.InfoUserResponse;
 import com.insert.ioj.domain.user.service.ProfileService;
 import io.swagger.v3.oas.annotations.Operation;
