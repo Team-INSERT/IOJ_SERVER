@@ -21,14 +21,4 @@ public class TestcaseDto {
     public Testcase toEntity(int id, Problem problem) {
         return new Testcase(id, input, output+"\n", example, problem);
     }
-
-    public TestcaseDto(Testcase testcase) {
-        this.input = testcase.getInput();
-        this.output = testcase.getOutput();
-        this.example = testcase.getExample();
-    }
-
-    public Testcase toTestcase() {
-        return new Testcase(input, output, example);
-    }
 }

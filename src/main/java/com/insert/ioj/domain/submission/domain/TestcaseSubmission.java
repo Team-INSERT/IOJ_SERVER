@@ -41,6 +41,7 @@ public class TestcaseSubmission {
     private Submission submission;
 
     public TestcaseSubmission(int orderId, String input, String expectedOutput, Submission submission) {
+        this.orderId = orderId;
         this.input = input;
         this.expectedOutput = expectedOutput;
         this.submission = submission;

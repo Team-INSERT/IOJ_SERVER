@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 public class TestcaseCacheDto {
     private Long id;
 
+    private int orderId;
+
     private String input;
 
     private String output;
@@ -16,12 +18,13 @@ public class TestcaseCacheDto {
     private boolean example;
 
     public TestcaseCacheDto(Testcase testcase) {
+        this.orderId = testcase.getOrderId();
         this.input = testcase.getInput();
         this.output = testcase.getOutput();
         this.example = testcase.getExample();
     }
 
     public Testcase toTestcase() {
-        return new Testcase(input, output, example);
+        return new Testcase(orderId, input, output, example);
     }
 }
