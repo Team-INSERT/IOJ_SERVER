@@ -31,7 +31,7 @@ public class CacheFacade {
 
     @Cacheable(cacheNames = "testcases", key = "#id")
     public TestcaseCacheDto[] findTestcasesById(Long id) {
-        List<Testcase> testcases = testcaseRepository.findAllByProblem_Id(id);
+        List<Testcase> testcases = testcaseRepository.findAllByProblemIdASC(id);
         return testcases.stream()
             .map(TestcaseCacheDto::new)
             .toArray(TestcaseCacheDto[]::new);

@@ -56,8 +56,8 @@ public class SaveProblemRequest {
 
     public List<Testcase> toTestcaseList(Problem problem) {
         List<Testcase> testcaseList = new ArrayList<>();
-        for(TestcaseDto testcase: testcases) {
-            testcaseList.add(testcase.toEntity(problem));
+        for(int i = 0; i < testcases.size(); i++) {
+            testcaseList.add(testcases.get(i).toEntity(i, problem));
         }
         return testcaseList;
     }

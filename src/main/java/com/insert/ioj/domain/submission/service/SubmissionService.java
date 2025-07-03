@@ -17,6 +17,7 @@ import com.insert.ioj.domain.submission.domain.repository.TestcaseSubmissionRepo
 import com.insert.ioj.domain.submission.facade.EntityFacade;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
+import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest.TestcaseResultDto;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.domain.repository.UserRepository;
@@ -71,7 +72,7 @@ public class SubmissionService {
         List<TestcaseSubmission> testcaseSubmissions = testcaseSubmissionRepository.findAllBySubmission(submission);
 
         List<TestcaseSubmissionStatusResponse> response = new ArrayList<>();
-        for (int i=0; i < artifacts.size(); i++) {
+        for (int i = 0; i < artifacts.size(); i++) {
             Artifact artifact = artifacts.get(i);
             TestcaseSubmission testcaseSubmission = testcaseSubmissions.get(i);
 
@@ -116,13 +117,19 @@ public class SubmissionService {
         );
         submissionRepository.save(submission);
 
-        List<TestcaseSubmission> submissions = request.testcaseResultDto().stream()
-            .map(dto -> new TestcaseSubmission(
-                dto.input(),
-                dto.expectedOutput()+"\n",
-                submission
-            ))
-            .collect(Collectors.toList());
+        List<TestcaseSubmission> submissions = new ArrayList<>();
+        for (int i = 0; i < request.testcaseResultDto().size(); i++) {
+            TestcaseResultDto dto = request.testcaseResultDto().get(i);
+
+            submissions.add(
+                new TestcaseSubmission(
+                    i,
+                    dto.input(),
+                    dto.expectedOutput() + "\n",
+                    submission
+                )
+            );
+        }
         testcaseSubmissionRepository.saveAll(submissions);
 
         List<Testcase> testcases = submissions.stream()
@@ -190,8 +197,8 @@ public class SubmissionService {
         Verdict verdict;
         if ("compile".equals(status)) {
             String result = FileUtil.readFile(
-                volumePath+"/%s/results/".formatted(id) + FileConstants.COMPILE_STDERR_FILE);
-            result = result.replace("vol/"+id+"/", "");
+                volumePath + "/%s/results/".formatted(id) + FileConstants.COMPILE_STDERR_FILE);
+            result = result.replace("vol/" + id + "/", "");
 
             artifactRepository.save(
                 new Artifact(null, result, null, submission)

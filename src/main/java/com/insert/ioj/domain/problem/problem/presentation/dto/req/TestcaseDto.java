@@ -18,8 +18,8 @@ public class TestcaseDto {
     @NotNull(message = "example이 비어있습니다.")
     private boolean example;
 
-    public Testcase toEntity(Problem problem) {
-        return new Testcase(input, output+"\n", example, problem);
+    public Testcase toEntity(int id, Problem problem) {
+        return new Testcase(id, input, output+"\n", example, problem);
     }
 
     public TestcaseDto(Testcase testcase) {

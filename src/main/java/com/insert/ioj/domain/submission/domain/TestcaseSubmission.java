@@ -22,6 +22,8 @@ public class TestcaseSubmission {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int orderId;
+
     @Column(columnDefinition = "TEXT")
     String input;
 
@@ -38,7 +40,7 @@ public class TestcaseSubmission {
     @JoinColumn(name = "submission_id")
     private Submission submission;
 
-    public TestcaseSubmission(String input, String expectedOutput, Submission submission) {
+    public TestcaseSubmission(int orderId, String input, String expectedOutput, Submission submission) {
         this.input = input;
         this.expectedOutput = expectedOutput;
         this.submission = submission;
@@ -50,7 +52,7 @@ public class TestcaseSubmission {
 
     public Testcase toTestcase() {
         return new Testcase(
-            input, expectedOutput, false, submission.getProblem()
+            orderId, input, expectedOutput, false, submission.getProblem()
         );
     }
 }

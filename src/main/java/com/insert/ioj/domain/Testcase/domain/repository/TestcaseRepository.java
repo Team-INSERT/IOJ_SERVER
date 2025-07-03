@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface TestcaseRepository extends JpaRepository<Testcase, Long> {
+public interface TestcaseRepository extends JpaRepository<Testcase, Long>, CustomTestcaseRepository {
     Optional<List<Testcase>> findAllByProblem(Problem problem);
     List<Testcase> findAllByProblem_Id(Long problemId);
     Optional<List<Testcase>> findAllByProblemAndExampleIsTrue(Problem problem);

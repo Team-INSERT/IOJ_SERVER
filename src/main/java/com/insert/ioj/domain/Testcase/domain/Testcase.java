@@ -23,6 +23,8 @@ public class Testcase extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private int orderId;
+
     @Column(columnDefinition = "TEXT")
     private String input;
 
@@ -35,7 +37,8 @@ public class Testcase extends BaseTimeEntity {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    public Testcase(String input, String output, Boolean example, Problem problem) {
+    public Testcase(int orderId, String input, String output, Boolean example, Problem problem) {
+        this.orderId = orderId;
         this.input = input;
         this.output = output;
         this.example = example;

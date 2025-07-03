@@ -69,10 +69,10 @@ public abstract class Execution {
 
         if (testcases != null) {
             FileUtil.createDirectory(path + "/testcases");
-            for (int i = 0; i < testcases.size(); i++) {
+            for (Testcase testcase : testcases) {
                 FileUtil.saveUploadedFiles(
-                    testcases.get(i).getInput(),
-                    path + "/testcases/input" + i + ExtensionConstants.TEXT_EXTENSION);
+                    testcase.getInput(),
+                    path + "/testcases/input" + testcase.getOrderId() + ExtensionConstants.TEXT_EXTENSION);
             }
         }
     }
