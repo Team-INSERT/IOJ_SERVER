@@ -68,4 +68,14 @@ public class JavaExecution extends Execution {
     public Language getLanguage() {
         return Language.JAVA;
     }
+
+    @Override
+    public int getTimeLimit() {
+        return timeLimit*2+1;
+    }
+
+    @Override
+    public int getMemoryLimit() {
+        return memoryLimit * 2 + (16 * 1024); // 기본 메모리 * 2 + 16MB
+    }
 }

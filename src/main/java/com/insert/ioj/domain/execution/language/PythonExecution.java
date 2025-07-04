@@ -55,4 +55,14 @@ public class PythonExecution extends Execution {
     public Language getLanguage() {
         return Language.PYTHON;
     }
+
+    @Override
+    public int getTimeLimit() {
+        return timeLimit*3+2;
+    }
+
+    @Override
+    public int getMemoryLimit() {
+        return memoryLimit * 2 + (32 * 1024); // 기본 메모리 * 2 + 32MB
+    }
 }

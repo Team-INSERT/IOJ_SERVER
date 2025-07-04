@@ -62,4 +62,14 @@ public class CppExecution extends Execution {
     public Language getLanguage() {
         return Language.CPP;
     }
+
+    @Override
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    @Override
+    public int getMemoryLimit() {
+        return memoryLimit;
+    }
 }

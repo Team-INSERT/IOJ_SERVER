@@ -20,8 +20,8 @@ public abstract class Execution {
     private String id;
     private String sourcecode;
     private List<Testcase> testcases;
-    private int timeLimit;
-    private int memoryLimit;
+    protected int timeLimit;
+    protected int memoryLimit;
     private String path;
 
     protected Execution(String id,
@@ -97,4 +97,8 @@ public abstract class Execution {
     protected abstract void createEntrypointFile(String inputFileName, String testcaseId);
 
     public abstract Language getLanguage();
+
+    public abstract int getTimeLimit();
+
+    public abstract int getMemoryLimit();
 }

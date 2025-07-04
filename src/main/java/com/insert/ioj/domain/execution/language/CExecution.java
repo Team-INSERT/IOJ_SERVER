@@ -62,4 +62,14 @@ public class CExecution extends Execution {
     public Language getLanguage() {
         return Language.C;
     }
+
+    @Override
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    @Override
+    public int getMemoryLimit() {
+        return memoryLimit;
+    }
 }
