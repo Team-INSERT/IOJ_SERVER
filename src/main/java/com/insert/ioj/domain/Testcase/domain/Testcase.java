@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.Testcase.domain;
 
 import com.insert.ioj.domain.problem.problem.domain.Problem;
+import com.insert.ioj.domain.subtask.domain.Subtask;
 import com.insert.ioj.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,10 @@ public class Testcase extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subtask_id")
+    private Subtask subtask;
 
     public Testcase(int orderId, String input, String output, Boolean example, Problem problem) {
         this.orderId = orderId;

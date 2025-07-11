@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.submission.service;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
+import com.insert.ioj.domain.Testcase.domain.repository.TestcaseRepository;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.execution.domain.Execution;
 import com.insert.ioj.domain.execution.domain.ExecutionFactory;
@@ -19,6 +20,10 @@ import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest.TestcaseResultDto;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
+import com.insert.ioj.domain.subtask.domain.Subtask;
+import com.insert.ioj.domain.subtask.domain.SubtaskResult;
+import com.insert.ioj.domain.subtask.domain.repository.SubtaskRepository;
+import com.insert.ioj.domain.subtask.domain.repository.SubtaskResultRepository;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.domain.repository.UserRepository;
 import com.insert.ioj.domain.user.domain.type.Authority;
@@ -44,6 +49,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class SubmissionService {
+    private final TestcaseRepository testcaseRepository;
     @Value("${volume.path}")
     private String volumePath;
 
@@ -55,6 +61,8 @@ public class SubmissionService {
     private final ContestSubmissionRepository contestSubmissionRepository;
     private final TestcaseSubmissionRepository testcaseSubmissionRepository;
     private final ApplicationEventPublisher publisher;
+    private final SubtaskRepository subtaskRepository;
+    private final SubtaskResultRepository subtaskResultRepository;
 
     @Transactional(readOnly = true)
     public Verdict submissionStatus(UUID id) {
@@ -86,20 +94,17 @@ public class SubmissionService {
 
                 testcaseSubmission.updateVerdict(Verdict.COMPILATION_ERROR);
             } else {
-                Verdict verdict = VerificationUtil.evaluateTestcase(
-                    artifact, testcaseSubmission.toTestcase()
-                );
-                String output = (verdict == Verdict.ACCEPTED || verdict == Verdict.WRONG_ANSWER)
+                String output = (artifact.getVerdict() == Verdict.ACCEPTED || artifact.getVerdict() == Verdict.WRONG_ANSWER)
                     ? artifact.getStdout()
                     : artifact.getStderr();
 
                 response.add(
                     new TestcaseSubmissionStatusResponse(
                         testcaseSubmission.getInput(), output,
-                        testcaseSubmission.getExpectedOutput(), verdict
+                        testcaseSubmission.getExpectedOutput(), artifact.getVerdict()
                     )
                 );
-                testcaseSubmission.updateVerdict(verdict);
+                testcaseSubmission.updateVerdict(artifact.getVerdict());
             }
         }
 
@@ -155,7 +160,6 @@ public class SubmissionService {
     @Transactional
     public UUID create(SubmissionRequest request) throws IOException {
         Problem problem = entityFacade.getProblemById(request.problemId());
-        List<Testcase> testcases = entityFacade.getTestcasesByProblem(request.problemId());
         Long userId = userFacade.getCurrentUserId();
         User user = userRepository.getReferenceById(userId);
         Authority userAuthority = userFacade.getCurrentUserAuthority();
@@ -172,6 +176,9 @@ public class SubmissionService {
         );
 
         contestSubmissionRepository.save(submission);
+
+        List<Subtask> subtasks = subtaskRepository.findAllByProblem(problem);
+        List<Testcase> testcases = testcaseRepository.findAllBySubtasksASC(subtasks);
 
         Execution execution = ExecutionFactory.createExecution(
             submission.getId().toString(),
@@ -214,17 +221,46 @@ public class SubmissionService {
         List<Artifact> artifacts;
 
         if (testcaseSubmissions.isEmpty()) {
-            testcases = entityFacade.getTestcasesByProblem(problem.getId());
+            List<Subtask> subtasks = subtaskRepository.findAllByProblem(problem);
+            testcases = testcaseRepository.findAllBySubtasksASC(subtasks);
 
             artifacts = toArtifacts(submission, testcases.size());
+            artifacts = VerificationUtil.evaluateTestcases(artifacts, testcases);
             artifactRepository.saveAll(artifacts);
 
+            int startIndex = 0;
+            for (Subtask subtask : subtasks) {
+                int testcaseCount = subtask.getTotalTestcases();
+                List<Artifact> subtaskArtifacts = artifacts.subList(startIndex, startIndex + testcaseCount);
+
+                int passedTestcases = (int) subtaskArtifacts.stream()
+                    .filter(artifact -> artifact.getVerdict() == Verdict.ACCEPTED)
+                    .count();
+
+                double maxExecutionTime = subtaskArtifacts.stream()
+                    .mapToDouble(Artifact::getExecutionTime)
+                    .max()
+                    .orElse(-1.0);
+
+                int maxMemoryUsed = subtaskArtifacts.stream()
+                    .mapToInt(Artifact::getMemoryUsage)
+                    .max()
+                    .orElse(-1);
+
+                SubtaskResult subtaskResult = new SubtaskResult(
+                    passedTestcases, maxExecutionTime, maxMemoryUsed, submission, subtask
+                );
+                subtaskResultRepository.save(subtaskResult);
+
+                startIndex += testcaseCount;
+            }
         } else {
             testcases = testcaseSubmissions.stream()
                 .map(TestcaseSubmission::toTestcase)
                 .toList();
 
             artifacts = toArtifacts(submission, testcaseSubmissions.size());
+            artifacts = VerificationUtil.evaluateTestcases(artifacts, testcases);
             artifactRepository.saveAll(artifacts);
         }
         verdict = VerificationUtil.verify(artifacts, testcases);

@@ -1,6 +1,7 @@
 package com.insert.ioj.domain.Testcase.domain.repository;
 
 import com.insert.ioj.domain.Testcase.domain.Testcase;
+import com.insert.ioj.domain.subtask.domain.Subtask;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,15 @@ public class CustomTestcaseRepositoryImpl implements CustomTestcaseRepository {
         return queryFactory
             .selectFrom(testcase)
             .where(testcase.problem.id.eq(id))
+            .orderBy(testcase.orderId.asc())
+            .fetch();
+    }
+
+    @Override
+    public List<Testcase> findAllBySubtasksASC(List<Subtask> subtasks) {
+        return queryFactory
+            .selectFrom(testcase)
+            .where(testcase.subtask.in(subtasks))
             .orderBy(testcase.orderId.asc())
             .fetch();
     }

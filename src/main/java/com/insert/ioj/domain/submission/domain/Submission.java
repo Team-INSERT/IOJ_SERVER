@@ -39,6 +39,8 @@ public class Submission extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Verdict verdict;
 
+    private int totalScore;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

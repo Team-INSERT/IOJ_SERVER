@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Verdict {
     ACCEPTED("Accepted"),
+    PARTIAL("Partial"),
     WRONG_ANSWER("Wrong Answer"),
     COMPILATION_ERROR("Compilation Error"),
     OUT_OF_MEMORY("Out Of Memory"),

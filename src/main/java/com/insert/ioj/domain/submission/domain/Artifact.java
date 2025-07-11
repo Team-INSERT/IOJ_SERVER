@@ -1,8 +1,11 @@
 package com.insert.ioj.domain.submission.domain;
 
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,6 +32,13 @@ public class Artifact extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String meta;
 
+    private Double executionTime;
+    private int memoryUsage;
+    private int exitCode;
+
+    @Enumerated(EnumType.STRING)
+    private Verdict verdict;
+
     @ManyToOne
     @JoinColumn(name = "submission_id")
     private Submission submission;
@@ -38,5 +48,19 @@ public class Artifact extends BaseTimeEntity {
         this.stderr = stderr;
         this.meta = meta;
         this.submission = submission;
+    }
+
+    public Artifact update(
+        Double executionTime,
+        int memoryUsage,
+        int exitCode,
+        Verdict verdict
+    ) {
+        this.executionTime = executionTime;
+        this.memoryUsage = memoryUsage;
+        this.exitCode = exitCode;
+        this.verdict = verdict;
+
+        return this;
     }
 }
