@@ -1,8 +1,8 @@
 package com.insert.ioj.domain.submission.presentation;
 
-import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
+import com.insert.ioj.domain.submission.presentation.dto.res.SubmissionResponse;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.submission.service.SubmissionService;
 import jakarta.validation.Valid;
@@ -26,7 +26,7 @@ public class SubmissionController {
     private final SubmissionService submissionService;
 
     @GetMapping("/{submission-id}/status")
-    public Verdict getSubmissionStatus(
+    public SubmissionResponse getSubmissionStatus(
         @PathVariable("submission-id") UUID id
     ) {
         return submissionService.submissionStatus(id);

@@ -23,7 +23,7 @@ public class Subtask extends BaseTimeEntity {
 
     private String name;
 
-    private int score;
+    private int perfectScore;
 
     private int totalTestcases;
 

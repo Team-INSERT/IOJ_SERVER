@@ -45,12 +45,10 @@ public class VerificationUtil {
         return artifact.update(executionTime, memoryUsage, exitCode, verdict);
     }
 
-    public static Verdict verify(List<Artifact> artifacts, List<Testcase> testcases) {
-        List<Artifact> results = evaluateTestcases(artifacts, testcases);
-
-        for (Artifact result : results) {
-            if (result.getVerdict() != Verdict.ACCEPTED) {
-                return result.getVerdict();
+    public static Verdict verify(List<Artifact> artifacts) {
+        for (Artifact artifact : artifacts) {
+            if (artifact.getVerdict() != Verdict.ACCEPTED) {
+                return artifact.getVerdict();
             }
         }
 

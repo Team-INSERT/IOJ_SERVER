@@ -19,6 +19,7 @@ import com.insert.ioj.domain.submission.facade.EntityFacade;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest.TestcaseResultDto;
+import com.insert.ioj.domain.submission.presentation.dto.res.SubmissionResponse;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.subtask.domain.Subtask;
 import com.insert.ioj.domain.subtask.domain.SubtaskResult;
@@ -65,11 +66,13 @@ public class SubmissionService {
     private final SubtaskResultRepository subtaskResultRepository;
 
     @Transactional(readOnly = true)
-    public Verdict submissionStatus(UUID id) {
+    public SubmissionResponse submissionStatus(UUID id) {
         Submission submission = contestSubmissionRepository.findById(id)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
 
-        return submission.getVerdict();
+        List<SubtaskResult> subtaskResults = subtaskResultRepository.findAllBySubmission(submission);
+
+        return SubmissionResponse.of(submission, subtaskResults);
     }
 
     @Transactional
@@ -247,10 +250,13 @@ public class SubmissionService {
                     .max()
                     .orElse(-1);
 
+                Verdict subtaskVerdict = VerificationUtil.verify(subtaskArtifacts);
+
                 SubtaskResult subtaskResult = new SubtaskResult(
-                    passedTestcases, maxExecutionTime, maxMemoryUsed, submission, subtask
+                    passedTestcases, maxExecutionTime, maxMemoryUsed, subtaskVerdict, submission, subtask
                 );
                 subtaskResultRepository.save(subtaskResult);
+                submission.updateTotalScore(subtaskResult.getScore());
 
                 startIndex += testcaseCount;
             }
@@ -263,7 +269,11 @@ public class SubmissionService {
             artifacts = VerificationUtil.evaluateTestcases(artifacts, testcases);
             artifactRepository.saveAll(artifacts);
         }
-        verdict = VerificationUtil.verify(artifacts, testcases);
+
+        verdict = VerificationUtil.verify(artifacts);
+        if (submission.getTotalScore() != 0 && verdict != Verdict.ACCEPTED) {
+            verdict = Verdict.PARTIAL;
+        }
 
         submission.updateVerdict(verdict);
     }

@@ -1,7 +1,10 @@
 package com.insert.ioj.domain.subtask.domain;
 
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.submission.domain.Submission;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +33,9 @@ public class SubtaskResult {
 
     private int maxMemoryUsed;
 
+    @Enumerated(EnumType.STRING)
+    private Verdict verdict;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "submission_id")
     private Submission submission;
@@ -40,13 +46,14 @@ public class SubtaskResult {
 
     public SubtaskResult(
         int passedTestcases,
-        Double maxExecutionTime, int maxMemoryUsed, Submission submission, Subtask subtask
+        Double maxExecutionTime, int maxMemoryUsed, Verdict verdict, Submission submission, Subtask subtask
     ) {
-        this.score = subtask.getTotalTestcases() == passedTestcases ? subtask.getScore() : 0;
+        this.score = subtask.getTotalTestcases() == passedTestcases ? subtask.getPerfectScore() : 0;
         this.passedTestcases = passedTestcases;
         this.totalTestcases = subtask.getTotalTestcases();
         this.maxExecutionTime = maxExecutionTime;
         this.maxMemoryUsed = maxMemoryUsed;
+        this.verdict = verdict;
         this.submission = submission;
         this.subtask = subtask;
     }

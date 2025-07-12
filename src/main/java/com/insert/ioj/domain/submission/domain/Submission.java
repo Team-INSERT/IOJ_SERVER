@@ -60,4 +60,8 @@ public class Submission extends BaseTimeEntity {
     public void updateVerdict(Verdict verdict) {
         this.verdict = verdict;
     }
+
+    public void updateTotalScore(int totalScore) {
+        this.totalScore += totalScore;
+    }
 }
