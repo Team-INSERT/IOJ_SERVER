@@ -10,4 +10,5 @@ import java.util.List;
 public interface CustomContestSubmissionRepository {
     Boolean existsByCorrectProblem(Contest contest, Long userId, Problem problem);
     List<ContestSubmission> getUserProblemSubmission(User user, Contest contest);
+    List<ContestSubmission> findByUserIdAndContestIdAndProblemId(Long userId, Long contestId, Long problemId);
 }

@@ -39,4 +39,15 @@ public class CustomContestSubmissionRepositoryImpl implements CustomContestSubmi
             .orderBy(contestSubmission.problem.id.asc(), contestSubmission.createdAt.desc())
             .fetch();
     }
+
+    @Override
+    public List<ContestSubmission> findByUserIdAndContestIdAndProblemId(Long userId, Long contestId, Long problemId) {
+        return queryFactory
+            .selectFrom(contestSubmission)
+            .where(contestSubmission.user.id.eq(userId)
+                .and(contestSubmission.contest.id.eq(contestId)
+                .and(contestSubmission.problem.id.eq(problemId))
+            )
+        ).fetch();
+    }
 }

@@ -20,10 +20,12 @@ import com.insert.ioj.domain.submission.domain.repository.ContestSubmissionRepos
 import com.insert.ioj.domain.submission.domain.repository.SubmissionRepository;
 import com.insert.ioj.domain.submission.domain.repository.TestcaseSubmissionRepository;
 import com.insert.ioj.domain.submission.facade.EntityFacade;
+import com.insert.ioj.domain.submission.presentation.dto.req.GetSubmissionsRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest.TestcaseResultDto;
 import com.insert.ioj.domain.submission.presentation.dto.res.SubmissionResponse;
+import com.insert.ioj.domain.submission.presentation.dto.res.SubmissionsResponse;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.subtask.domain.Subtask;
 import com.insert.ioj.domain.subtask.domain.SubtaskResult;
@@ -82,6 +84,18 @@ public class SubmissionService {
         updateOrCreateProblemScore(submission);
 
         return SubmissionResponse.of(submission, subtaskResults);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubmissionsResponse> submissionsStatus(GetSubmissionsRequest request) {
+        Long userId = userFacade.getCurrentUserId();
+        List<ContestSubmission> submissions = contestSubmissionRepository.findByUserIdAndContestIdAndProblemId(
+            userId, request.contestId(), request.ProblemId()
+        );
+
+        return submissions.stream()
+            .map(SubmissionsResponse::toEntity)
+            .toList();
     }
 
     @Transactional

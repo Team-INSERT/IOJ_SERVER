@@ -1,8 +1,10 @@
 package com.insert.ioj.domain.submission.presentation;
 
+import com.insert.ioj.domain.submission.presentation.dto.req.GetSubmissionsRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.SubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmissionRequest;
 import com.insert.ioj.domain.submission.presentation.dto.res.SubmissionResponse;
+import com.insert.ioj.domain.submission.presentation.dto.res.SubmissionsResponse;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.submission.service.SubmissionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +34,13 @@ public class SubmissionController {
         @PathVariable("submission-id") UUID id
     ) {
         return submissionService.submissionStatus(id);
+    }
+
+    @PostMapping("/status/list")
+    public List<SubmissionsResponse> getSubmissionsStatus(
+        @RequestBody  @Valid GetSubmissionsRequest request
+    ) {
+        return submissionService.submissionsStatus(request);
     }
 
     @GetMapping("/{testcaseSubmission-id}/status/testcase")
