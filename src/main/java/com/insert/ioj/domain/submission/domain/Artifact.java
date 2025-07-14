@@ -43,6 +43,14 @@ public class Artifact extends BaseTimeEntity {
     @JoinColumn(name = "submission_id")
     private Submission submission;
 
+    public Artifact(String stdout, String stderr, String meta, Submission submission, Verdict verdict) {
+        this.stdout = stdout;
+        this.stderr = stderr;
+        this.meta = meta;
+        this.submission = submission;
+        this.verdict = verdict;
+    }
+
     public Artifact(String stdout, String stderr, String meta, Submission submission) {
         this.stdout = stdout;
         this.stderr = stderr;

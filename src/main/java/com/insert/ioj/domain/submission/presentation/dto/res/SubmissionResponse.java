@@ -4,10 +4,12 @@ import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.submission.domain.Submission;
 import com.insert.ioj.domain.subtask.domain.SubtaskResult;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record SubmissionResponse(
     Verdict verdict,
+    LocalDateTime submittedAt,
     List<SubtaskInfo> subtaskInfos
 ) {
     public static SubmissionResponse of(
@@ -15,6 +17,7 @@ public record SubmissionResponse(
     ) {
         return new SubmissionResponse(
             submission.getVerdict(),
+            submission.getCreatedAt(),
             SubtaskInfo.toEntities(subtaskResults, details)
         );
     }

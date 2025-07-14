@@ -48,7 +48,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -107,7 +106,7 @@ public class SubmissionService {
                     String detail = null;
                     for (int i = 0; i < subtaskArtifacts.size(); i++) {
                         if (subtaskArtifacts.get(i).getVerdict() != Verdict.ACCEPTED) {
-                            detail = i+1 + "번째 테스트케이스에서 실패하였습니다.";
+                            detail = String.valueOf(i+1);
                             break;
                         }
                     }
@@ -274,7 +273,7 @@ public class SubmissionService {
             result = result.replace("vol/" + id + "/", "");
 
             artifactRepository.save(
-                new Artifact(null, result, null, submission)
+                new Artifact(null, result, null, submission, Verdict.COMPILATION_ERROR)
             );
 
             submission.updateVerdict(Verdict.COMPILATION_ERROR);
@@ -378,7 +377,7 @@ public class SubmissionService {
                         score.update(submission.getTotalScore(), submission.getVerdict());
                         rankingRepository.findByContestAndUser(submission.getContest(), submission.getUser())
                             .ifPresent(
-                                ranking -> ranking.update(submission.getTotalScore(), LocalDateTime.now())
+                                ranking -> ranking.update(submission.getTotalScore(), submission.getCreatedAt())
                             );
                     }
                 },
@@ -393,7 +392,7 @@ public class SubmissionService {
     }
 
     private void createNewRanking(ContestSubmission submission) {
-        Ranking ranking = new Ranking(submission.getTotalScore(), LocalDateTime.now(), submission.getContest(), submission.getUser());
+        Ranking ranking = new Ranking(submission.getTotalScore(), submission.getCreatedAt(), submission.getContest(), submission.getUser());
         rankingRepository.save(ranking);
     }
 }
