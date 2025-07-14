@@ -5,6 +5,7 @@ import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problem.problem.domain.repository.CustomProblemRepository;
 import com.insert.ioj.domain.problem.problem.presentation.dto.res.ProblemStatusDto;
+import com.insert.ioj.domain.problem.problemContest.domain.ProblemContest;
 import com.insert.ioj.domain.solve.contest.repository.CustomSolveContestRepository;
 import com.insert.ioj.domain.submission.domain.ContestSubmission;
 import com.insert.ioj.domain.submission.domain.repository.ContestSubmissionRepository;
@@ -38,7 +39,7 @@ public class ProblemFacade {
 //    }
 
     public List<ProblemStatusDto> getProblemStatuses(Contest contest, User user) {
-        List<Problem> problems = customProblemRepository.getContestProblems(contest);
+        List<ProblemContest> problems = customProblemRepository.getContestProblems(contest);
         List<ContestSubmission> solveContests = contestSubmissionRepository.getUserProblemSubmission(user, contest);
 
         Map<Long, ContestSubmission> latestSolveContests = new HashMap<>();
@@ -67,10 +68,10 @@ public class ProblemFacade {
 //        return problemStatuses;
 //    }
 
-    private static List<ProblemStatusDto> getProblemStatus(List<Problem> problems,
+    private static List<ProblemStatusDto> getProblemStatus(List<ProblemContest> problems,
                                                            Map<Long, ContestSubmission> latestSolveContests) {
         List<ProblemStatusDto> problemStatuses = new ArrayList<>();
-        for (Problem problem : problems) {
+        for (ProblemContest problem : problems) {
             ContestSubmission solveContest = latestSolveContests.get(problem.getId());
             String status = "solved";
             if (solveContest == null) {
