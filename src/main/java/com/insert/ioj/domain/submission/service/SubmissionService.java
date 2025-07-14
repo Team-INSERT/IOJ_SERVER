@@ -80,10 +80,50 @@ public class SubmissionService {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
 
         List<SubtaskResult> subtaskResults = subtaskResultRepository.findAllBySubmission(submission);
+        List<Artifact> artifacts = artifactRepository.findAllBySubmission(submission);
+
+        List<String> details = new ArrayList<>();
+        int startIndex = 0;
+
+        for (SubtaskResult it : subtaskResults) {
+            switch (it.getVerdict()) {
+                case ACCEPTED:
+                    details.add(null);
+                    startIndex += it.getTotalTestcases();
+                    break;
+
+                case COMPILATION_ERROR:
+                case RUNTIME_ERROR:
+                    details.add(artifacts.get(0).getStderr());
+                    break;
+
+                case PARTIAL:
+                case WRONG_ANSWER:
+                case OUT_OF_MEMORY:
+                case TIME_LIMIT_EXCEEDED:
+                    int testcaseCount = it.getTotalTestcases();
+                    List<Artifact> subtaskArtifacts = artifacts.subList(startIndex, startIndex + testcaseCount);
+
+                    String detail = null;
+                    for (int i = 0; i < subtaskArtifacts.size(); i++) {
+                        if (subtaskArtifacts.get(i).getVerdict() != Verdict.ACCEPTED) {
+                            detail = i+1 + "번째 테스트케이스에서 실패하였습니다.";
+                            break;
+                        }
+                    }
+                    details.add(detail);
+                    startIndex += testcaseCount;
+                    break;
+
+                default:
+                    details.add(null);
+                    break;
+            }
+        }
 
         updateOrCreateProblemScore(submission);
 
-        return SubmissionResponse.of(submission, subtaskResults);
+        return SubmissionResponse.of(submission, subtaskResults, details);
     }
 
     @Transactional(readOnly = true)

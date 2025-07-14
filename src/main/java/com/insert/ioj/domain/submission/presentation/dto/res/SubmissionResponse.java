@@ -11,11 +11,11 @@ public record SubmissionResponse(
     List<SubtaskInfo> subtaskInfos
 ) {
     public static SubmissionResponse of(
-        Submission submission, List<SubtaskResult> subtaskResults
+        Submission submission, List<SubtaskResult> subtaskResults, List<String> details
     ) {
         return new SubmissionResponse(
             submission.getVerdict(),
-            SubtaskInfo.toEntities(subtaskResults)
+            SubtaskInfo.toEntities(subtaskResults, details)
         );
     }
 }

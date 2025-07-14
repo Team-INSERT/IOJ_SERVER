@@ -38,7 +38,7 @@ public class SubmissionController {
 
     @PostMapping("/status/list")
     public List<SubmissionsResponse> getSubmissionsStatus(
-        @RequestBody  @Valid GetSubmissionsRequest request
+        @RequestBody @Valid GetSubmissionsRequest request
     ) {
         return submissionService.submissionsStatus(request);
     }
