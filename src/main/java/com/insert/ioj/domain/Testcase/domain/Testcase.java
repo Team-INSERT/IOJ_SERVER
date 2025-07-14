@@ -42,7 +42,7 @@ public class Testcase extends BaseTimeEntity {
     @JoinColumn(name = "subtask_id")
     private Subtask subtask;
 
-    public Testcase(int orderId, String input, String output, Boolean example, Problem problem) {
+    public Testcase(int orderId, String input, String output, Boolean example, Problem problem, Subtask subtask) {
         this.orderId = orderId;
         this.input = input;
         this.output = output;

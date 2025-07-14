@@ -21,8 +21,6 @@ public class Subtask extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private int perfectScore;
 
     private int totalTestcases;
@@ -32,4 +30,11 @@ public class Subtask extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Problem problem;
+
+    public Subtask(int perfectScore, int totalTestcases, String description, Problem problem) {
+        this.perfectScore = perfectScore;
+        this.totalTestcases = totalTestcases;
+        this.description = description;
+        this.problem = problem;
+    }
 }

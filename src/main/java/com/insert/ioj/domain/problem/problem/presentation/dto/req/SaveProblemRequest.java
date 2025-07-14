@@ -1,6 +1,5 @@
 package com.insert.ioj.domain.problem.problem.presentation.dto.req;
 
-import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,20 +43,12 @@ public class SaveProblemRequest {
     private Integer timeLimit;
 
     @Valid
-    @NotNull(message = "testcases가 비어있습니다.")
-    private List<TestcaseDto> testcases;
+    @NotNull(message = "subtaskDtos가 비어있습니다.")
+    private List<SubtaskDto> subtaskDtos;
 
     public Problem toProblem() {
         return new Problem(
             title, content, source, inputContent, outputContent, level, memoryLimit, timeLimit
         );
-    }
-
-    public List<Testcase> toTestcaseList(Problem problem) {
-        List<Testcase> testcaseList = new ArrayList<>();
-        for(int i = 0; i < testcases.size(); i++) {
-            testcaseList.add(testcases.get(i).toEntity(i, problem));
-        }
-        return testcaseList;
     }
 }
