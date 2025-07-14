@@ -7,6 +7,10 @@ import com.insert.ioj.domain.execution.domain.Execution;
 import com.insert.ioj.domain.execution.domain.ExecutionFactory;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
+import com.insert.ioj.domain.problemscore.domain.ProblemScore;
+import com.insert.ioj.domain.problemscore.domain.repository.ProblemScoreRepository;
+import com.insert.ioj.domain.ranking.domain.Ranking;
+import com.insert.ioj.domain.ranking.domain.repository.RankingRepository;
 import com.insert.ioj.domain.submission.domain.Artifact;
 import com.insert.ioj.domain.submission.domain.ContestSubmission;
 import com.insert.ioj.domain.submission.domain.Submission;
@@ -42,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -64,13 +69,18 @@ public class SubmissionService {
     private final ApplicationEventPublisher publisher;
     private final SubtaskRepository subtaskRepository;
     private final SubtaskResultRepository subtaskResultRepository;
+    private final ProblemScoreRepository problemScoreRepository;
+    private final RankingRepository rankingRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public SubmissionResponse submissionStatus(UUID id) {
-        Submission submission = contestSubmissionRepository.findById(id)
+        ContestSubmission submission = contestSubmissionRepository.findById(id)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_SUBMISSION));
 
         List<SubtaskResult> subtaskResults = subtaskResultRepository.findAllBySubmission(submission);
+
+        updateOrCreateProblemScore(submission);
+        updateOrCreateRanking(submission);
 
         return SubmissionResponse.of(submission, subtaskResults);
     }
@@ -305,5 +315,32 @@ public class SubmissionService {
         Boolean isCorrect = contestSubmissionRepository.existsByCorrectProblem(contest, userId, problem);
         if (isCorrect)
             throw new IojException(ErrorCode.ALREADY_SOLVED_PROBLEM);
+    }
+
+    private void updateOrCreateProblemScore(ContestSubmission submission) {
+        problemScoreRepository.findByProblemIdAndContestAndUser(submission.getProblem().getId(), submission.getContest(), submission.getUser())
+            .filter(score -> score.getScore() < submission.getTotalScore())
+            .ifPresentOrElse(
+                score -> score.update(submission.getTotalScore(), submission.getVerdict()),
+                () -> createNewProblemScore(submission)
+            );
+    }
+
+    private void updateOrCreateRanking(ContestSubmission submission) {
+        rankingRepository.findByContestAndUser(submission.getContest(), submission.getUser())
+            .ifPresentOrElse(
+                ranking -> ranking.update(submission.getTotalScore(), LocalDateTime.now()),
+                () -> createNewRanking(submission)
+            );
+    }
+
+    private void createNewProblemScore(ContestSubmission submission) {
+        ProblemScore problemScore = new ProblemScore(submission.getTotalScore(), submission.getVerdict(), submission.getProblem().getId(), submission.getContest(), submission.getUser());
+        problemScoreRepository.save(problemScore);
+    }
+
+    private void createNewRanking(ContestSubmission submission) {
+        Ranking ranking = new Ranking(submission.getTotalScore(), LocalDateTime.now(), submission.getContest(), submission.getUser());
+        rankingRepository.save(ranking);
     }
 }

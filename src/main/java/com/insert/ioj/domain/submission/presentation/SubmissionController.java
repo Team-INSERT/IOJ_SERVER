@@ -5,6 +5,7 @@ import com.insert.ioj.domain.submission.presentation.dto.req.TestcasesSubmission
 import com.insert.ioj.domain.submission.presentation.dto.res.SubmissionResponse;
 import com.insert.ioj.domain.submission.presentation.dto.res.TestcaseSubmissionStatusResponse;
 import com.insert.ioj.domain.submission.service.SubmissionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Submission API")
 @RequiredArgsConstructor
 @RequestMapping("/submissions")
 @RestController
