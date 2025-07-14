@@ -2,6 +2,7 @@ package com.insert.ioj.domain.problem.problem.domain.repository;
 
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
+import com.insert.ioj.domain.problem.problemContest.domain.ProblemContest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,9 +18,9 @@ public class CustomProblemRepositoryImpl implements CustomProblemRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Problem> getContestProblems(Contest contest) {
+    public List<ProblemContest> getContestProblems(Contest contest) {
         return queryFactory
-            .selectFrom(problem)
+            .selectFrom(problemContest)
             .join(problemContest).on(problem.eq(problemContest.problem))
             .where(problemContest.contest.eq(contest))
             .orderBy(problemContest.orderId.asc())

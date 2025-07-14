@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProblemIds {
     private Long id;
+    private Long orderId;
 
-    public ProblemIds(Long problemId) {
+    public ProblemIds(Long problemId, Long orderId) {
         this.id = problemId;
+        this.orderId = orderId;
     }
 }

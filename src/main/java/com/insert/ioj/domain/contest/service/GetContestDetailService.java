@@ -20,7 +20,7 @@ public class GetContestDetailService {
         Contest contest = entityFacade.getContestById(contestId);
 
         List<ProblemIds> problemIds = customProblemRepository.getContestProblems(contest).stream()
-            .map(problem -> new ProblemIds(problem.getId()))
+            .map(problem -> new ProblemIds(problem.getProblem().getId(), problem.getOrderId()))
             .toList();
 
         return new GetContestDetailResponse(contest.getEndTime(), problemIds);
