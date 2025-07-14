@@ -13,6 +13,7 @@ public class ListContestProblemResponse {
     private int level;
     private String title;
     private Verdict verdict;
+    private int score;
 
     public ListContestProblemResponse(ProblemStatusDto problemStatus) {
         Problem problem = problemStatus.getProblem();
@@ -22,10 +23,11 @@ public class ListContestProblemResponse {
 //        this.verdict = problemStatus.getStatus();
     }
 
-    public ListContestProblemResponse(Problem problem, Verdict verdict) {
+    public ListContestProblemResponse(Problem problem, Verdict verdict, int score) {
         this.id = problem.getId();
         this.level = problem.getLevel();
         this.title = problem.getTitle();
         this.verdict = verdict;
+        this.score = score;
     }
 }

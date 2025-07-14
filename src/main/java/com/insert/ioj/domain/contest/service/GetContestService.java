@@ -10,6 +10,7 @@ import com.insert.ioj.domain.problemscore.domain.repository.ProblemScoreReposito
 import com.insert.ioj.domain.submission.facade.EntityFacade;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.facade.UserFacade;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,22 +35,35 @@ public class GetContestService {
 
         List<ProblemScore> problems = problemScoreRepository.findAllByContestAndUser(contestId, user.getId());
 
-        Map<Long, Verdict> problemVerdictMap = problems.stream()
+        Map<Long, ProblemInfo> problemVerdictMap = problems.stream()
             .collect(Collectors.toMap(
                 ProblemScore::getProblemId,
-                ProblemScore::getVerdict,
+                ProblemInfo::of,
                 (existing, replacement) -> existing
             ));
 
         List<ListContestProblemResponse> contestProblems = problemContestRepository.findAllByContest_Id(contestId).stream()
             .map(it -> {
-                Verdict verdict = problemVerdictMap.get(it.getProblem().getId());
-                return new ListContestProblemResponse(it.getProblem(), verdict);
-            })
-            .toList();
+                ProblemInfo problemInfo = problemVerdictMap.get(it.getProblem().getId());
+                return new ListContestProblemResponse(
+                    it.getProblem(),
+                    problemInfo != null ? problemInfo.verdict() : null,
+                    problemInfo != null ? problemInfo.score() : 0
+                );
+            }).toList();
 
 
         return new ContestResponse(contest, contestProblems);
+    }
+
+    @Builder
+    private record ProblemInfo(Verdict verdict, int score) {
+        public static ProblemInfo of(ProblemScore problemScore) {
+            return ProblemInfo.builder()
+                .verdict(problemScore.getVerdict())
+                .score(problemScore.getScore())
+                .build();
+        }
     }
 
 //    public ContestResponse execute(Long contestId) {
