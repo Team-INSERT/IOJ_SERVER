@@ -18,8 +18,9 @@ public class ProblemResponse {
     private int memoryLimit;
     private int timeLimit;
     private List<TestcaseResponse> testcases;
+    private List<SubtaskResponse> subtasks;
 
-    public ProblemResponse(Problem problem, List<TestcaseResponse> testcases) {
+    public ProblemResponse(Problem problem, List<TestcaseResponse> testcases, List<SubtaskResponse> subtasks) {
         this.title = problem.getTitle();
         this.content = problem.getContent();
         this.source = problem.getSource();
@@ -29,5 +30,6 @@ public class ProblemResponse {
         this.memoryLimit = problem.getMemoryLimit();
         this.timeLimit = problem.getTimeLimit();
         this.testcases = testcases;
+        this.subtasks = subtasks;
     }
 }
