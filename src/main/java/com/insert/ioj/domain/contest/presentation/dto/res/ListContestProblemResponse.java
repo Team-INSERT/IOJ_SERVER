@@ -22,7 +22,7 @@ public class ListContestProblemResponse {
 //        this.verdict = problemStatus.getStatus();
     }
 
-    public ListContestProblemResponse(Verdict verdict, Problem problem) {
+    public ListContestProblemResponse(Problem problem, Verdict verdict) {
         this.id = problem.getId();
         this.level = problem.getLevel();
         this.title = problem.getTitle();
