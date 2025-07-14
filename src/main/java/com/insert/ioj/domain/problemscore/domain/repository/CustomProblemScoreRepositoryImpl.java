@@ -16,7 +16,7 @@ public class CustomProblemScoreRepositoryImpl implements CustomProblemScoreRepos
 
 
     @Override
-    public List<ProblemScore> findByContestAndUser(Long contestId, Long userId) {
+    public List<ProblemScore> findAllByContestAndUser(Long contestId, Long userId) {
         return queryFactory
             .selectFrom(problemScore)
             .where(

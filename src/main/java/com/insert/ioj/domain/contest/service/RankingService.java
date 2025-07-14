@@ -51,7 +51,7 @@ public class RankingService {
 
         List<UserSubmissionElement> submissions = rankElements.stream()
             .map(it -> {
-                    List<SubmissionDetailElement> problems = problemScoreRepository.findByContestAndUser(contestId, it.userId()).stream()
+                    List<SubmissionDetailElement> problems = problemScoreRepository.findAllByContestAndUser(contestId, it.userId()).stream()
                         .map(SubmissionDetailElement::from)
                         .toList();
                     return new UserSubmissionElement(problems, it.userId());
