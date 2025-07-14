@@ -80,7 +80,6 @@ public class SubmissionService {
         List<SubtaskResult> subtaskResults = subtaskResultRepository.findAllBySubmission(submission);
 
         updateOrCreateProblemScore(submission);
-        updateOrCreateRanking(submission);
 
         return SubmissionResponse.of(submission, subtaskResults);
     }
@@ -319,24 +318,24 @@ public class SubmissionService {
 
     private void updateOrCreateProblemScore(ContestSubmission submission) {
         problemScoreRepository.findByProblemIdAndContestAndUser(submission.getProblem().getId(), submission.getContest(), submission.getUser())
-            .filter(score -> score.getScore() < submission.getTotalScore())
             .ifPresentOrElse(
-                score -> score.update(submission.getTotalScore(), submission.getVerdict()),
+                score -> {
+                    if (score.getScore() < submission.getTotalScore()) {
+                        score.update(submission.getTotalScore(), submission.getVerdict());
+                        rankingRepository.findByContestAndUser(submission.getContest(), submission.getUser())
+                            .ifPresent(
+                                ranking -> ranking.update(submission.getTotalScore(), LocalDateTime.now())
+                            );
+                    }
+                },
                 () -> createNewProblemScore(submission)
-            );
-    }
-
-    private void updateOrCreateRanking(ContestSubmission submission) {
-        rankingRepository.findByContestAndUser(submission.getContest(), submission.getUser())
-            .ifPresentOrElse(
-                ranking -> ranking.update(submission.getTotalScore(), LocalDateTime.now()),
-                () -> createNewRanking(submission)
             );
     }
 
     private void createNewProblemScore(ContestSubmission submission) {
         ProblemScore problemScore = new ProblemScore(submission.getTotalScore(), submission.getVerdict(), submission.getProblem().getId(), submission.getContest(), submission.getUser());
         problemScoreRepository.save(problemScore);
+        createNewRanking(submission);
     }
 
     private void createNewRanking(ContestSubmission submission) {

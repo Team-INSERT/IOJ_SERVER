@@ -1,5 +1,6 @@
 package com.insert.ioj.domain.submission.presentation.dto.res;
 
+import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.subtask.domain.SubtaskResult;
 
 import java.util.List;
@@ -10,7 +11,8 @@ public record SubtaskInfo(
     int passedTestcases,
     int totalTestcases,
     Double maxExecutionTime,
-    int maxMemoryUsed
+    int maxMemoryUsed,
+    Verdict verdict
 ) {
     public static List<SubtaskInfo> toEntities(List<SubtaskResult> subtaskResults) {
         return subtaskResults.stream()
@@ -25,7 +27,8 @@ public record SubtaskInfo(
             subtaskResult.getPassedTestcases(),
             subtaskResult.getTotalTestcases(),
             subtaskResult.getMaxExecutionTime(),
-            subtaskResult.getMaxMemoryUsed()
+            subtaskResult.getMaxMemoryUsed(),
+            subtaskResult.getVerdict()
         );
     }
 }
