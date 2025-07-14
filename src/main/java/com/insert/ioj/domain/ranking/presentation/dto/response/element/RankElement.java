@@ -9,10 +9,11 @@ public record RankElement(
     Long userId,
     String userName,
     int totalScore,
-    LocalDateTime achievedAt
+    LocalDateTime achievedAt,
+    Long penalty
 ) {
-    public static RankElement toEntity(Ranking ranking) {
+    public static RankElement toEntity(Ranking ranking, Long penalty) {
         User user = ranking.getUser();
-        return new RankElement(user.getId(), user.getNickname(), ranking.getScore(), ranking.getAchievedAt());
+        return new RankElement(user.getId(), user.getNickname(), ranking.getScore(), ranking.getAchievedAt(), penalty);
     }
 }

@@ -46,7 +46,7 @@ public class RankingService {
             .toList();
 
         List<RankElement> rankElements = rankings.stream()
-                .map(RankElement::toEntity)
+                .map(it -> RankElement.toEntity(it, penalty(it.getAchievedAt(), it.getContest().getStartTime())))
                 .toList();
 
         List<UserSubmissionElement> submissions = rankElements.stream()
