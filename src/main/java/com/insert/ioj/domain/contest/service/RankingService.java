@@ -17,7 +17,6 @@ import com.insert.ioj.domain.ranking.presentation.dto.response.element.RankEleme
 import com.insert.ioj.domain.ranking.presentation.dto.response.element.SubmissionDetailElement;
 import com.insert.ioj.domain.ranking.presentation.dto.response.element.UserSubmissionElement;
 import com.insert.ioj.domain.solve.contest.repository.CustomSolveContestRepository;
-import com.insert.ioj.domain.submission.facade.EntityFacade;
 import com.insert.ioj.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,6 @@ public class RankingService {
     private final ContestFacade contestFacade;
     private final CustomSolveContestRepository customSolveContestRepository;
     private final ProblemFacade problemFacade;
-    private final EntityFacade entityFacade;
     private final ProblemContestRepository problemContestRepository;
     private final RankingRepository rankingRepository;
     private final ProblemScoreRepository problemScoreRepository;

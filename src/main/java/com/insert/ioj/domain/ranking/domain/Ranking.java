@@ -43,7 +43,7 @@ public class Ranking extends BaseTimeEntity {
     }
 
     public void update(int score, LocalDateTime achievedAt) {
-        this.score = score;
+        this.score += score;
         this.achievedAt = achievedAt;
     }
 }
