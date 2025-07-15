@@ -105,7 +105,7 @@ public class SubmissionService {
                     List<Artifact> subtaskArtifacts = artifacts.subList(startIndex, startIndex + testcaseCount);
 
                     String detail = null;
-                    for (int i = 0; i < subtaskArtifacts.size(); i++) {
+                    for (int i = startIndex; i < subtaskArtifacts.size(); i++) {
                         if (subtaskArtifacts.get(i).getVerdict() == Verdict.RUNTIME_ERROR) {
                             detail = artifacts.get(i).getStderr();
                             break;
