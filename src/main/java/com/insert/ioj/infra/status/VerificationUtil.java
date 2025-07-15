@@ -69,7 +69,7 @@ public class VerificationUtil {
         }
 
         Integer exitCode = extractExitCode(meta);
-        if (exitCode == null || exitCode != 0) {
+        if (exitCode != 0) {
             return Verdict.RUNTIME_ERROR;
         }
 
@@ -108,16 +108,16 @@ public class VerificationUtil {
     }
 
     private static Integer extractExitCode(String meta) {
-        if (meta == null) return null;
+        if (meta == null) return -111;
 
         Matcher matcher = EXIT_CODE_PATTERN.matcher(meta);
         if (matcher.find()) {
             try {
                 return Integer.parseInt(matcher.group(1));
             } catch (NumberFormatException e) {
-                return null;
+                return -111;
             }
         }
-        return null;
+        return -111;
     }
 }
