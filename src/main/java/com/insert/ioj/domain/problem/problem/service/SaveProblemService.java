@@ -22,13 +22,15 @@ public class SaveProblemService {
     public Long execute(SaveProblemRequest request) {
         Problem problem = problemRepository.save(request.toProblem());
 
+        int orderIndex = 0;
         for (SubtaskDto subtaskDto: request.getSubtaskDtos()) {
             Subtask subtask = new Subtask(
                 subtaskDto.score(), subtaskDto.testcases().size(), subtaskDto.description(), problem
             );
 
             subtaskRepository.save(subtask);
-            testcaseRepository.saveAll(subtaskDto.toTestcaseList(problem, subtask));
+            testcaseRepository.saveAll(subtaskDto.toTestcaseList(problem, subtask, orderIndex));
+            orderIndex += subtaskDto.testcases().size();
         }
 
         return problem.getId();

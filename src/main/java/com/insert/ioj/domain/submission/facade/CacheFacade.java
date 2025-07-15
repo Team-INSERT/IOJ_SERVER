@@ -7,6 +7,8 @@ import com.insert.ioj.domain.contest.domain.repository.ContestRepository;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problem.problem.domain.repository.ProblemRepository;
 import com.insert.ioj.domain.submission.facade.dto.TestcaseCacheDto;
+import com.insert.ioj.domain.subtask.domain.Subtask;
+import com.insert.ioj.domain.subtask.domain.repository.SubtaskRepository;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class CacheFacade {
     private final TestcaseRepository testcaseRepository;
     private final ProblemRepository problemRepository;
     private final UserRepository userRepository;
+    private final SubtaskRepository subtaskRepository;
 
     @Cacheable(cacheNames = "contests", key = "#id")
     public Optional<Contest> findContestById(Long id) {
@@ -45,5 +48,10 @@ public class CacheFacade {
     @Cacheable(cacheNames = "users", key = "#id")
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    @Cacheable(cacheNames = "subtasks", key = "#id")
+    public List<Subtask> findSubtasksByProblemId(Long id) {
+        return subtaskRepository.findAllByProblem_Id(id);
     }
 }

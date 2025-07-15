@@ -12,9 +12,9 @@ public record SubtaskDto(
     String description,
     List<TestcaseDto> testcases
 ) {
-    public List<Testcase> toTestcaseList(Problem problem, Subtask subtask) {
+    public List<Testcase> toTestcaseList(Problem problem, Subtask subtask, int orderIndex) {
         List<Testcase> testcaseList = new ArrayList<>();
-        for(int i = 0; i < testcases.size(); i++) {
+        for(int i = orderIndex; i < orderIndex + testcases.size(); i++) {
             testcaseList.add(testcases.get(i).toEntity(i, problem, subtask));
         }
         return testcaseList;

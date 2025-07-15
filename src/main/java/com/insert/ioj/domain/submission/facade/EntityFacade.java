@@ -4,6 +4,7 @@ import com.insert.ioj.domain.Testcase.domain.Testcase;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.submission.facade.dto.TestcaseCacheDto;
+import com.insert.ioj.domain.subtask.domain.Subtask;
 import com.insert.ioj.domain.user.domain.User;
 import com.insert.ioj.global.error.exception.ErrorCode;
 import com.insert.ioj.global.error.exception.IojException;
@@ -39,5 +40,9 @@ public class EntityFacade {
     public User getUserById(Long id) {
         return cacheFacade.findUserById(id)
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_USER));
+    }
+
+    public List<Subtask> getSubtasksByProblemId(Long id) {
+        return cacheFacade.findSubtasksByProblemId(id);
     }
 }

@@ -13,5 +13,5 @@ public interface TestcaseRepository extends JpaRepository<Testcase, Long>, Custo
     List<Testcase> findAllBySubtask(Subtask subtask);
     List<Testcase> findAllBySubtask_Id(Long subtaskId);
     List<Testcase> findAllByProblem_Id(Long problemId);
-    Optional<List<Testcase>> findAllByProblemAndExampleIsTrue(Problem problem);
+    List<Testcase> findAllByProblemAndExampleIsTrue(Problem problem);
 }

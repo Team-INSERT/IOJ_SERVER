@@ -38,8 +38,7 @@ public class VerifyTestcasesService {
     public List<TestcasesResponse> execute(ExecutionProblemRequest request) {
         Problem problem = problemRepository.findById(request.getId())
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
-        List<Testcase> testcases = testcaseRepository.findAllByProblemAndExampleIsTrue(problem)
-            .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_PROBLEM));
+        List<Testcase> testcases = testcaseRepository.findAllByProblemAndExampleIsTrue(problem);
 
         Execution execution = ExecutionFactory.createExecution(
             UUID.randomUUID().toString(),

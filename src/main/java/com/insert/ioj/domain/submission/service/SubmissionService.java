@@ -105,9 +105,9 @@ public class SubmissionService {
                     List<Artifact> subtaskArtifacts = artifacts.subList(startIndex, startIndex + testcaseCount);
 
                     String detail = null;
-                    for (int i = startIndex; i < subtaskArtifacts.size(); i++) {
+                    for (int i = 0; i < subtaskArtifacts.size(); i++) {
                         if (subtaskArtifacts.get(i).getVerdict() == Verdict.RUNTIME_ERROR) {
-                            detail = artifacts.get(i).getStderr();
+                            detail = subtaskArtifacts.get(i).getStderr();
                             break;
                         }
                         if (subtaskArtifacts.get(i).getVerdict() != Verdict.ACCEPTED) {
@@ -243,7 +243,7 @@ public class SubmissionService {
 
         contestSubmissionRepository.save(submission);
 
-        List<Subtask> subtasks = subtaskRepository.findAllByProblem(problem);
+        List<Subtask> subtasks = entityFacade.getSubtasksByProblemId(problem.getId());
         List<Testcase> testcases = testcaseRepository.findAllBySubtasksASC(subtasks);
 
         Execution execution = ExecutionFactory.createExecution(
@@ -287,7 +287,7 @@ public class SubmissionService {
         List<Artifact> artifacts;
 
         if (testcaseSubmissions.isEmpty()) {
-            List<Subtask> subtasks = subtaskRepository.findAllByProblem(problem);
+            List<Subtask> subtasks = entityFacade.getSubtasksByProblemId(problem.getId());
             testcases = testcaseRepository.findAllBySubtasksASC(subtasks);
 
             artifacts = toArtifacts(submission, testcases.size());
