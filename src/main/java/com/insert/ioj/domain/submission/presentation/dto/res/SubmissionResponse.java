@@ -10,15 +10,17 @@ import java.util.List;
 public record SubmissionResponse(
     Verdict verdict,
     LocalDateTime submittedAt,
-    List<SubtaskInfo> subtaskInfos
+    List<SubtaskInfo> subtaskInfos,
+    String compilationDetail
 ) {
     public static SubmissionResponse of(
-        Submission submission, List<SubtaskResult> subtaskResults, List<String> details
+        Submission submission, List<SubtaskResult> subtaskResults, List<String> details, String compilationDetail
     ) {
         return new SubmissionResponse(
             submission.getVerdict(),
             submission.getCreatedAt(),
-            SubtaskInfo.toEntities(subtaskResults, details)
+            SubtaskInfo.toEntities(subtaskResults, details),
+            compilationDetail
         );
     }
 }

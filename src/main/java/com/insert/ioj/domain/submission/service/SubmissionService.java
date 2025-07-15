@@ -84,6 +84,11 @@ public class SubmissionService {
         List<String> details = new ArrayList<>();
         int startIndex = 0;
 
+        String compilationDetail = null;
+        if (submission.getVerdict() == Verdict.COMPILATION_ERROR) {
+            compilationDetail = artifacts.get(0).getStderr();
+        }
+
         for (SubtaskResult it : subtaskResults) {
             switch (it.getVerdict()) {
                 case ACCEPTED:
@@ -91,7 +96,6 @@ public class SubmissionService {
                     startIndex += it.getTotalTestcases();
                     break;
 
-                case COMPILATION_ERROR:
                 case RUNTIME_ERROR:
                     details.add(artifacts.get(0).getStderr());
                     break;
@@ -122,7 +126,7 @@ public class SubmissionService {
 
         updateOrCreateProblemScore(submission);
 
-        return SubmissionResponse.of(submission, subtaskResults, details);
+        return SubmissionResponse.of(submission, subtaskResults, details, compilationDetail);
     }
 
     @Transactional(readOnly = true)
