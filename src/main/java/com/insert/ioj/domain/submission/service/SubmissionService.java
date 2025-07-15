@@ -97,9 +97,6 @@ public class SubmissionService {
                     break;
 
                 case RUNTIME_ERROR:
-                    details.add(artifacts.get(0).getStderr());
-                    break;
-
                 case PARTIAL:
                 case WRONG_ANSWER:
                 case OUT_OF_MEMORY:
@@ -109,6 +106,10 @@ public class SubmissionService {
 
                     String detail = null;
                     for (int i = 0; i < subtaskArtifacts.size(); i++) {
+                        if (subtaskArtifacts.get(i).getVerdict() == Verdict.RUNTIME_ERROR) {
+                            detail = artifacts.get(i).getStderr();
+                            break;
+                        }
                         if (subtaskArtifacts.get(i).getVerdict() != Verdict.ACCEPTED) {
                             detail = String.valueOf(i+1);
                             break;
@@ -116,10 +117,6 @@ public class SubmissionService {
                     }
                     details.add(detail);
                     startIndex += testcaseCount;
-                    break;
-
-                default:
-                    details.add(null);
                     break;
             }
         }
