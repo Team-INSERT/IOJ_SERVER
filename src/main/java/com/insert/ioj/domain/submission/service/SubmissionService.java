@@ -389,7 +389,11 @@ public class SubmissionService {
     private void createNewProblemScore(ContestSubmission submission) {
         ProblemScore problemScore = new ProblemScore(submission.getTotalScore(), submission.getVerdict(), submission.getProblem().getId(), submission.getContest(), submission.getUser());
         problemScoreRepository.save(problemScore);
-        createNewRanking(submission);
+        rankingRepository.findByContestAndUser(submission.getContest(), submission.getUser())
+            .ifPresentOrElse(
+                ranking -> {},
+                () -> createNewRanking(submission)
+            );
     }
 
     private void createNewRanking(ContestSubmission submission) {
