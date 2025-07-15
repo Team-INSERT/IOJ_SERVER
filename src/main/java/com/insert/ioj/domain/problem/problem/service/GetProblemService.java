@@ -6,6 +6,7 @@ import com.insert.ioj.domain.problem.problem.presentation.dto.res.ProblemRespons
 import com.insert.ioj.domain.problem.problem.presentation.dto.res.SubtaskResponse;
 import com.insert.ioj.domain.problem.problem.presentation.dto.res.TestcaseResponse;
 import com.insert.ioj.domain.submission.facade.EntityFacade;
+import com.insert.ioj.domain.subtask.domain.repository.SubtaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,12 @@ import java.util.List;
 public class GetProblemService {
     private final EntityFacade entityFacade;
     private final TestcaseRepository testcaseRepository;
+    private final SubtaskRepository subtaskRepository;
 
     public ProblemResponse execute(Long id) {
         Problem problem = entityFacade.getProblemById(id);
 
-        List<SubtaskResponse> subtasks = entityFacade.getSubtasksByProblemId(id).stream()
+        List<SubtaskResponse> subtasks = subtaskRepository.findAllByProblem_Id(id).stream()
             .map(SubtaskResponse::from)
             .toList();
 
