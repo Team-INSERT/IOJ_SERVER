@@ -14,8 +14,8 @@ public record SubtaskDto(
 ) {
     public List<Testcase> toTestcaseList(Problem problem, Subtask subtask, int orderIndex) {
         List<Testcase> testcaseList = new ArrayList<>();
-        for(int i = orderIndex; i < orderIndex + testcases.size(); i++) {
-            testcaseList.add(testcases.get(i).toEntity(i, problem, subtask));
+        for(int i = 0; i < testcases.size(); i++) {
+            testcaseList.add(testcases.get(i).toEntity(orderIndex + i, problem, subtask));
         }
         return testcaseList;
     }
