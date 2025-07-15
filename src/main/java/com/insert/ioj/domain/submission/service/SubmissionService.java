@@ -243,7 +243,7 @@ public class SubmissionService {
 
         contestSubmissionRepository.save(submission);
 
-        List<Subtask> subtasks = entityFacade.getSubtasksByProblemId(problem.getId());
+        List<Subtask> subtasks = subtaskRepository.findAllByProblem_Id(problem.getId());
         List<Testcase> testcases = testcaseRepository.findAllBySubtasksASC(subtasks);
 
         Execution execution = ExecutionFactory.createExecution(
@@ -287,7 +287,7 @@ public class SubmissionService {
         List<Artifact> artifacts;
 
         if (testcaseSubmissions.isEmpty()) {
-            List<Subtask> subtasks = entityFacade.getSubtasksByProblemId(problem.getId());
+            List<Subtask> subtasks = subtaskRepository.findAllByProblem_Id(problem.getId());
             testcases = testcaseRepository.findAllBySubtasksASC(subtasks);
 
             artifacts = toArtifacts(submission, testcases.size());

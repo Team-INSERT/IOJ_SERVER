@@ -42,7 +42,7 @@ public class EntityFacade {
             .orElseThrow(() -> new IojException(ErrorCode.NOT_FOUND_USER));
     }
 
-    public List<Subtask> getSubtasksByProblemId(Long id) {
-        return cacheFacade.findSubtasksByProblemId(id);
-    }
+//    public List<Subtask> getSubtasksByProblemId(Long id) {
+//        return cacheFacade.findSubtasksByProblemId(id);
+//    }
 }
