@@ -3,6 +3,7 @@ package com.insert.ioj.domain.problemscore.domain;
 import com.insert.ioj.domain.contest.domain.Contest;
 import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.user.domain.User;
+import com.insert.ioj.global.entity.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ProblemScore {
+public class ProblemScore extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
