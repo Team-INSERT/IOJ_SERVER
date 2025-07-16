@@ -46,4 +46,10 @@ public class Problem extends BaseTimeEntity {
         this.memoryLimit = memoryLimit;
         this.timeLimit = timeLimit;
     }
+
+    public void update(String content, String inputContent, String outputContent) {
+        this.content = content;
+        this.inputContent = inputContent;
+        this.outputContent = outputContent;
+    }
 }
