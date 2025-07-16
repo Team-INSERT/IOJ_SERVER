@@ -6,6 +6,7 @@ import com.insert.ioj.domain.contest.presentation.dto.res.ListContestAdminRespon
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problem.problemContest.domain.repository.CustomProblemContestRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,7 @@ public class ListContestAdminService {
 
     @Transactional(readOnly = true)
     public List<ListContestAdminResponse> execute() {
-        List<Contest> contests = contestRepository.findAllByEndTimeAfter(LocalDateTime.now());
+        List<Contest> contests = contestRepository.findAllByEndTimeAfter(LocalDateTime.now(), Pageable.unpaged());
         return contests.stream()
             .map(contest -> {
                 List<Problem> problems = problemContestRepository.getProblems(contest);
