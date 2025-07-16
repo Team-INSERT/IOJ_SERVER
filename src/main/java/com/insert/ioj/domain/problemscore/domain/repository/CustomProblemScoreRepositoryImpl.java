@@ -8,6 +8,7 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,15 +40,13 @@ public class CustomProblemScoreRepositoryImpl implements CustomProblemScoreRepos
                 user_id,
                 user_name,
                 total_score,
-                max_achieved_at,
-                problems_attempted
+                max_achieved_at
             FROM (
                 SELECT 
                     ps.user_id,
                     u.nickname as user_name,
                     SUM(ps.score) as total_score,
-                    MAX(ps.achieved_at) as max_achieved_at,
-                    COUNT(DISTINCT ps.problem_id) as problems_attempted
+                    MAX(ps.achieved_at) as max_achieved_at
                 FROM problem_score ps
                 JOIN tbl_user u ON ps.user_id = u.id
                 WHERE ps.contest_id = :contestId
@@ -67,8 +66,17 @@ public class CustomProblemScoreRepositoryImpl implements CustomProblemScoreRepos
                 ((Long) row[1]),
                 (String) row[2],
                 ((Number) row[3]).intValue(),
-                (LocalDateTime) row[4]
+                convertToLocalDateTime(row[4])
             ))
             .collect(Collectors.toList());
+    }
+
+    private LocalDateTime convertToLocalDateTime(Object obj) {
+        if (obj instanceof Timestamp) {
+            return ((Timestamp) obj).toLocalDateTime();
+        } else if (obj instanceof LocalDateTime) {
+            return (LocalDateTime) obj;
+        }
+        return null;
     }
 }
