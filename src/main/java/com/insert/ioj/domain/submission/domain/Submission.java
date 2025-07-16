@@ -33,7 +33,7 @@ public class Submission extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Language language;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String sourcecode;
 
     @Enumerated(EnumType.STRING)

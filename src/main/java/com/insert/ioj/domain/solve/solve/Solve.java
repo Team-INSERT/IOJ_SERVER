@@ -36,7 +36,7 @@ public class Solve extends BaseTimeEntity {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String sourcecode;
 
     @Enumerated(EnumType.STRING)

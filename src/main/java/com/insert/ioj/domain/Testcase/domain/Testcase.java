@@ -26,10 +26,10 @@ public class Testcase extends BaseTimeEntity {
 
     private int orderId;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String input;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String output;
 
     private Boolean example;

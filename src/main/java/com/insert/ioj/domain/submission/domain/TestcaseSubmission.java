@@ -24,13 +24,13 @@ public class TestcaseSubmission {
 
     private int orderId;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     String input;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     String output;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     String expectedOutput;
 
     @Enumerated(EnumType.STRING)
