@@ -16,6 +16,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -29,6 +31,8 @@ public class ProblemScore extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Verdict verdict;
 
+    private LocalDateTime achievedAt;
+
     @ManyToOne
     @JoinColumn(name = "contest_id")
     private Contest contest;
@@ -39,16 +43,18 @@ public class ProblemScore extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public ProblemScore(int score, Verdict verdict, Long problemId, Contest contest, User user) {
+    public ProblemScore(int score, Verdict verdict, LocalDateTime achievedAt, Long problemId, Contest contest, User user) {
         this.score = score;
         this.verdict = verdict;
+        this.achievedAt = achievedAt;
         this.problemId = problemId;
         this.contest = contest;
         this.user = user;
     }
 
-    public void update(int score, Verdict verdict) {
+    public void update(int score, Verdict verdict, LocalDateTime achievedAt) {
         this.score = score;
         this.verdict = verdict;
+        this.achievedAt = achievedAt;
     }
 }

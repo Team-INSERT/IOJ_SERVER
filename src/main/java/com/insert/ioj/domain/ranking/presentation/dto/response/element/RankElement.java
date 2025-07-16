@@ -1,19 +1,22 @@
 package com.insert.ioj.domain.ranking.presentation.dto.response.element;
 
-import com.insert.ioj.domain.ranking.domain.Ranking;
-import com.insert.ioj.domain.user.domain.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public record RankElement(
-    Long userId,
-    String userName,
-    int totalScore,
-    LocalDateTime achievedAt,
-    Long penalty
-) {
-    public static RankElement toEntity(Ranking ranking, Long penalty) {
-        User user = ranking.getUser();
-        return new RankElement(user.getId(), user.getNickname(), ranking.getScore(), ranking.getAchievedAt(), penalty);
+@NoArgsConstructor
+@Getter
+public class RankElement {
+    private Long userId;
+    private String userName;
+    private int totalScore;
+    private LocalDateTime achievedAt;
+
+    public RankElement(Long userId, String userName, int totalScore, LocalDateTime achievedAt) {
+        this.userId = userId;
+        this.userName = userName;
+        this.totalScore = totalScore;
+        this.achievedAt = achievedAt;
     }
 }

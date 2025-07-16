@@ -9,8 +9,6 @@ import com.insert.ioj.domain.problem.problem.facade.ProblemFacade;
 import com.insert.ioj.domain.problem.problem.presentation.dto.res.ProblemStatusDto;
 import com.insert.ioj.domain.problem.problemContest.domain.repository.ProblemContestRepository;
 import com.insert.ioj.domain.problemscore.domain.repository.ProblemScoreRepository;
-import com.insert.ioj.domain.ranking.domain.Ranking;
-import com.insert.ioj.domain.ranking.domain.repository.RankingRepository;
 import com.insert.ioj.domain.ranking.presentation.dto.response.RankResponse;
 import com.insert.ioj.domain.ranking.presentation.dto.response.element.ProblemOrderElement;
 import com.insert.ioj.domain.ranking.presentation.dto.response.element.RankElement;
@@ -33,26 +31,21 @@ public class RankingService {
     private final CustomSolveContestRepository customSolveContestRepository;
     private final ProblemFacade problemFacade;
     private final ProblemContestRepository problemContestRepository;
-    private final RankingRepository rankingRepository;
     private final ProblemScoreRepository problemScoreRepository;
 
     public RankResponse ranking(Long contestId) {
-        List<Ranking> rankings = rankingRepository.getRankings(contestId);
-
         List<ProblemOrderElement> problemOrders = problemContestRepository.findAllByContest_Id(contestId).stream()
             .map(ProblemOrderElement::from)
             .toList();
 
-        List<RankElement> rankElements = rankings.stream()
-                .map(it -> RankElement.toEntity(it, penalty(it.getAchievedAt(), it.getContest().getStartTime())))
-                .toList();
+        List<RankElement> rankElements = problemScoreRepository.getRankings(contestId);
 
         List<UserSubmissionElement> submissions = rankElements.stream()
             .map(it -> {
-                    List<SubmissionDetailElement> problems = problemScoreRepository.findAllByContestAndUser(contestId, it.userId()).stream()
+                    List<SubmissionDetailElement> problems = problemScoreRepository.findAllByContestAndUser(contestId, it.getUserId()).stream()
                         .map(SubmissionDetailElement::from)
                         .toList();
-                    return new UserSubmissionElement(problems, it.userId());
+                    return new UserSubmissionElement(problems, it.getUserId());
                 }
             ).toList();
 

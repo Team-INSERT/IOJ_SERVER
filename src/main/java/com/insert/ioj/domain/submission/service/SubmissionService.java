@@ -9,8 +9,6 @@ import com.insert.ioj.domain.execution.domain.type.Verdict;
 import com.insert.ioj.domain.problem.problem.domain.Problem;
 import com.insert.ioj.domain.problemscore.domain.ProblemScore;
 import com.insert.ioj.domain.problemscore.domain.repository.ProblemScoreRepository;
-import com.insert.ioj.domain.ranking.domain.Ranking;
-import com.insert.ioj.domain.ranking.domain.repository.RankingRepository;
 import com.insert.ioj.domain.submission.domain.Artifact;
 import com.insert.ioj.domain.submission.domain.ContestSubmission;
 import com.insert.ioj.domain.submission.domain.Submission;
@@ -71,7 +69,6 @@ public class SubmissionService {
     private final SubtaskRepository subtaskRepository;
     private final SubtaskResultRepository subtaskResultRepository;
     private final ProblemScoreRepository problemScoreRepository;
-    private final RankingRepository rankingRepository;
 
     @Transactional
     public SubmissionResponse submissionStatus(UUID id) {
@@ -375,11 +372,7 @@ public class SubmissionService {
             .ifPresentOrElse(
                 score -> {
                     if (score.getScore() < submission.getTotalScore()) {
-                        score.update(submission.getTotalScore(), submission.getVerdict());
-                        rankingRepository.findByContestAndUser(submission.getContest(), submission.getUser())
-                            .ifPresent(
-                                ranking -> ranking.update(submission.getTotalScore(), submission.getCreatedAt())
-                            );
+                        score.update(submission.getTotalScore(), submission.getVerdict(), submission.getCreatedAt());
                     }
                 },
                 () -> createNewProblemScore(submission)
@@ -387,17 +380,7 @@ public class SubmissionService {
     }
 
     private void createNewProblemScore(ContestSubmission submission) {
-        ProblemScore problemScore = new ProblemScore(submission.getTotalScore(), submission.getVerdict(), submission.getProblem().getId(), submission.getContest(), submission.getUser());
+        ProblemScore problemScore = new ProblemScore(submission.getTotalScore(), submission.getVerdict(), submission.getCreatedAt(), submission.getProblem().getId(), submission.getContest(), submission.getUser());
         problemScoreRepository.save(problemScore);
-        rankingRepository.findByContestAndUser(submission.getContest(), submission.getUser())
-            .ifPresentOrElse(
-                ranking -> {},
-                () -> createNewRanking(submission)
-            );
-    }
-
-    private void createNewRanking(ContestSubmission submission) {
-        Ranking ranking = new Ranking(submission.getTotalScore(), submission.getCreatedAt(), submission.getContest(), submission.getUser());
-        rankingRepository.save(ranking);
     }
 }
