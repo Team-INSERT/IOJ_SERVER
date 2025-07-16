@@ -232,7 +232,7 @@ public class SubmissionService {
         contest.isFinished();
         contest.checkRole(userAuthority);
 
-//        existsCorrectProblem(contest, userId, problem);
+        existsCorrectProblem(contest, userId, problem);
 
         ContestSubmission submission = new ContestSubmission(
             request.language(), request.sourcecode(), user, problem, contest
