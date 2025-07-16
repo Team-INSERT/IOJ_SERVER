@@ -74,9 +74,44 @@ public class VerificationUtil {
         }
 
         String processedOutput = TestcaseUtil.processString(stdOutput);
+        debugStringComparison(processedOutput, testcase.getOutput(), "processedOutput", "expectedOutput");
         return testcase.getOutput().equals(processedOutput)
             ? Verdict.ACCEPTED
             : Verdict.WRONG_ANSWER;
+    }
+
+    public static void debugStringComparison(String str1, String str2, String label1, String label2) {
+        System.out.println("=== 문자열 비교 디버깅 ===");
+        System.out.println(label1 + " 길이: " + str1.length());
+        System.out.println(label2 + " 길이: " + str2.length());
+
+        System.out.println(label1 + ": '" + visualizeAllChars(str1) + "'");
+        System.out.println(label2 + ": '" + visualizeAllChars(str2) + "'");
+
+        System.out.println("equals 결과: " + str1.equals(str2));
+
+        // 차이점 찾기
+        int minLength = Math.min(str1.length(), str2.length());
+        for (int i = 0; i < minLength; i++) {
+            if (str1.charAt(i) != str2.charAt(i)) {
+                System.out.printf("첫 번째 차이점 [%d]: '%c'(%d) vs '%c'(%d)%n",
+                    i, str1.charAt(i), (int)str1.charAt(i),
+                    str2.charAt(i), (int)str2.charAt(i));
+                break;
+            }
+        }
+
+        if (str1.length() != str2.length()) {
+            System.out.println("길이가 다름: " + str1.length() + " vs " + str2.length());
+        }
+    }
+
+    public static String visualizeAllChars(String str) {
+        return str.replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\t", "\\t")
+            .replace(" ", "·")
+            .replace("\u00A0", "\\u00A0"); // non-breaking space
     }
 
     private static Double extractExecutionTime(String meta) {
