@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class VerificationUtil {
     private static final Pattern TIME_PATTERN = Pattern.compile("time-wall:([0-9.]+)");
-    private static final Pattern CG_MEM_PATTERN = Pattern.compile("cg-mem:(\\d+)");
+    private static final Pattern CG_MEM_PATTERN = Pattern.compile("max-rss:(\\d+)");
     private static final Pattern EXIT_CODE_PATTERN = Pattern.compile("exitcode:(\\d+)");
 
     private static final String OOM_KEY = "cg-oom-killed";
