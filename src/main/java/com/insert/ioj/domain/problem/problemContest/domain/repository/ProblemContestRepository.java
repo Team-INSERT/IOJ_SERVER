@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface ProblemContestRepository extends CrudRepository<ProblemContest, Long> {
+public interface ProblemContestRepository extends CrudRepository<ProblemContest, Long>, CustomProblemContestRepository {
     List<ProblemContest> findAllByContest_Id(Long contestId);
 }

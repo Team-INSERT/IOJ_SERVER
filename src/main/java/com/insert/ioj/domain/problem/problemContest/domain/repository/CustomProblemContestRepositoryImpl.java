@@ -22,6 +22,7 @@ public class CustomProblemContestRepositoryImpl implements CustomProblemContestR
             .select(problem)
             .from(problemContest)
             .where(problemContest.contest.eq(contest))
+            .orderBy(problemContest.orderId.asc())
             .fetch();
     }
 }

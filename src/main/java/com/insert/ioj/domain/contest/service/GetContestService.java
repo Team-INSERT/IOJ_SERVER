@@ -42,11 +42,11 @@ public class GetContestService {
                 (existing, replacement) -> existing
             ));
 
-        List<ListContestProblemResponse> contestProblems = problemContestRepository.findAllByContest_Id(contestId).stream()
+        List<ListContestProblemResponse> contestProblems = problemContestRepository.getProblems(contest).stream()
             .map(it -> {
-                ProblemInfo problemInfo = problemVerdictMap.get(it.getProblem().getId());
+                ProblemInfo problemInfo = problemVerdictMap.get(it.getId());
                 return new ListContestProblemResponse(
-                    it.getProblem(),
+                    it,
                     problemInfo != null ? problemInfo.verdict() : null,
                     problemInfo != null ? problemInfo.score() : 0
                 );
