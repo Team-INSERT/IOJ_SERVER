@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-backend
+  template:
+    metadata:
+      labels:
+        app: admin-backend
+    spec:
+      containers:
+        - name: admin-backend
+          image: anys34/ioj:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: admin-backend-config
+            - secretRef:
+                name: admin-backend-secret
+          volumeMounts:
+            - name: ioj-storage
+              mountPath: /vol
+      volumes:
+        - name: ioj-storage
+          persistentVolumeClaim:
+            claimName: nfs-pvc
+

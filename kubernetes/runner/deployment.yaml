@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runner
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: runner
+  template:
+    metadata:
+      labels:
+        app: runner
+    spec:
+      containers:
+        - name: runner
+          image: anys34/runner:latest
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: runner-config
+          volumeMounts:
+            - name: ioj-storage
+              mountPath: /vol
+          securityContext:
+            privileged: true
+      volumes:
+        - name: ioj-storage
+          persistentVolumeClaim:
+            claimName: nfs-pvc
